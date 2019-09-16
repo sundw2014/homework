@@ -1,0 +1,298 @@
+\documentclass[11pt]{article}
+
+% This is a package for drawing figures
+% it is a part of standard latex 2e distribution
+\usepackage{tikz}
+\usetikzlibrary{shapes}
+\usepackage{fullpage}
+
+
+\usepackage{palatino}
+\RequirePackage{ifthen}
+\usepackage{latexsym}
+\RequirePackage{amsmath}
+\RequirePackage{amsthm}
+\RequirePackage{amssymb}
+\RequirePackage{xspace}
+\RequirePackage{graphics}
+\usepackage{xcolor}
+
+
+
+
+\RequirePackage{textcomp}
+\usepackage{keyval}
+\usepackage{listings}
+\usepackage{xspace}
+\usepackage{mathrsfs,paralist, amsmath,amssymb,url,listings,mathrsfs}
+%\usepackage{pvs}
+%\usepackage{supertabular,alltt,latexsym}
+%\usepackage{multicol,multirow,epsfig}
+%\usepackage[dvips, usenames]{color}
+\usepackage{framed}
+\usepackage{lipsum}
+%\usepackage[dvipsnames]{color}
+\usepackage{upgreek}
+\usepackage{stmaryrd}
+% copyright notice
+
+
+\definecolor{reddish}{rgb}{1,.8,0.8}
+\definecolor{blueish}{rgb}{0.8,.8,1}
+\definecolor{greenish}{rgb}{.8,1,0.8}
+\definecolor{yellowish}{rgb}{1,1,.20}
+
+
+\usepackage[pdftex]{hyperref}
+\hypersetup{
+  pdftitle={Lecture notes for Modeling and Verification of Real-time and Hybrid Systems},
+  pdfauthor={Sayan Mitra},
+  colorlinks=true,
+  citecolor={blue},
+  linkcolor = {blue},
+  pagecolor={blue},
+  backref={true},
+  bookmarks=true,
+  bookmarksopen=false,
+  bookmarksnumbered=true
+}
+
+\newcommand{\tab}{\hspace*{5mm}}
+%\newcommand{\remove}[1]{}
+\newcommand{\nicole}[1]{\textcolor{red}{#1}}
+
+% \input{prelude1}
+
+
+\newcommand{\handout}[6]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf ECE/CS 584: Embedded and cyberphysical system  verification } \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+       \hbox to 5.78in { {\Large \hfill #6  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\smallheader}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf ECE/CS 584: Embedded and cyberphysical system  verification  } \hfill #2 }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em \hfill #5} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{Scribe: #4}{Lecture #1}}
+
+\newcommand{\homework}[2]{\smallheader{#1}{Fall 2019}{Homework #1}\vspace{5mm}
+	{#2}
+	}
+
+\newcommand{\solution}[2]{\smallheader{#1}{Fall 2017}{Solutions for Homework #1}{#2}}
+
+
+\newcommand{\interestingfact}[1]{
+	\noindent
+	\begin{center}
+	\colorbox{yellowish}{
+	\parbox{11.5cm}{{\bf Factoid.} #1}
+	}
+	\end{center}
+	\vspace*{4mm}
+}
+%\definecolor{MyGray}{rgb}{0.96,0.97,0.98}
+\makeatletter\newenvironment{color1box}{%
+   \begin{lrbox}{\@tempboxa}\begin{minipage}{\columnwidth}}{\end{minipage}\end{lrbox}%
+   \colorbox{reddish}{\usebox{\@tempboxa}}
+}\makeatother
+
+
+\makeatletter\newenvironment{color3box}{%
+   \begin{lrbox}{\@tempboxa}\begin{minipage}{\columnwidth}}{\end{minipage}\end{lrbox}%
+   \colorbox{blueish}{\usebox{\@tempboxa}}
+}\makeatother
+
+% 1-inch margins, from fullpage.sty by H.Partl, Version 2, Dec. 15, 1988.
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+%\renewcommand{\baselinestretch}{1.25}
+
+\begin{document}
+
+
+\smallheader{1 on Modeling computation and invariance--- Due on September $17^{th}$}{Fall 2019}{Dawei Sun, daweis2}{Homework 1: Modeling computation and invariance}{Due September 17th 11:59pm}
+
+\begin{quote}
+	{\em Typeset your solutions using \LaTeX\, zip your writeup (.pdf) and code (.py) in a single file called \texttt{nedid-584-F19.zip} and upload this file through Compass.}
+\end{quote}
+
+\paragraph{Problem 1. Bidirectional array (20 points).}
+Model the following token-based mutual exclusion algorithm that works on a {\em bidirectional array\/}.  There are $N$ processes $\{0,\ldots, N-1\}$ in an array. Each process $i$, has a single variable $s[i]$ that takes values in the set $\{0,1,2,3\}$ independent of the size of the array. The two processes $0$ and $N-1$ behave differently from the rest, they can take two values each $s[0]$ can take values $\{1,3\}$ and $s[N-1]$ can take values $\{0,2\}$. Let $\mathit{Nbrs}(i)$ be the set of neighboring  processes for process $i$.
+\begin{enumerate}
+	\item Program for processes, $i$, $i=0$ or $i = N-1$: \\
+	if $\exists \ j \in \mathit{Nbrs}(i)$:$s[j] = s[i] + 1 \mod 4$ then $s[i] = s[i] + 2 \mod 4$
+	\item Program for processes, $i$, $0<i,N-1$: \\
+	if $\exists \ j \in \mathit{Nbrs}(i)$:$s[j] = s[i] + 1 \mod 4$ then $s[i] = s[i] + 1 \mod 4$
+\end{enumerate}
+In this protocol, process $i$ {\em has token\/} iff
+\[
+\exists j \in \mathit{Nbrs}(i):s[j] = s[i] + 1 \mod 4.
+\]
+
+\begin{enumerate}[(a)]
+\item Write the model of the bidirectional array system with $N$ processes using the language we saw in class.
+\item Write an execution of the algorithm that starts from a state with a single token. Mark the process with the token.
+\item Write an execution (of length at least 6) that starts from a state with multiple tokens.
+\item Prove the invariant ``system has a single token'' using the inductive invariance theorem.
+\end{enumerate}
+
+\paragraph{Solution}
+
+(a)
+
+\noindent\rule{7cm}{1.0pt}\\
+% \begin{lstlisting}[escapeinside={(*}{*)}]
+\textbf{automaton} BidirectionalArray(N:Nat)\\
+\tab\textbf{type} ID:\textbf{enumeration} [0,$\cdot\cdot\cdot$,N-1]\\
+\tab\textbf{type} Val:\textbf{enumeration} [0,1,2,3]\\
+\tab\textbf{actions}\\
+\tab\tab update(i:ID)\\
+\tab\textbf{Variables}\\
+\tab\tab s:[ID$\rightarrow$Value]\\
+\tab\textbf{transitions}\\
+\tab\tab update(i:ID)\\
+\tab\tab\tab\textbf{pre} $i = 0 \wedge s[i+1] = (s[i]+1) \% 4$\\
+\tab\tab\tab\textbf{eff} s[i] := (s[i]+2) \% 4\\
+\tab\tab update(i:ID)\\
+\tab\tab\tab\textbf{pre} $i = N-1 \wedge s[i-1] = (s[i]+1) \% 4$\\
+\tab\tab\tab\textbf{eff} s[i] := (s[i]+2) \% 4\\
+\tab\tab update(i:ID)\\
+\tab\tab\tab\textbf{pre} $i > 0 \wedge i < N-1 \wedge (s[i-1] = (s[i]+1) \% 4 \vee s[i+1] = (s[i]+1) \% 4)$\\
+\tab\tab\tab\textbf{eff} s[i] := (s[i]+1) \% 4\\
+%\end{lstlisting}
+\noindent\rule{7cm}{1.0pt}
+
+(b) Let $N=5$. For every step, the state are represented by a number like $1333\hat{2}$, which means $s[0]=1,s[1]=s[2]=s[3]=3,s[4]=2$ and process 4 has the token. An execution that starts from a state with a single token: $1333\hat{2} \rightarrow 133\hat{3}0 \rightarrow 13\hat{3}00 \rightarrow 1\hat{3}000 \rightarrow 1\hat{0}000 \rightarrow 11\hat{0}00 \rightarrow 111\hat{0}0 \rightarrow 1111\hat{0} \rightarrow 111\hat{1}2 \rightarrow \dots$.
+
+(c) Let $N=5$. An execution that starts from a state with multiple tokens: $1\hat{0}1\hat{0}0 \rightarrow 111\hat{0}0 \rightarrow 1111\hat{0} \rightarrow 111\hat{1}2 \rightarrow 11\hat{1}22 \rightarrow 1\hat{1}222 \rightarrow \hat{1}2222 \rightarrow \dots$.
+
+(d) It is easy to verify that if the variables of two neighboring processes has different parity, then at least one of them has the token. Because process $0$ must take an odd variable and process $N-1$ must take an even one, we have the following consequence: the state has only one token $\iff$ there exists a parity-separating process $p (0 \le p < N-1)$ so that $\forall j \le p, s[j] \in {1,3}$ and $\forall j > p, s[j] \in {0,2}$. Next we prove that if $v_k$ has only one token, then $v_{k+1}$ also has only one token. For a state with only one token and the parity-separating ID $p$, process $p$ or $p+1$ has the token. There are 4 possible situations. 1) $p=0$. If process $0$ has the token, then in the next state there exists an parity-separating ID $p'=0$. If process $1$ has the token, then $p'=1$. 2) $p=N-2$. If process $N-2$ has the token, then $p'=N-3$. If process $N-1$ has the token, then $p'=N-2$. 3) $1<p<N-2$. If process $p$ has the token, then $p'=p-1$. If process $p+1$ has the token, then $p'=p+1$. Therefore, in all situations the next state has a parity-separating ID which means this state has only one token. With the inductive invariance theorem, we proved that ``system has only one token" is an invariant.
+
+\paragraph{Problem 2. LCR Leader election (20 points).}
+In this problem, you will create a model of a leader election algorithm in a unidirectional ring~\cite{lynch1996a}. Here is the informal description of the protocol:
+
+Each process sends its identifier to its successor around the ring. When a process receives an incoming identifier, it compares that identifier to its own. If the incoming identifier is greater than its own, it keeps passing the identifier; if it is less than its own, it discards the incoming identifier; if it is equal to its own the process declares itself as the leader.
+
+\begin{enumerate}[(a)]
+\item Write the model of the system with $n$ processes in the ring using the language we saw in class. To get you started, the set of variables is:
+\begin{itemize}
+\item $\mathit{send}$: The identifier to send or {\em null\/},
+\item $\mathit{status}$: Takes values in $\{ \mathit{unknown},\mathit{leader}\}$ to indicate that the leader has been elected or not.
+\end{itemize}
+
+\item Write an execution of the system in which status of at least one process is eventually set to $\mathit{leader\/}$.
+\item Write two candidate invariants.
+\end{enumerate}
+
+\paragraph{Solution}
+
+(a) In order to avoid the message lost problem, the algorithm should be synchronous. Also, as described in \cite{lynch1996a}, every process has an unique ID (UID).
+
+\noindent\rule{7cm}{1.0pt}\\
+% \begin{lstlisting}[escapeinside={(*}{*)}]
+\textbf{automaton} LCRLeaderElection(N:Nat)\\
+\tab\textbf{type} indices:\textbf{enumeration} [0,\dots,N-1] // \textit{index for every process}\\
+\tab\textbf{type} UID:\textbf{enumeration} [N different IDs] // \textit{every process has an unique ID} \\
+\tab\textbf{type} MSG:\textbf{enumeration} UID $\cup$ [null] // \textit{possible values in \textbf{send[i]}}\\
+\tab\textbf{type} STA:\textbf{enumeration} [unknown, leader] // \textit{possible status values}\\
+\tab\textbf{actions}\\
+\tab\tab step\\
+\tab\textbf{Variables}\\
+\tab\tab uid:[indices$\rightarrow$UID]\\
+\tab\tab send:[indices$\rightarrow$MSG] \textbf{initially} send[i] = uid[i], $\forall i \in indices$\\
+\tab\tab send\_old:[indices$\rightarrow$MSG]\\
+\tab\tab status:[indices$\rightarrow$STA] \textbf{initially} status[i] = unknown, $\forall i \in indices$\\
+\tab\textbf{transitions}\\
+\tab\tab step\\
+\tab\tab\tab\textbf{pre} True\\
+\tab\tab\tab\textbf{eff} send\_old := send\\
+\tab\tab\tab\tab \textbf{for} i=0 \textbf{to} N-1:\\
+\tab\tab\tab\tab\tab\textbf{if} (send\_old[(i-1) mod N] $>$ uid[i]) or (send\_old[(i-1) mod N] == null):\\
+\tab\tab\tab\tab\tab\textbf{then} send[i] := send\_old[(i-1) mod N]\\
+\tab\tab\tab\tab\tab\textbf{if} send\_old[(i-1) mod N] $<$ uid[i]:\\
+\tab\tab\tab\tab\tab\textbf{then} send[i] := null\\
+\tab\tab\tab\tab\tab\textbf{if} send\_old[(i-1) mod N] $==$ uid[i]:\\
+\tab\tab\tab\tab\tab\textbf{then} status[i] := leader; send[i] = null\\
+
+%\end{lstlisting}
+\noindent\rule{7cm}{1.0pt}
+
+(b) Let $N = 5, uid = [1,3,2,4,5]$, ``u" is short for ``unkonwn" and ``n" is short for ``null". $send = [1,3,2,4,5], status = [u,u,u,u,u]$  $\rightarrow send = [5, n, 3, n, n], status = [u,u,u,u,u] \rightarrow send = [n, 5, n, n, n], status = [u,u,u,u,u] \rightarrow send = [n,n,5,n,n], status=[u,u,u,u,u] \rightarrow send = [n,n,n,5,n], status=[u,u,u,u,u] \rightarrow send=[n,n,n,n,n], status=[u,u,u,u,\textbf{leader}]$
+
+(c) $I_1 = whole~state~space$. $I_2 = \llbracket(\exists i,~send[i] == the~largest~UID~uid_{max}) \vee (\exists i,~status[i] == leader)\rrbracket$.
+ % $I_3 = $
+
+
+\paragraph{Problem 3. Impossibility of election (20 points).}
+A {\em symmetric function\/} $f:S^k \rightarrow S$ has the property that for all $s_1,s_2\in S^k$, if $s_1$ is a permutation of $s_2$ then $f(s_1) = f(s_2)$. That is, for $k=3$, $f(\langle 1,2,3 \rangle) = f(\langle 2,3,1\rangle) = f(\langle 3,1,2\rangle)$, etc.
+
+Consider a synchronous algorithm $\auto{SymGk}$ running on a graph $G$ with {\em indegree\/} $k$. That is, each process $P_j$ reads the states of exactly $k$ other processes. In this algorithm. $\auto{SymGk}$, every node updates its state $x_i$ according to some symmetric function $f:S^k \rightarrow S$, that is,
+\[
+x[i] := f(\langle x[j] \ | \ (j,i) \in G)
+\]
+Show that it is impossible for $\auto{SymGk}$  to elect a leader if initially every process has the same value of $x[i]$. {\em [Hint: State an invariant and prove it by induction on rounds.]}
+
+\paragraph{Solution}
+Let $\Uptheta$ be the set of all states where every process has the same value. Next, we prove that $\Uptheta$ is an invariant for initial states set $\Uptheta$. First, every initial state is in the invariant. Then, for any execution $\alpha = v_0\,step\,v_1\,step\,\,v_2 step\,\,v_3 \dots $. If $v_k$ is in the invariant, then $v_k \lceil x[i] = C, \forall i$, where $C$ a constant. Therefore, we have $v_{k+1} \lceil x[i] = f(\langle v_k \lceil x[j] \ | \ (j,i) \in G) = f(C,C,\dots,C) = C', \forall i$, which means $v_{k+1} \in \Uptheta$ still holds. Therefore $\Uptheta$ is an invariant. If initially every process has the same value, they will always have the same value which means a leader cannot be elected.
+
+\paragraph{Problem 4. Dijkstra invariance with Z3 (40 points).}
+Use the Z3 SMT solver to encode and check that for the Dijkstra's token ring mutual exclusion algorithm ($\auto{DijkstraTR}$ of Chapter~2) the predicate $\phi_{\mathit{legal}}$ is an inductive invariant.
+
+First install z3 in your computer. This is a very quick process. On the MacOS \texttt{pip install z3-solver} does it in less than a minute. For Windows and Linux you can get it from: \\  \href{https://github.com/Z3Prover/z3}{https://github.com/Z3Prover/z3}. There is a lot of help available online for installation related issues.
+
+Next, download the file \texttt{DijkstraTRind.py} given for this homework and read it carefully. There are several function given and you have to complete several other functions. The documentation given with the program, the lecture slides, and the discussions in the book chapter 2 and 7 should be adequate for you to complete this problem. Here are some additional notes.
+
+\begin{itemize}
+\item \texttt{has\_token(x\_list, j)}: Generates a Z3 Boolean expression (predicate) that represents whether process P\_j holds the token. Here  \texttt{x\_list} is a list of Z3 variables, for example, \texttt{[x[0], x[1], x[2], x[3]]}, and  \texttt{j} is the index of process P\_j.
+\item \texttt{legal\_config(x\_list)}: Generates a Z3 Boolean expression that represents whether the system is in a legal configuration. This is the implementation of $\phi_{\mathit{legal}}$. This function is given to and {\bf you do not have to change it\/}.
+%
+\item \texttt{transition\_relation(old\_x\_list, new\_x\_list)}: Generates a Z3 Boolean expression representing transition from \texttt{old\_x\_list} to \texttt{new\_x\_list}.
+\item \texttt{prove(conjecture)}: Checks whether the Boolean predicate \texttt{conjecture} is valid using the Z3 solver to check the {\em unsatisfiability\/} of the negation of \texttt{conjecture}. {\bf You do not have to change this.\/}
+\end{itemize}
+
+Run your program with \texttt{python DijkstraTRind.py}. If the functions are written correctly, then validity of the base case and the induction case imply (by the induction invariance Theorem) that \texttt{legal\_config} is indeed an invariant.
+
+\paragraph{Class contribution and project ideas}
+\begin{itemize}
+\item Verify the self-stabilization property of Dijkstra's algorithm and other self-stabilizing algorithms from Chapter 17 of~\cite{Ghosh:2014:DSA}. Note self-stabilization is not an invariant property and requires a different proof technique with ranking functions  that we will discuss later in this course.
+\item Verify inductive invariants of other distributed algorithms, such as the bidirectional array in Problem~1, following the pattern of Problem 4. Several interesting examples appear in Chapter~17 of~\cite{Ghosh:2014:DSA}.
+\end{itemize}
+
+\bibliography{sayan1}
+\bibliographystyle{plain}
+\end{document}
