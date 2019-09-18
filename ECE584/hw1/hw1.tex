@@ -5,7 +5,7 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes}
 \usepackage{fullpage}
-
+\usepackage{mathtools}
 
 \usepackage{palatino}
 \RequirePackage{ifthen}
@@ -197,11 +197,11 @@ In this protocol, process $i$ {\em has token\/} iff
 %\end{lstlisting}
 \noindent\rule{7cm}{1.0pt}
 
-(b) Let $N=5$. For every step, the state are represented by a number like $1333\hat{2}$, which means $s[0]=1,s[1]=s[2]=s[3]=3,s[4]=2$ and process 4 has the token. An execution that starts from a state with a single token: $1333\hat{2} \rightarrow 133\hat{3}0 \rightarrow 13\hat{3}00 \rightarrow 1\hat{3}000 \rightarrow 1\hat{0}000 \rightarrow 11\hat{0}00 \rightarrow 111\hat{0}0 \rightarrow 1111\hat{0} \rightarrow 111\hat{1}2 \rightarrow \dots$.
+(b) Let $N=5$. For every step, the state are represented by a number like $1333\hat{2}$, which means $s[0]=1,s[1]=s[2]=s[3]=3,s[4]=2$ and process 4 has the token. An execution that starts from a state with a single token: $1333\hat{2} \xrightarrow{\text{update(4)}} 133\hat{3}0 \xrightarrow{\text{update(3)}} 13\hat{3}00 \xrightarrow{\text{update(2)}} 1\hat{3}000 \xrightarrow{\text{update(1)}} 1\hat{0}000 \xrightarrow{\text{update(1)}} 11\hat{0}00 \xrightarrow{\text{update(2)}} 111\hat{0}0 \xrightarrow{\text{update(3)}} 1111\hat{0} \xrightarrow{\text{update(4)}} 111\hat{1}2 \xrightarrow{\text{update(3)}} \dots$.
 
-(c) Let $N=5$. An execution that starts from a state with multiple tokens: $1\hat{0}1\hat{0}0 \rightarrow 111\hat{0}0 \rightarrow 1111\hat{0} \rightarrow 111\hat{1}2 \rightarrow 11\hat{1}22 \rightarrow 1\hat{1}222 \rightarrow \hat{1}2222 \rightarrow \dots$.
+(c) Let $N=5$. An execution that starts from a state with multiple tokens: $1\hat{0}1\hat{0}0 \xrightarrow{\text{update(1)}}  111\hat{0}0 \xrightarrow{\text{update(3)}} 1111\hat{0} \xrightarrow{\text{update(4)}} 111\hat{1}2 \xrightarrow{\text{update(3)}} 11\hat{1}22 \xrightarrow{\text{update(2)}} 1\hat{1}222 \xrightarrow{\text{update(1)}} \hat{1}2222 \xrightarrow{\text{update(0)}} \dots$.
 
-(d) It is easy to verify that if the variables of two neighboring processes has different parity, then at least one of them has the token. Because process $0$ must take an odd variable and process $N-1$ must take an even one, we have the following consequence: the state has only one token $\iff$ there exists a parity-separating process $p (0 \le p < N-1)$ so that $\forall j \le p, s[j] \in {1,3}$ and $\forall j > p, s[j] \in {0,2}$. Next we prove that if $v_k$ has only one token, then $v_{k+1}$ also has only one token. For a state with only one token and the parity-separating ID $p$, process $p$ or $p+1$ has the token. There are 4 possible situations. 1) $p=0$. If process $0$ has the token, then in the next state there exists an parity-separating ID $p'=0$. If process $1$ has the token, then $p'=1$. 2) $p=N-2$. If process $N-2$ has the token, then $p'=N-3$. If process $N-1$ has the token, then $p'=N-2$. 3) $1<p<N-2$. If process $p$ has the token, then $p'=p-1$. If process $p+1$ has the token, then $p'=p+1$. Therefore, in all situations the next state has a parity-separating ID which means this state has only one token. With the inductive invariance theorem, we proved that ``system has only one token" is an invariant.
+(d) It is easy to verify that if the variables of two neighboring processes has different parity, then at least one of them has the token. Then, because process $0$ must take an odd value and process $N-1$ must take an even one, we have the following consequence: the state has only one token $\iff$ there exists a parity-separating process $p (0 \le p < N-1)$ so that $\forall j \le p, s[j] \in \{1,3\}$ and $\forall j > p, s[j] \in \{0,2\}$. Next we prove that if $v_k$ has only one token, then $v_{k+1}$ also has only one token. For a state with only one token and the parity-separating ID $p$, process $p$ or $p+1$ has the token. There are 4 possible situations. 1) $p=0$. If process $0$ has the token, then in the next state there exists an parity-separating ID $p'=0$. If process $1$ has the token, then $p'=1$. 2) $p=N-2$. If process $N-2$ has the token, then $p'=N-3$. If process $N-1$ has the token, then $p'=N-2$. 3) $1<p<N-2$. If process $p$ has the token, then $p'=p-1$. If process $p+1$ has the token, then $p'=p+1$. Therefore, in all situations the next state has a parity-separating ID which means this state has only one token. With the inductive invariance theorem, we proved that ``system has only one token" is an invariant.
 
 \paragraph{Problem 2. LCR Leader election (20 points).}
 In this problem, you will create a model of a leader election algorithm in a unidirectional ring~\cite{lynch1996a}. Here is the informal description of the protocol:

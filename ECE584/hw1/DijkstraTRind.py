@@ -105,11 +105,13 @@ def main():
     init = legal_config(prestate)
 
     # 3. Write the base_case predicate using the Implies() function of z3
-    base_case = Implies(And(bounds(prestate), legal_config(prestate)), invariant(prestate))
+    # base_case = Implies(And(bounds(prestate), init), invariant(prestate))
+    base_case = Implies(init, invariant(prestate))
 
     # 4. Write the induction step predicate using the Implies() function of z3
     # prestate and poststate and transition_relation
-    ind_case = Implies(And(bounds(prestate), invariant(prestate), transition_relation(prestate, poststate)), And(bounds(poststate), invariant(poststate)))
+    # ind_case = Implies(And(bounds(prestate), invariant(prestate), transition_relation(prestate, poststate)), And(bounds(poststate), invariant(poststate)))
+    ind_case = Implies(And(invariant(prestate), transition_relation(prestate, poststate)), invariant(poststate))
 
     # Do not change
     print("## Proving base case:")
