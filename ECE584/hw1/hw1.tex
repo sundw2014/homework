@@ -254,7 +254,7 @@ Each process sends its identifier to its successor around the ring. When a proce
 
 (b) Let $N = 5, uid = [1,3,2,4,5]$, ``u" is short for ``unkonwn" and ``n" is short for ``null". $send = [1,3,2,4,5], status = [u,u,u,u,u]$  $\rightarrow send = [5, n, 3, n, n], status = [u,u,u,u,u] \rightarrow send = [n, 5, n, n, n], status = [u,u,u,u,u] \rightarrow send = [n,n,5,n,n], status=[u,u,u,u,u] \rightarrow send = [n,n,n,5,n], status=[u,u,u,u,u] \rightarrow send=[n,n,n,n,n], status=[u,u,u,u,\textbf{leader}]$
 
-(c) $I_1 = whole~state~space$. $I_2 = \llbracket(\exists i,~send[i] == the~largest~UID~uid_{max}) \vee (\exists i,~status[i] == leader)\rrbracket$.
+(c) $I_1 = whole~state~space$. $I_2 = \llbracket(\exists i,~send[i] == the~largest~UID~uid_{max}) \vee (\exists i,~status[i] == leader)\rrbracket$. $I_2$ is an invariant, because the largest UID will not be discarded until a leader is elected.
  % $I_3 = $
 
 
