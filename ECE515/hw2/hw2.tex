@@ -1,0 +1,179 @@
+\documentclass[11pt]{report}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{ragged2e}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{pgf,tikz}
+\usepackage[shortlabels]{enumitem}
+\usepackage{color}
+\usepackage{pgfplots}
+\usepackage[margin = 1 in]{geometry}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{psfrag}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\newcounter{appdef}
+\setcounter{appdef}{2}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{defn}{Definition}[appdef]
+\newtheorem{lemma}{Lemma}[appdef]
+
+\theoremstyle{definition}
+\newtheorem{proposition}{Proposition}[chapter]
+\newtheorem{remark}{Remark}[chapter]
+\newtheorem{example}{Example}[appdef]
+
+\newcommand{\T}{\intercal}
+\newcommand{\user}{}
+\newcommand{\xlr}[2]{#1 \left(#2\right)}
+\newcommand{\clr}[2]{#1 \left\{ #2 \right\}}
+\newcommand{\spn}{\operatorname{span}}
+\lhead{ECE 515 - Fall 2019 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{HW2 - Template}}
+\lfoot{Submitted by: \textcolor{red}{\textit{daweis2}}}
+\rfoot{Due: \textcolor{red}{\today}}
+\begin{document}
+
+%==========================================================================================
+\section*{Problem 1}
+Consider the nonlinear differential equation:
+\[
+\ddot y = 2y - (y^2 + 1)(\dot y + 1) + u
+\]
+\begin{enumerate}[label=\alph*)]
+\item Obtain a non-linear state-space representation.
+\item Linearize this system of equations around its equilibrium output trajectory when $u(\cdot) \equiv 0$, and write it in state-space form.
+\end{enumerate}
+%----------------------------------------
+\subsection*{Solution}
+
+(a) Let $x_1=y,~x_2=\dot{y}$, then
+\begin{equation*}
+\begin{split}
+  \dot{x_1} &= x_2\\
+  \dot{x_2} &= 2x_1 - (x_1^2+1)(x_2+1) + u\\
+  y &= x_1
+\end{split}
+\end{equation*}
+
+\noindent(b) Letting $\dot{x_{e1}} = 0,~\dot{x_{e2}} = 0, u = 0$, we have $x_{e1} = 1,~x_{e2} = 0$. Linerize the system around the nominal trajectory $x^n(t) = [1, 0]^T$. Letting $x_1 = x_{e1} + \delta x_1,~x_2 = x_{e2} + \delta x_2$, we have
+\begin{equation*}
+\begin{split}
+  \dot{x_1} &= \delta\dot{x_1} = x_2 = x_{e2} + \delta x_2 = \delta x_2\\
+  \dot{x_2} &= \delta\dot{x_2} = f(x_{e1}+\delta x_1, x_{e2}+\delta x_2, 0) =  f(x_{e1}, x_{e2}, 0) + \frac{\partial f}{x_1} \delta x_1 + \frac{\partial f}{x_2} \delta x_2 = -2\delta x_2
+\end{split}
+.
+\end{equation*}
+
+The state space equation is
+\begin{equation*}
+\begin{split}
+\begin{bmatrix}\delta \dot{x_1} \\ \delta \dot{x_2} \end{bmatrix} = \begin{bmatrix} 0&1\\0&-2 \end{bmatrix} \begin{bmatrix} \delta x_1 \\ \delta x_2 \end{bmatrix}
+\end{split}
+\end{equation*}
+%==========================================================================================
+\section*{Problem 2}
+Suppose $A \in \mathbb{R}^{n \times n}$ and $D \in \mathbb{R}^{m \times m}$ are square matrices. Suppose $A$ and $D$ have all distinct eigenvalues. (That is, the eigenvalues of $A$ are from both different from each other {\em and} the eigenvalues of $D$, and similarly for $D$.) Prove that the eigenvalues of $M$ are the union of the eigenvalues of $A$ and $D$, where:
+\[
+M =
+\begin{bmatrix}
+A & B \\
+0_{m \times n} & D
+\end{bmatrix}
+\]
+Here, $0_{m \times n} \in \mathbb{R}^{m \times n}$ is the matrix of all zeros, and $B \in \mathbb{R}^{n \times m}$ is an arbitrary matrix.
+
+\justify {\bf Hint:} Use the eigenvectors of $A$ and $D$ to construct the eigenvectors of $M$. Note that $(sI-A)$ is invertible for any $s$ that is {\em not} an eigenvalue of $A$.
+
+\justify {\bf Note:} This is actually true for any $A$ and $D$, but is easier to show for the distinct eigenvalue case.
+%----------------------------------------
+\subsection*{Solution}
+Let $v_i$ be the $i$-th eigenvector of $A$ corresponding to the eigenvalue $\lambda_i$ and $u_i = \begin{bmatrix}v_i\\0_{m \times 1}\end{bmatrix}$. Then $Mu_i = \lambda_i u_i$, which means $u_i$ is an eigenvector of $M$ and $\lambda_i$ is an eigenvalue of $M$. Therefore, all the $n$ eigenvalues of $A$ are eigenvalues of $M$.
+
+\noindent Let $v_i$ be the $i$-th eigenvector of $D$ corresponding to the eigenvalue $\lambda_i$ and $C = \lambda_iI - A$. Then because $\lambda_i$ is not an eigenvalue of $A$, $C^{-1}$ exists. Let $u_i = \begin{bmatrix}C^{-1}Bv_i\\v_i\end{bmatrix}$. Then $Mu_i = \lambda_i u_i$, which means $u_i$ is an eigenvector of $M$ and $\lambda_i$ is an eigenvalue of $M$. Therefore, all the $m$ eigenvalues of $D$ are eigenvalues of $M$.
+
+\noindent $M$ has at most $n+m$ eigenvalues, so eigenvalues of $M$ is exactly the union of the eigenvalues of $A$ and $D$.
+
+%==========================================================================================
+\section*{Problem 3}
+Consider:
+\[
+M =
+\begin{bmatrix}
+A & B \\
+C & D
+\end{bmatrix}
+\]
+Suppose $D$ is invertible. Show that $\det(M) = \det(D) \det(A-BD^{-1}C)$. (This is known as the Schur complement; note how this generalizes the $2 \times 2$ equation for the determinant: $ad - bc$.)
+
+\justify {\bf Hint:} You may use the previous problem, and you may take it for granted that $\det(AB) = \det(A) \det(B)$. (In abstract algebra terms, this means that the determinant is a group homomorphism.) Try to break down $M$ into the product of two triangular matrices, one with determinant $\xlr{\det}{D}$ and one with determinant $\xlr{\det}{A - B D^{-1} C }$.
+
+%----------------------------------------
+\subsection*{Solution}
+Since $$ \begin{bmatrix} A & B \\ C & D \end{bmatrix} = \begin{bmatrix}
+A-BD^{-1}C & BD^{-1} \\ 0 & I \end{bmatrix} \begin{bmatrix} I & 0 \\ C & D \end{bmatrix},$$ we have $\det(M) = \det(\begin{bmatrix}
+A-BD^{-1}C & BD^{-1} \\ 0 & I \end{bmatrix}) \det(\begin{bmatrix} I & 0 \\ C & D \end{bmatrix}) = \det(D) \det(A-BD^{-1}C)$
+
+%==========================================================================================
+\section*{Problem 4}
+Consider the linear system:
+\begin{equation}
+\label{eq:dyn}
+\dot x = Ax + Bu \qquad \qquad y = Cx
+\end{equation}
+For any time $T > 0$, we can view this system as a mapping $L :(x_0,(u(t))_{0 \le t \le T}) \mapsto (x_f,(y(t))_{0 \le t \le T})$. That is, $L$ takes initial conditions $x(0) = x_0$ and functions $u(\cdot)$ as an input, and it outputs final states $x(T) = x_f$ and functions $y(\cdot)$, according to the differential equation~\eqref{eq:dyn}. Let $\mathcal{U}$ denote the set of piecewise continuous, square-integrable functions from $[0,T]$ to $\mathbb{R}^{n_i}$, and similarly $\mathcal{Y}$ denote the set of piecewise continuous, square-integrable functions from $[0,T]$ to $\mathbb{R}^{n_o}$. So, $L : \mathbb{R}^n \times \mathcal{U} \rightarrow \mathbb{R}^n \times \mathcal{Y}$.
+
+\justify
+The {\em dual system} is given by:
+\[
+- \dot {\tilde x} = A^\T \tilde x + C^\T \tilde u \qquad \qquad \tilde y = B^\T \tilde x
+\]
+Here, $\tilde u \in \tilde {\mathcal{U}} = \mathcal{Y}$ and $\tilde y \in \tilde {\mathcal{Y}} = \mathcal{U}$. Note the minus sign on the state dynamics; we'll actually think of the dual system moving {\em backward} in time. Define $L^*: (\tilde x_f,(\tilde u(t))_{0 \le t \le T}) \mapsto (\tilde x_0,(\tilde y(t))_{0 \le t \le T})$, mapping {\em final} states $\tilde x_f$ and dual inputs $\tilde u$ to initial states $\tilde x_0$ and dual outputs $\tilde y$. Note that $L^* : \mathbb{R}^n \times \tilde {\mathcal{U}} \rightarrow \mathbb{R}^n \times \tilde {\mathcal{Y}}$.
+
+\justify
+Define the inner product on $\mathbb{R}^n \times \mathcal{U}$ (which is also $\mathbb{R}^n \times \tilde {\mathcal{Y}}$) as:
+\[
+\langle (x_0, u(\cdot)), (x_0', u'(\cdot)) \rangle =
+x_0^\T x_0' + \int_0^T u(t)^\T u'(t) dt
+\]
+\justify
+Define the inner product on $\mathbb{R}^n \times \mathcal{Y}$ similarly. For this problem, show that $L^*$ is the adjoint of $L$. (This is sometimes called the {\em pairing lemma}.)
+
+\justify {\bf Hint:} Consider $\dfrac{d}{dt} \langle x, \tilde x \rangle$, and integrate on $[0,T]$.
+
+%----------------------------------------
+\subsection*{Solution}
+Define $\langle x, \tilde x \rangle := x^T \tilde{x}$, then we have
+\begin{multline*}
+\dfrac{d}{dt} \langle x, \tilde x \rangle = \langle \dot{x}, \tilde{x} \rangle + \langle x, \dot{\tilde{x}} \rangle = \langle Ax + Bu, \tilde{x} \rangle - \langle x, A^T \tilde{x} + C^T \tilde{u} \rangle = \langle Ax, \tilde{x} \rangle + \langle Bu, \tilde{x} \rangle - \langle x, A^T \tilde{x} \rangle - \langle x, C^T \tilde{u} \rangle\\
+  =\langle Bu, \tilde{x} \rangle - \langle x, C^T \tilde{u} \rangle = u^T B^T \tilde{x} - x^TC^T\tilde{u} = u^T \tilde{y} - y^T \tilde{u}
+\end{multline*}
+
+\noindent From the fundamental theorem of calculus, we hace the integral equation
+\begin{multline*}
+\int_{0}^{T} \dfrac{d}{dt} \langle x, \tilde x \rangle = \langle x(T), \tilde x(T) \rangle - \langle x(0), \tilde x(0) \rangle = x_f^T\tilde{x}_f - x_0^T\tilde{x}_0 = \int_{0}^{T} u^T \tilde{y} dt - \int_{0}^{T} y^T \tilde{u} dt
+\end{multline*}
+
+\noindent Therefore,
+\begin{equation*}
+x_f^T\tilde{x}_f + \int_{0}^{T} y^T \tilde{u} dt = x_0^T\tilde{x}_0 + \int_{0}^{T} u^T \tilde{y} dt,
+\end{equation*}
+which means
+
+\begin{equation*}
+\langle L(x_0, u_0), (\tilde{x}_f, \tilde{u}) \rangle = \langle (x_0, u_0), L^*(\tilde{x}_f, \tilde{u}) \rangle,
+\end{equation*}
+
+\noindent and $L$ and $L^*$ are adjoint.
+
+\raggedleft $\blacksquare$
+\end{document}
