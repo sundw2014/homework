@@ -1,0 +1,253 @@
+\documentclass[11pt]{report}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{ragged2e}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{pgf,tikz}
+\usepackage[shortlabels]{enumitem}
+\usepackage{color}
+\usepackage{pgfplots}
+\usepackage[margin = 1 in]{geometry}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{psfrag}
+\usepackage{upgreek}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\newcounter{appdef}
+\setcounter{appdef}{2}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{defn}{Definition}[appdef]
+\newtheorem{lemma}{Lemma}[appdef]
+
+\theoremstyle{definition}
+\newtheorem{proposition}{Proposition}[chapter]
+\newtheorem{remark}{Remark}[chapter]
+\newtheorem{example}{Example}[appdef]
+
+\newcommand{\T}{\intercal}
+\newcommand{\user}{}
+\newcommand{\xlr}[2]{#1 \left(#2\right)}
+\newcommand{\clr}[2]{#1 \left\{ #2 \right\}}
+\newcommand{\spn}{\operatorname{span}}
+\lhead{ECE 515 - Fall 2019 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{HW3 - Template}}
+\lfoot{Submitted by: \textcolor{red}{\textit{daweis2}}}
+\rfoot{Due: \textcolor{red}{\today}}
+\begin{document}
+
+%==========================================================================================
+\section*{Problem 1}
+Let $R[x]_{\le n}$ be the space of polynomials with real coefficients of degree at most $n$ defined on the field of reals $\mathbb{R}$.
+Let $\mathcal{A}:R[x]_{\le n} \rightarrow R[x]_{\le n}$ be the derivative operator (e.g., $\mathcal{A}[2x^2+3x+1]=4x+3$).
+
+\begin{enumerate}[label = \alph*)]
+\item
+Show that $(R[x]_{\le n},\mathbb{R})$ is a vector space and $V=\{1,x,x^2,\ldots,x^n\}$ is a basis for it.
+\item
+Show that $\mathcal{A}(\cdot)$  is a linear operator, and find the matrix representation of $\mathcal{A}$ in terms of basis $V$. That is, find a matrix $A$ such that for every $f\in R[x]_{\le n}$, $[\mathcal{A}(f)]_V=A[f]_V$, where $[g]_V \in \mathbb{R}^{n+1}$ is the representation of $g$ with respect to the basis $V$.
+\end{enumerate}
+
+%----------------------------------------
+\subsection*{Solution}
+\begin{enumerate}[label = \alph*)]
+\item
+There exists $\upvartheta = 0(x)$, a constant function with value 0. Also $\forall \alpha, \beta \in \mathbb{R}, x_1, x_2 \in R[x]_{\le n}$, we have $\alpha x_1 + \beta x_2$ which is also a polynomial with real coefficients of degree at most $n$. Therefore $(R[x]_{\le n},\mathbb{R})$ is a vector space.
+
+$\sum\limits_{i=0}^{n} \alpha_i x^i = 0(x) \iff \forall i,~\alpha_i = 0$, so $\{1,x,x^2,\ldots,x^n\}$ are linearly independent. Also for any polynomials in $R[x]_{\le n}$, it can be represented by $\{1,x,x^2,\ldots,x^n\}$. Therefore, $\{1,x,x^2,\ldots,x^n\}$ is a basis.
+
+\item
+Derivative is a linear operation, so $\forall \alpha, \beta \in \mathbb{R}, x_1, x_2 \in R[x]_{\le n}$, $\mathcal{A}(\alpha x_1 + \beta x_2) = \alpha \mathcal{A}(x_1) + \beta \mathcal{A}(x_2)$. Therefore $\mathcal{A}$ is a linear operator. $\forall f(x) = \sum\limits_{i=0}^{n} \alpha_i x^i,~\mathcal{A}(f(x)) = \sum\limits_{i=1}^{n} i \alpha_i x^{i-1}$, so $$A=\begin{bmatrix}0 &1 &0 &\ldots &0\\0 &0 &2 &\ldots &0\\ &&\ldots& \\0 &0 &0 &\ldots &n\\0 &0 &0 &\ldots &0\end{bmatrix}.$$
+\end{enumerate}
+
+
+
+
+%==========================================================================================
+\section*{Problem 2}
+Suppose $\mathcal{A} : \mathcal{X} \rightarrow \mathcal{Y}$ is a linear operator. Show that $\mbox{dim}(N(\mathcal{A})) + \mbox{dim}(R(\mathcal{A})) = \mbox{dim}(\mathcal{X})$. This is known as the {\em rank-nullity theorem}
+\justify
+{\bf Hint:} Let $\{v_1, \ldots , v_k\}$ be a basis of $N(\mathcal{A})$. Show that this basis can be extended to a basis for $\mathcal{X}$ by adding additional independent vectors $\{v_{k+1}, \ldots , v_n\}$. Then show $A(v_{k+1}),\ldots,A(v_n)$ is a basis of $R(\mathcal{A})$.
+
+%----------------------------------------
+\subsection*{Solution}
+Let the dimension of $\mathcal{X}$ be $n$ and $\{v_1, \ldots , v_k\}$ be a basis of $N(\mathcal{A})$. Then this basis can be extended to a basis for $\mathcal{X}$ by adding additional independent vectors $\{v_{k+1}, \ldots , v_n\}$. $\forall x \in \mathcal{X}$, it can be represented by the basis, $x = \sum\limits_{i=1}^{n} \alpha_i v_i$. Then $\mathcal{A}(x) = \sum\limits_{i=1}^{n} \alpha_i \mathcal{A}(v_i) = \sum\limits_{i=k+1}^{n} \alpha_i \mathcal{A}(v_i)$. So $R(\mathcal{A})$ is the space spaned by $\{\mathcal{A}(v_{k+1}), \ldots, \mathcal{A}(v_n)\}$. Next we prove $\{\mathcal{A}(v_{k+1}), \ldots, \mathcal{A}(v_n)\}$ are linearly independent. Let $\sum\limits_{i=k+1}^{n} \beta_i \mathcal{A}(v_i) = \mathcal{A}(\sum\limits_{i=k+1}^{n} \beta_i v_i) = 0$, then $\sum\limits_{i=k+1}^{n} \beta_i v_i$ must be in $N(\mathcal{A})$ and can be represented by $\{v_1, \ldots, v_k\}$. Let $\sum\limits_{i=k+1}^{n} \beta_i v_i = \sum\limits_{j=1}^{k} \gamma_j v_j$, because $\{v_1, \ldots, v_n\}$ are linearly independent, we have $\beta_i = 0, \gamma_j = 0, \forall i,j$. So $\{\mathcal{A}(v_{k+1}), \ldots, \mathcal{A}(v_n)\}$ are linearly independent. Therefore, $\mbox{dim}(N(\mathcal{A})) + \mbox{dim}(R(\mathcal{A})) = \mbox{dim}(\mathcal{X})$.
+
+%==========================================================================================
+\section*{Problem 3}
+As we discussed in class, every matrix can be put into Jordan form:
+\[
+A =
+T
+\begin{bmatrix}
+J_1 & 0 & 0 \\
+0 & \ddots & 0 \\
+0 & 0 & J_k
+\end{bmatrix}
+T^{-1}
+\]
+Here, each Jordan block $J_i$ has the form:
+\[
+\begin{bmatrix}
+\lambda_i & 1 & 0 & \dots & 0 \\
+0 & \lambda_i & 1 & \dots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \lambda_i & 1 \\
+0 & 0 & 0 & 0 & \lambda_i
+\end{bmatrix}
+\]
+
+\begin{enumerate}[label = \alph*)]
+\item
+Let $J$ be a Jordan block of size $n$. Show that:
+\[
+J^k =
+\begin{bmatrix}
+\binom{k}{0}\lambda^k & \binom{k}{1}\lambda^{k-1} & \binom{k}{2}\lambda^{k-2} & \cdots & \cdots & \binom{k}{n-1}\lambda^{k-(n-1)} \\
+ & \binom{k}{0}\lambda^k & \binom{k}{1}\lambda^{k-1} & \cdots & \cdots & \binom{k}{n-2}\lambda^{k-(n-2)} \\
+ &  & \ddots & \ddots & \vdots & \vdots\\
+ &  & & \ddots & \ddots & \vdots\\
+ &  & &  & \binom{k}{0}\lambda^k & \binom{k}{1}\lambda^{k-1}\\
+ &  &  &  &  & \binom{k}{0}\lambda^k
+\end{bmatrix}
+\]
+Here, $\binom{n}{k} = \frac{n!}{k!(n-k)!}$, and we use the convention that $(n-k)! = 0$ if $n-k < 0$.
+
+{\bf Hint: } You may use a proof by induction, and Pascal's rule may prove useful:
+\[
+\binom{n-1}{k} + \binom{n-1}{k-1} = \binom{n}{k}
+\]
+
+\item
+If the Jordan block $J_i$ is of size $n$, then for any analytic function $f$:
+\[
+f(J_i) =
+\begin{bmatrix}
+f(\lambda_i) & f'(\lambda_i) & \frac{f''(\lambda_i)}{2} & \dots & \frac{f^{(n-1)}(\lambda_i)}{(n-1)!} \\
+0 & f(\lambda_i) &  f'(\lambda_i) & \dots &  \frac{f^{(n-2)}(\lambda_i)}{(n-2)!} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & f(\lambda_i) &  f'(\lambda_i) \\
+0 & 0 & 0 & 0 & f(\lambda_i)
+\end{bmatrix}
+\]
+Use the result from the previous problem to prove this.
+
+\justify
+{\bf Hint:} Since $f$ is analytic, we may write $f(s) = \sum_{k = 0}^\infty \alpha_k s^k$. Using this, write out $f(J)$, and consider what the entries in $f(J)$ will be.
+
+\justify
+{\bf Note: }
+One consequence of what you just proved is the following:
+\[
+e^{J_i t} =
+\begin{bmatrix}
+e^{\lambda_i t} & t e^{\lambda_i t} & \frac{t^2}{2}e^{\lambda_i t} & \dots & \frac{t^{n-1}}{(n-1)!} e^{\lambda_i t} \\
+0 & e^{\lambda_i t} & t e^{\lambda_i t} & \dots & \frac{t^{n-2}}{(n-2)!} e^{\lambda_i t} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & e^{\lambda_i t} & t e^{\lambda_i t} \\
+0 & 0 & 0 & 0 & e^{\lambda_i t}
+\end{bmatrix}
+\]
+Thus, by answering parts (a) and (b), you have shown that:
+\[
+e^{At} =
+T
+\begin{bmatrix}
+e^{J_1 t} & 0 & 0 \\
+0 & \ddots & 0 \\
+0 & 0 & e^{J_k t}
+\end{bmatrix}
+T^{-1}
+\]
+\end{enumerate}
+
+%----------------------------------------
+\subsection*{Solution}
+
+\begin{enumerate}[label = \alph*)]
+\item
+Obviously, $J^1$ satisfies this form. Assume that $J^k$ satisfies this form, we prove that $J^{k+1}$ will also satisfy this form. We denote $A(i,j)$ as the element in the i-th row and j-th column of $A$.
+
+$\forall 1 \leq i < j \leq n$, $J^{k+1}(i,j) = \sum\limits_{h=1}^{n} J^{k+1}(i, h) J(h, j) = \binom{k}{j-i-1} \lambda^{k-(j-i-1)} + \binom{k}{j-i} \lambda^{k-(j-i)} \lambda = \binom{k+1}{j-i} \lambda^{k+1-(j-i)}$
+
+$\forall 1 \leq i = j \leq n$, $J^{k+1}(i,j) = \sum\limits_{h=1}^{n} J^{k+1}(i, h) J(h, j) =  \lambda^{k+1}$
+
+$\forall 1 \leq j < i \leq n$, $J^{k+1}(i,j) = \sum\limits_{h=1}^{n} J^{k+1}(i, h) J(h, j) = 0 $
+
+So $J^{k+1}$ also satisfies this form. Therefore, the proposition is true $\forall k \in \mathcal{Z^+}$
+
+\item
+Since $f$ is analytic, we may write $f(J) = \sum\limits_{k = 0}^\infty \alpha_k J^k$. We denote $A(i,j)$ as the element in the i-th row and j-th column of $A$.
+
+\begin{multline*}
+  \forall 1 \leq i < j \leq n,~~~f(J)(i,j) = \sum\limits_{k=0}^{\infty} \alpha_k J^k(i, j) = \sum\limits_{k=j-i}^{\infty} \alpha_k \binom{k}{j-i} \lambda^{k-(j-i)} \\ = \sum\limits_{k=j-i}^{\infty}\frac{1}{(j-i)!} \alpha_k \frac{k!}{(n-(j-i))!} \lambda^{k-{j-i}} = \frac{f^{(j-i)}(\lambda)}{(j-i)!}
+\end{multline*}
+
+\begin{multline*}
+  \forall 1 \leq i = j \leq n,~~~f(J)(i,j) = \sum\limits_{k=0}^{\infty} \alpha_k J^k(i, j) = \sum\limits_{k=0}^{\infty} \alpha_k \lambda^k = f(\lambda)
+\end{multline*}
+
+\begin{multline*}
+  \forall 1 \leq j < i \leq n,~~~f(J)(i,j) = \sum\limits_{k=0}^{\infty} \alpha_k J^k(i, j) = 0
+\end{multline*}
+
+So $f(J)$ satisfies this form.
+
+\end{enumerate}
+
+
+
+%==========================================================================================
+\section*{Problem 4}
+Suppose that $A$ and $Q$ are $n \times n$ matrices, and consider the matrix differential equation:
+\begin{equation}
+\label{eq:pr1}
+\dot Z = AZ + Z A^* \qquad \qquad Z(0) = Q
+\end{equation}
+\begin{enumerate}[(a), noitemsep]
+\item  Show using the product rule that the unique solution to~\eqref{eq:pr1} is given by:
+\[
+Z(t) = e^{At} Q e^{A^* t}
+\]
+\item Show that if $e^{At} \rightarrow 0$ as $t \rightarrow \infty$, then
+\[
+P = \lim_{t_f \rightarrow \infty} \int_0^{t_f} Z(t) dt
+\]
+is a solution to the {\em Lyapunov equation}:
+\[
+AP + PA^* + Q = 0
+\]
+\end{enumerate}
+\justify
+({\bf Hint:} Integrate both sides of~\eqref{eq:pr1} from $0$ to $t_f$ and use the fundamental theorem of calculus.)
+
+
+
+
+
+%----------------------------------------
+\subsection*{Solution}
+
+\begin{enumerate}[(a), noitemsep]
+\item
+First, the solution satisfies the initial state, $Z(0) = e^{A0} Q e^{A^* 0} = Q$. Then we show that is satisfies the differential equation. $\dot{Z}(t) = (e^{At})' Q e^{A^* t} + e^{At} Q (e^{A^* t})' = A e^{At} Q e^{A^* t} + e^{At} Q e^{A^* t} A^* = AZ+ZA^*$.
+
+\item
+Because $e^{At} \rightarrow 0$ as $t \rightarrow \infty$, $e^{A^* t} \rightarrow 0$ and $Z(t) \rightarrow 0$ as $t \rightarrow \infty$. Integrating both sides of~\eqref{eq:pr1} from $0$ to $t_f$ and using the fundamental theorem of calculus, we have
+$$Z(t_f) - Z(0) = A\int_{0}^{t_f} Z dt + \int_{0}^{t_f} Z dt A^*$$
+
+Letting $t_f$ go to $\infty$, we have $-Q = AP + PA^*$. Therefore $P$ is a solution of $AP+PA^*+Q=0$.
+
+\end{enumerate}
+
+
+
+\end{document}
