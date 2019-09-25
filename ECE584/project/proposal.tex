@@ -1,0 +1,24 @@
+\documentclass[11pt]{article}
+
+% \topmargin -.5in
+% \textheight 9in
+% \oddsidemargin -.25in
+% \evensidemargin -.25in
+% \textwidth 7in
+
+\begin{document}
+
+% ========== Edit your name here
+\author{Dawei Sun}
+\title{ECE 584 Project Proposal: Statistical Model Checking with Black-box Optimization}
+\maketitle
+
+\medskip
+
+Cyber-Physical systems often behaves stochastically. For examples, the properties of the enviornment or the inputs sometimes can only be modeled as random variables conforming to some distributions due to the limited information we can get. In order to analyze this kind of systems, probablistic models like Discrete Time Markov Chain (DTMC) or Markov Decision Processes (MDP) are used. Checking whether a stochastic model satisfies some specifications is a basic problem in formal verificaion. Formally, Probabilistic Model Checking (PMC) algorithms take a probabilistic model and a specification as input and decide if the model conform the specification.
+
+The most straightforward idea to check a stochastic system is to explore the whole state space. Many methods have been developped following this idea. The size of state space may grow exponitially as the complexity of the system grows. For example, in a multi-agent system, if every agent has $N$ possible states, an $m$-agent system will have $N^m$ states. We will show in the final report that checking a very simple ``$n$ cars on a single lane" model can only be done for the cases where $n \leq 3$ on a laptop.
+\bibliography{project}
+\bibliographystyle{plain}
+
+\end{document}
