@@ -1,10 +1,11 @@
 \documentclass[11pt]{article}
-
-% \topmargin -.5in
-% \textheight 9in
-% \oddsidemargin -.25in
-% \evensidemargin -.25in
-% \textwidth 7in
+\usepackage{geometry}
+\geometry{
+ letterpaper,
+ left=30mm,
+ right=30mm,
+ top=20mm,
+ }
 
 \begin{document}
 
@@ -13,11 +14,25 @@
 \title{ECE 584 Project Proposal: Statistical Model Checking with Black-box Optimization}
 \maketitle
 
-\medskip
+\section{Introduction}
+Model Checking~\cite{clarke2018model} is a successful technique widely used in the industry. It is about how to model transition systems and how to check whether they have some properties. As a formal verification method, model checking doesn't require a proof but just explores the entire state space of the model. An interesting extension of this classic method is Probabilistic Model Checking (PMC)~\cite{ciesinski2004probabilistic}, which can be used to check stochastic transition systems. Real-world systems often behaves stochastic ally. For examples, the properties of the environment or the inputs sometimes can only be modeled as random variables conforming to some distributions due to the limited information we have access to. In order to represent this kind of systems, probabilistic models like Discrete Time Markov Chain (DTMC) or Markov Decision Processes (MDP) are used. PMC algorithms take a probabilistic model and a specification as input and decide the probability that the model satisfies the specification.
 
-Cyber-Physical systems often behaves stochastically. For examples, the properties of the enviornment or the inputs sometimes can only be modeled as random variables conforming to some distributions due to the limited information we can get. In order to analyze this kind of systems, probablistic models like Discrete Time Markov Chain (DTMC) or Markov Decision Processes (MDP) are used. Checking whether a stochastic model satisfies some specifications is a basic problem in formal verificaion. Formally, Probabilistic Model Checking (PMC) algorithms take a probabilistic model and a specification as input and decide if the model conform the specification.
+When dealing with PMC problems, the most straightforward idea is to explore the whole state space and compute the exact probability, which are known as Exact Methods. Many methods~\cite{ciesinski2004probabilistic,kwiatkowska2011prism,baier1997symbolic} have been developed following this idea. However exact methods do not scale well. In practice, the size of state space may grow exponentially as the complexity of the system grows. For example, in a multi-agent system, if every agent has $N$ possible states, an $m$-agent system will have $N^m$ states. We will show in the final report that checking a very simple ``$n$ cars on a single lane" model can only be done when $n \leq 3$ on a powerful workstation. When $n=4$, the model checker failed to construct the abstract representation of the model due to memory limitation. Moreover, these methods require an explicit description of the system (the so-called ``white-box" system), which is not practical in many applications. Statistical Model Checking (SMC)~\cite{agha2018survey} address these problems by using simulation-based methods. In SMC, a set of traces of the system is analyzed with statistical reasoning. SMC doesn't explore the whole state space, and thus the conclusion is not always correct. However SMC methods give an upper bound on the error~\cite{herault2004approximate} which ensures the results are correct with a certain degree of confidence. Moreover, SMC only relies on the ability to access trajectories of the system and thus can be used for checking ``black-box" systems.
 
-The most straightforward idea to check a stochastic system is to explore the whole state space. Many methods have been developped following this idea. The size of state space may grow exponitially as the complexity of the system grows. For example, in a multi-agent system, if every agent has $N$ possible states, an $m$-agent system will have $N^m$ states. We will show in the final report that checking a very simple ``$n$ cars on a single lane" model can only be done for the cases where $n \leq 3$ on a laptop.
+Using SMC for MDP is difficult because the non-deterministic nature of the model. In MDP models, at some point, an action is needed, and different actions lead to different transition probability distributions. However, actions are chosen in a non-deterministic way. Schedulers are used to resolve the non-determinism. They are functions from states to actions. Given the current state, the scheduler gives the next action. When analyzing the reachability of an MDP model, a basic problem is to find the maximum or minimum probability of reaching a target state set over all the possible schedulers, in other words, to find the worst or best scheduler. In order to find the exact answer, the algorithm have to explore the entire scheduler space, which is not feasible in most cases. Therefore, approximate methods are studied to address this problem. Approximate methods use a sample policy to partially explore the scheduler space and find a answer. When designing this kind of methods, the most important property we care about is the sample efficiency which directly impacts how many samples are required before finding the answer.
+
+When the transition probability distributions of the system are unknown, the aforementioned problem are known as black-box optimization for which many methods have been developed~\cite{bubeck2011x, sen2019noisy}. We follow a previous paper~\cite{sen2019noisy} where MFHOO, a multi-fidelity hierarchical search algorithm is developed to optimize black-box models. The ultimate goal is to use black-box optimization algorithms to solve general MDP model checking problem. However as a first step towards the ultimate goal, this project studies a special type of MDP models where the only non-deterministic behavior is the choice of the initial state. Once the initial state is determined, the model degrades into a DTMC.
+
+The general idea of the method is as the following. From every initial state we can evaluate the probability of reaching a target set of states. Therefore we have a function $f:\mathbb{\Theta} \mapsto [0,1]$, where $\mathbb{\Theta}$ the set of initial states. $f$ is a black-box function, and its value can be evaluated under different fidelity. Specifically, the more simulation steps are used, the higher fidelity we get. Therefore MFHOO can be used to find the maximum of $f$. In this project, we will apply MFHOO to some initial state searching problems and do some theoretical analysis about the error bound.
+
+\section{Workload}
+\paragraph{Theoretical analysis} First, we have to figure out the bias function of different fidelity. In our case, the bias means the difference of the probabilities reaching a target set within different time bounds. Second, we have to specialize the bound in MFHOO by taking the nature of our problem into account. For example, in our examples the state space is discrete which cause non-smooth function $f$. In this special case, the performance of MFHOO is worth more discussion.
+
+\paragraph{Design examples} Because currently our method cannot handle general MDP models, we have to design some examples from scratch for evaluation purposes. For every example, we first have to develop a simulator in Python. A simulator is a DTMC model. Given an initial state and a fidelity, the simulator run the DTMC for some steps and check if it reaches an unsafe set. Moreover, we want to compare our method with other model checkers and thus an equivalent PRSIM~\cite{kwiatkowska2011prism} model also have to be developed. PRISM is a modeling language widely used by model checkers. With the PRISM representation, models can be checked by many other model checkers like PRISM model checker~\cite{kwiatkowska2011prism}, Storm~\cite{dehnert2017storm}, or PLASMA Lab\cite{legay2016plasma}.
+
+\paragraph{Visualization}
+This part includes processing the data and plotting figures for illustration, or visualizing the simulation process for debugging. For example, visualization of the surface of the function $f$ is helpful to analyze the behavior of the optimization method.
+
 \bibliography{project}
 \bibliographystyle{plain}
 
