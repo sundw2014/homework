@@ -188,6 +188,7 @@ Show that a set of piece-wise continuous functions is closed under composition a
 \paragraph{Solution}
 \begin{itemize}[(a)]
 \item
+There is a counter-example. Let $g(x) = x \sin \frac{1}{x}$ and ${\bf DC}_f = \{0\}$. Then we have $\forall x_i = \frac{1}{n\pi}, n = 1,2,3,\ldots$, $g(x_i) = 0$, and thus $f(g(x))$ is not continuous at $x_i$. Therefore in $[-1, 1]$, there exists infinitly many $x_i$ such that $f(g(x))$ is not continuous at $x_i$, which means $f \circ g$ is not a piecewise continuous function.
 \item
 $\forall x \not\in {\bf DC}_f \cup {\bf DC}_g$, $h = a_1  f + a_2 g$ is continuos at $x$. $\forall x \in {\bf DC}_f \cup {\bf DC}_g$ and $x \not\in {\bf DC}_f \cap {\bf DC}_g$, $h$ is not continuos at $x$. $\forall x \in {\bf DC}_f \cap {\bf DC}_g$, $h$ may be continuous or discontinuos at $x$. Therefore, ${\bf DC}_h \subset {\bf DC}_f \cup {\bf DC}_g$, which means $h$ has a finite number of points of discontinuity and is also piece-wise continuos.
 \end{itemize}
