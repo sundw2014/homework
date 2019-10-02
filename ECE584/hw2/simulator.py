@@ -2,6 +2,7 @@ import numpy as np
 N = 5
 x = [1.0, 2.0, 3.0, 4.0, 5.0]
 # x = [1.0] * N
+a = [1.0] * N
 m = 0
 h = 10
 max_switching_times = 10
@@ -13,7 +14,7 @@ for i in range(max_switching_times):
     _x  = np.array(x)
     _x[m] = np.Inf
     j = np.argmin(_x)
-    delta_t = np.log((1+h)*_x[j]/x[m])
+    delta_t = np.log((1+h)*_x[j]/x[m])/a[m]
     _execution += '(%d, %.3f) $rightarrow$'%(m, delta_t)
     x[m] = (1+h)*_x[j]
     t += delta_t

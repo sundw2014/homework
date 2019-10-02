@@ -17,7 +17,7 @@
 \RequirePackage{graphics}
 \usepackage{xcolor}
 
-
+\usepackage{stmaryrd}
 
 
 \RequirePackage{textcomp}
@@ -156,27 +156,27 @@
 (b) Give an example of a nonlinear system for which $\reach{}(\Theta,t)$ is not convex, even if $\Theta$ is convex. You can give an analytical proof or a numerical example. You may consider a discrete time model $x(t+1) = f(x(t))$ as well.
 
 \paragraph{Solution}
-\begin{itemize}[(a)]
+\begin{enumerate}[(a)]
 \item
 $\forall x^1, x^2 \in \reach{}(\Theta, t)$, denote $x_0^1, x_0^2$ as the corresponding initial state, then we have $x^1 = e^{At}x_0^1, x^2 = e^{At}x_0^2$, and thus $\forall \lambda \in [0,1]$ we have $\lambda x^1 + (1 - \lambda) x^2 = e^{At}(\lambda x_0^1 + (1 - \lambda)x_0^2)$. Because $\Theta$ is convex and $x_0^1, x_0^2 \in \Theta$, we have $(\lambda x_0^1 + (1 - \lambda)x_0^2) \in \Theta$, and thus $e^{At}(\lambda x_0^1 + (1 - \lambda)x_0^2) \in \reach{}(\Theta, t)$. Because $x^1, x^2$ are chosen arbitraily, we proved that $\reach{}(\Theta, t)$ is convex.
 \item
 Consider a two-dimensional non-linear discrete time system.
 $$x(t+1) = \begin{cases}
-      0, & \text{if} x(t)^1 > 0, x(t)^2 > 0\\
+      0, & \text{if}~x(t)_1 > 0, x(t)_2 > 0\\
       x(t), & \text{otherwise}\\
     \end{cases}
 $$
 
-As shown in Fig. \ref{} starting from a convex set $\Theta$, $\reach{}(\Theta, t)$ is not convex.
+As shown in Fig. \ref{fig:convex} starting from a convex set $\Theta$, $\reach{}(\Theta, t)$ is not convex.
 
-\begin{figure}[t]
-\includegraphics[width=8cm]{}
+\begin{figure}[h]
+\centering
+\includegraphics[width=8cm]{convex}
 \caption{Starting from a convex set $\Theta$, $\reach{}(\Theta, t)$ is not convex}
 \label{fig:convex}
-\centering
 \end{figure}
 
-\end{itemize}
+\end{enumerate}
 
 \paragraph{Problem 2. (20 points)}
 Show that a set of piece-wise continuous functions is closed under composition and linear combinations. That is, consider any two piece-wise continuous functions of time $f, g: \reals \rightarrow \reals^m$ with points of discontinuity ${\bf DC}_f$ and ${\bf DC}_g$. Show that
@@ -186,12 +186,15 @@ Show that a set of piece-wise continuous functions is closed under composition a
 \end{enumerate}
 
 \paragraph{Solution}
-\begin{itemize}[(a)]
-\item
-There is a counter-example. Let $g(x) = x \sin \frac{1}{x}$ and ${\bf DC}_f = \{0\}$. Then we have $\forall x_i = \frac{1}{n\pi}, n = 1,2,3,\ldots$, $g(x_i) = 0$, and thus $f(g(x))$ is not continuous at $x_i$. Therefore in $[-1, 1]$, there exists infinitly many $x_i$ such that $f(g(x))$ is not continuous at $x_i$, which means $f \circ g$ is not a piecewise continuous function.
+\begin{enumerate}[(a)]
+% \item
+% There is a counter-example. Let $g(x) = \begin{cases}
+%       x \sin \frac{1}{x}, & \text{if}~x \neq 0\\
+%       0, & \text{if}~x = 0\\
+%     \end{cases}$ and ${\bf DC}_f = \{0\}$. Then we have $\forall x_i = \frac{1}{n\pi}, n = 1,2,3,\ldots$, $g(x_i) = 0$, and thus $f(g(x))$ is not continuous at $x_i$. Therefore in $[-1, 1]$, there exists infinitly many $x_i$ such that $f(g(x))$ is not continuous at $x_i$, which means $f \circ g$ is not a piecewise continuous function.
 \item
 $\forall x \not\in {\bf DC}_f \cup {\bf DC}_g$, $h = a_1  f + a_2 g$ is continuos at $x$. $\forall x \in {\bf DC}_f \cup {\bf DC}_g$ and $x \not\in {\bf DC}_f \cap {\bf DC}_g$, $h$ is not continuos at $x$. $\forall x \in {\bf DC}_f \cap {\bf DC}_g$, $h$ may be continuous or discontinuos at $x$. Therefore, ${\bf DC}_h \subset {\bf DC}_f \cup {\bf DC}_g$, which means $h$ has a finite number of points of discontinuity and is also piece-wise continuos.
-\end{itemize}
+\end{enumerate}
 
 \paragraph{Problem 3. Billiards model (20 points)}
 (a) Consider an idealized billiard table of length a and width b. The table has no pockets; its surface has no friction; and its boundary bounces the balls perfectly. Write a hybrid automaton model of the position of two balls of equal mass on this table. The balls have some initial velocities. A ball bounces off a wall when its position is at the boundary. Balls collide whenever $|x_1-x_2|\leq\varepsilon$ and $|y_1-y_2| \leq \varepsilon$ and their velocity vectors are pointing towards each other. Here $\varepsilon$ is some constant. Whenever a bounce occurs, the appropriate velocity changes sign. Whenever a collision occurs, the balls exchange their velocity vectors. Make all the variables internal. Wall bounces are modeled by an output action called bounce, and each collision is modeled by an output action collision.
@@ -200,7 +203,7 @@ $\forall x \not\in {\bf DC}_f \cup {\bf DC}_g$, $h = a_1  f + a_2 g$ is continuo
 (b) State and prove conservation of speed along each axis as an invariant property of the automaton.
 
 \paragraph{Solution}
-\begin{itemize}[(a)]
+\begin{enumerate}[(a)]
 \item
 \noindent\rule{7cm}{1.0pt}\\
 % \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -209,7 +212,7 @@ $\forall x \not\in {\bf DC}_f \cup {\bf DC}_g$, $h = a_1  f + a_2 g$ is continuo
 \tab\textbf{actions}\\
 \tab\tab bounce; collision;\\
 \tab\textbf{variables}\\
-\tab\tab $v_{1x}$:Real; $v_{1y}$:Real; $v_{2x}$:Real; $v_{2y}$:Real; $x_1$:Real; $y_1$:Real; $x_2$:Real; $y_2$:Real;\\
+\tab\tab $v_{1x}$:Real:=$v_{1x}^0$; $v_{1y}$:Real:=$v_{1y}^0$; $v_{2x}$:Real:=$v_{2x}^0$; $v_{2y}$:Real:$v_{2y}^0$; $x_1$:Real:=$x_1^0$; $y_1$:Real:=$y_1^0$; $x_2$:Real:$x_2^0$; $y_2$:Real:=$y_2^0$;\\
 \tab\textbf{transitions}\\
 \tab\tab bounce\\
 \tab\tab \textbf{pre} $x_1 = 0 \vee x_1 = a$\\
@@ -224,19 +227,24 @@ $\forall x \not\in {\bf DC}_f \cup {\bf DC}_g$, $h = a_1  f + a_2 g$ is continuo
 \tab\tab \textbf{pre} $y_2 = 0 \vee y_2 = b$\\
 \tab\tab \textbf{eff} $v_{2y} := -v_{2y}$;\\
 \tab\tab collision\\
-\tab\tab \textbf{pre} $|x_1-x_2| \leq \varepsilon \wedge |y_1-y_2| \leq \varepsilon$\\
+\tab\tab \textbf{pre} $|x_1-x_2| \leq \varepsilon \wedge |y_1-y_2| \leq \varepsilon \wedge (v_{1x}/v_{2x} = v_{1y}/v_{2y} < 0)$\\
 \tab\tab \textbf{eff} $v_{1x} := v_{2x}$; $v_{2x} := v_{1x}$; $v_{1y} := v_{2y}$; $v_{2y} := v_{1y}$;\\
 \tab\textbf{trajectories}\\
 \tab\tab running\\
 \tab\tab \textbf{evolve} $dx_1 = v_{1x}$; $dy_1 = v_{1y}$; $dx_2 = v_{2x}$; $dy_2 = v_{2y}$\\
-\tab\tab \textbf{invariant} $(0<x_1<a) \wedge (0<y_1<b) \wedge (0<x_2<a) \wedge (0<y_2<b) \wedge (|x_1-x_2| > \varepsilon \vee |y_1-y_2| > \varepsilon)$\\
-
+\tab\tab \textbf{invariant} $(0<x_1<a) \wedge (0<y_1<b) \wedge (0<x_2<a) \wedge (0<y_2<b) \wedge (|x_1-x_2| > \varepsilon \vee |y_1-y_2| > \varepsilon \vee v_{1x}/v_{2x} \neq v_{1y}/v_{2y} \vee v_{1x}/v_{2x} \geq 0)$\\
 %\end{lstlisting}
 \noindent\rule{7cm}{1.0pt}
 
 \item
+$$I = \llbracket (|v_{1x}|+|v_{2x}| = |v_{1x}^0|+|v_{2x}^0|) \wedge (|v_{1y}|+|v_{2y}| = |v_{1y}^0|+|v_{2y}^0|) \rrbracket$$
 
-\end{itemize}
+\noindent (Start Condition) For the initial state, we have $|v_{1x}|+|v_{2x}| = |v_{1x}^0|+|v_{2x}^0|$ and $|v_{1y}|+|v_{2y}| = |v_{1y}^0|+|v_{2y}^0|$ according to the initialization statement in the model description.
+
+\noindent (Transition Closure) After any ``bounce" action, the direction of the speed changes, but the absolute value of the speed doesn't change. Therefore, $\forall x \xrightarrow{\text{bounce}} x'$, if $x \in I$ then $x' \in I$. After the ``collision" action, $v_{1x}$ and $v_{2x}$ are exchanged, and $v_{1y}$ and $v_{2y}$ are exchanged. Thus if $|v_{1x}|+|v_{2x}| = |v_{1x}^0|+|v_{2x}^0|$ and $|v_{1y}|+|v_{2y}| = |v_{1y}^0|+|v_{2y}^0|$, then $|v_{1y}'|+|v_{2y}'| = |v_{1y}^0|+|v_{2y}^0|$ and $|v'_{1y}|+|v'_{2y}| = |v_{1y}^0|+|v_{2y}^0|$.
+
+\noindent (Trajectory Closure) In the trjectory ``running" the speed variables never change, and thus $\forall \tau \in \mathbb{T}$, if $\tau$.fstate $\in I$, then $\tau$.lstate $\in I$.
+\end{enumerate}
 
 \paragraph{Problem 4. Hysteresis model (coding 40 points).}
 (a) Model the following hysteresis-based switching system as a hybrid automaton. The automaton $\A$ has (at least) $n$ continuous variables $x_1,\ldots,x_n$ and a discrete variable called $m$ that takes the values in the set $m_1,\ldots, m_n$. For a state $\vx$ of the automaton, we say that the system is in $\mathit{mode}$ $m_i$, if $\vx \restr m =  m_i$. There are $n \times (n-1)$ actions $\auto{switch}(i,j)$, where $i, j \in [n]$ and $j\neq i$. When the system is in mode $m_i$,
@@ -248,7 +256,7 @@ where $a_i>0$ is a positive constant and $\dot{x}_j =0$ for all $j \neq i$. Furt
 (b) Write a simulator for this model and plot two executions starting from two different initial states: one where all the $x_i$'s are same, and another where they are different. For each execution, plot the duration that $\A$ stays in each mode. Can you conjecture something interesting about how long $\A$ stays in each mode?
 
 \paragraph{Solution}
-\begin{itemize}[(a)]
+\begin{enumerate}[(a)]
 \item
 \noindent\rule{7cm}{1.0pt}\\
 % \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -259,7 +267,7 @@ where $a_i>0$ is a positive constant and $\dot{x}_j =0$ for all $j \neq i$. Furt
 \tab\textbf{variables}\\
 \tab\tab $m$:Mode; $x_i$:Real; for $i \in \{1,2,3,\ldots,n\}$\\
 \tab\textbf{transitions}\\
-\tab\tab switch(i, j)\\
+\tab\tab switch(i, j), for $i,j \in \{1,2,3,\ldots,n\}, i \neq j$\\
 \tab\tab \textbf{pre} $(m = m_i) \wedge (x_i > (1+h)x_j)$\\
 \tab\tab \textbf{eff} $m := m_j$;\\
 \tab\textbf{trajectories}\\
@@ -273,16 +281,16 @@ where $a_i>0$ is a positive constant and $\dot{x}_j =0$ for all $j \neq i$. Furt
 This model is nondeterministic. \textbf{pre} $(m = m_i) \wedge (x_i > (1+h)x_j)$ may be satisfied for more than one $j$ at the same time.
 
 \item
-$h=10, n=5$, execution are plot in form of (m, duration).
+Let $h=10, n=5, a_i = 1, \text{for}~i \in \{1,2,3,4,5\}$, execution are plot in form of (m, duration).
 
-Execution 1: from $x_i = 1.0$\\
+Execution 1: from $x_i = 1.0, \text{for}~i \in \{1,2,3,4,5\}$\\
 (0, 2.398) $\rightarrow$ (1, 2.398) $\rightarrow$ (2, 2.398) $\rightarrow$ (3, 2.398) $\rightarrow$ (4, 4.796) $\rightarrow$ (0, 2.398) $\rightarrow$ (1, 2.398) $\rightarrow$ (2, 2.398) $\rightarrow$ (3, 4.796) $\rightarrow$ $\ldots$
 
 Execution 2: from $x = [1.0, 2.0, 3.0, 4.0, 5.0]$\\
 (0, 3.091) $\rightarrow$(1, 2.803) $\rightarrow$(2, 2.686) $\rightarrow$(3, 2.621) $\rightarrow$(4, 3.879) $\rightarrow$(0, 2.803) $\rightarrow$(1, 2.686) $\rightarrow$(2, 2.621) $\rightarrow$(3, 3.879) $\rightarrow$ $\ldots$
 
-When starting from states where all $x_i$ have the same value, then the possible duration values are $\{\ln(1+h), 2\ln(1+h)\}$.
-\end{itemize}
+When starting from states where all $x_i$ have the same value and all $a_i$ have the same value, the possible duration values are $\{\ln(1+h)/a_i, 2\ln(1+h)/a_i\}$.
+\end{enumerate}
 
 \paragraph{Class contribution and project ideas}
 \begin{itemize}
