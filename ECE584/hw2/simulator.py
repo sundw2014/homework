@@ -1,9 +1,9 @@
 import numpy as np
 N = 5
-x = [1.0, 2.0, 3.0, 4.0, 5.0]
+x = [1.0, 2.0, 3.0, 4.0, 100.0]
 # x = [1.0] * N
 a = [1.0] * N
-m = 0
+m = 4
 h = 10
 max_switching_times = 10
 execution = ''
@@ -21,4 +21,4 @@ for i in range(max_switching_times):
     m = j
     execution += '%f] '%(t)
 print(' $rightarrow$ '.join(_execution))
-print(execution)
+# print(execution)
