@@ -7,18 +7,18 @@ m = 0
 h = 10
 max_switching_times = 10
 execution = ''
-_execution = ''
+_execution = []
 t = 0
 for i in range(max_switching_times):
     execution += '%d [%f, '%(m, t)
     _x  = np.array(x)
     _x[m] = np.Inf
     j = np.argmin(_x)
-    delta_t = np.log((1+h)*_x[j]/x[m])/a[m]
-    _execution += '(%d, %.3f) $rightarrow$'%(m, delta_t)
+    delta_t = np.max([np.log((1+h)*_x[j]/x[m])/a[m], 0])
+    _execution.append('(%d, %.3f)'%(m, delta_t))
     x[m] = (1+h)*_x[j]
     t += delta_t
     m = j
     execution += '%f] '%(t)
-print(_execution)
+print(' $rightarrow$ '.join(_execution))
 print(execution)
