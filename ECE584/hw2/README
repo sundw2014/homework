@@ -1,4 +1,4 @@
-python simulator.py
+python simulator.py --n 3 --init_x 1.0 1.0 1.0 --a 1.0 2.0 3.0 --max_steps 30000
 
 # output
-# (m1, duration1) $rightarrow$ (m2, duration2) $rightarrow$ ...
+# duration in each mode: 16.121, 8.326, 5.552

@@ -281,16 +281,33 @@ where $a_i>0$ is a positive constant and $\dot{x}_j =0$ for all $j \neq i$. Furt
 This model is nondeterministic. \textbf{pre} $(m = m_i) \wedge (x_i > (1+h)x_j)$ may be satisfied for more than one $j$ at the same time.
 
 \item
-Let $h=10, n=5, a_i = 1, \text{for}~i \in \{1,2,3,4,5\}$, execution are plot in form of (m, duration).
+Let $T_i$ be the total duration that the model stays in mode $i$. For every execution, we plot the variables $x_i$ as time grows. Some ececutions are plotted in Fig. \ref{fig:same}, Fig. \ref{fig:different} and Fig. \ref{fig:different_longer}.
 
-Execution 1: from $x_i = 1.0, \text{for}~i \in \{1,2,3,4,5\}$\\
-(0, 2.398) $\rightarrow$ (1, 2.398) $\rightarrow$ (2, 2.398) $\rightarrow$ (3, 2.398) $\rightarrow$ (4, 4.796) $\rightarrow$ (0, 2.398) $\rightarrow$ (1, 2.398) $\rightarrow$ (2, 2.398) $\rightarrow$ (3, 4.796) $\rightarrow$ $\ldots$
+After comparing the durations in Fig. \ref{fig:different} and Fig. \ref{fig:different_longer}, we can find that as the time $t$ goes to $\infty$, $\frac{T_i}{T_j}$ converges to $\frac{a_j}{a_i}$, i.e. $\lim_{t \to \infty} \frac{T_i}{T_j} = \frac{a_j}{a_i}$. We will give an informal proof in the following.
 
-Execution 2: from $x = [1.0, 2.0, 3.0, 4.0, 5.0]$\\
-(0, 3.091) $\rightarrow$(1, 2.803) $\rightarrow$(2, 2.686) $\rightarrow$(3, 2.621) $\rightarrow$(4, 3.879) $\rightarrow$(0, 2.803) $\rightarrow$(1, 2.686) $\rightarrow$(2, 2.621) $\rightarrow$(3, 3.879) $\rightarrow$ $\ldots$
-
-When starting from states where all $x_i$ have the same value and all $a_i$ have the same value, the possible duration values are $\{\ln(1+h)/a_i, 2\ln(1+h)/a_i\}$.
+After every mode has been visited at least once, the following statement will hold: $x_{min} \leq x_i \leq x_{min}(1+h),~\forall i \in \{1,2,3,\ldots,n\}$, where $x_{min}$ is the minimal $x_i$ at this point of time. According to the dynamics of the model, we have $T_i = \frac{1}{a_i} \ln \frac{x_i}{x_i^0}$, where $x_i^0$ the initial value of $x_i$. Therefore, $\ln x_{min} - \ln{x_i^0} \leq a_i T_i \leq \ln x_{min} + \ln(1+h) - \ln{x_i^0}$. As $t$ goes to $\infty$, $x_{min}$ goes to $\infty$, and thus the inequation (or the interval) will be dominated by $\ln x_{min}$. Therefore, $\frac{a_i T_i}{a_j T_j}$ converges to 1, which implies $\lim_{t \to \infty} \frac{T_i}{T_j} = \frac{a_j}{a_i}$.
 \end{enumerate}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=12cm]{same_initial}
+\caption{Starting from a state where all the $x_i$'s are same. The durations are [4.162, 4.161, 4.161, 4.161, 3.354].}
+\label{fig:same}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=12cm]{different_initial}
+\caption{Starting from a state where $x_i$'s are different. The durations are [5.546, 4.052, 3.284, 3.468, 3.649].}
+\label{fig:different}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=12cm]{different_initial_longer}
+\caption{Starting from a state where $x_i$'s are different (with a larger simulation budget). The durations are [40.539, 39.741, 39.806, 39.925, 39.988].}
+\label{fig:different_longer}
+\end{figure}
 
 \paragraph{Class contribution and project ideas}
 \begin{itemize}
