@@ -116,6 +116,7 @@ Suppose $\xlr{V}{x} = x^T A x $ for a real matrx $A$. Prove that if the function
 \subsection*{Solution}
 Because $A$ is a real matrix, $M^* = M^T = M$, and thus $M$ is Hermitian. $\forall x \in \mathbb{C}$, let $\Re(x)$ and $\Im(x)$ denote the real and imaginary part of $x$ respectively. $\forall x \in \mathbb{C}$ and $x \neq \upvartheta$, $x^* M x = \dfrac{1}{2} (x^* A x + x^* A^T x) = \dfrac{1}{2} (x^* A x + \overline{x^* A x}) = \Re(x^* A x)$. Since $x^* A x = (\Re(x)^T-j\Im(x)^T) A (\Re(x)+j\Im(x)) = \Re(x)^T A \Re(x) + \Im(x)^T A \Im(x) + j(\ldots)$, $\Re(x^* A x) = \Re(x)^T A \Re(x) + \Im(x)^T A \Im(x) = \xlr{V}{\Re(x)} + \xlr{V}{\Im(x)} > 0$. Therefore, $M$ is positive definite.
 
+$A = \begin{bmatrix}1 &10\\ -10 & 1\end{bmatrix}$, and we have $\frac{A + A^T}{2} = I$ which is positive definite. Thus $V(x)$ is positive definite.
 %==========================================================================================
 \section*{Problem 5}
 Consider the LTI system described by:
