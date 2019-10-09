@@ -1,0 +1,178 @@
+\documentclass[11pt]{report}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{ragged2e}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{pgf,tikz}
+\usepackage[shortlabels]{enumitem}
+\usepackage{color}
+\usepackage{pgfplots}
+\usepackage[margin = 1 in]{geometry}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{psfrag}
+\usepackage{upgreek}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\newcounter{appdef}
+\setcounter{appdef}{2}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{defn}{Definition}[appdef]
+\newtheorem{lemma}{Lemma}[appdef]
+
+\theoremstyle{definition}
+\newtheorem{proposition}{Proposition}[chapter]
+\newtheorem{remark}{Remark}[chapter]
+\newtheorem{example}{Example}[appdef]
+
+\newcommand{\T}{\intercal}
+\newcommand{\user}{}
+\newcommand{\xlr}[2]{#1 \left(#2\right)}
+\newcommand{\clr}[2]{#1 \left[#2 \right]}
+\newcommand{\spn}{\operatorname{span}}
+\lhead{ECE 515 - Fall 2019 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{HW4 - Template}}
+\lfoot{Submitted by: \textcolor{red}{\textit{daweis2}}}
+\rfoot{Due: \textcolor{red}{\today}}
+\begin{document}
+
+%==========================================================================================
+\section*{Problem 1}
+Use stability definitions to determine whether the following systems are Lyapunov stable (i.e. stable in the sense of Lyapunov), asymptotically stable, globally asymptotically stable, or none. The first two systems are in $\mathbb{R}^2$ and the last one is in $\mathbb{R}$.
+\begin{multicols}{2}
+\begin{enumerate}[(a), noitemsep]
+\item $ \dot x_1 = 0 \\ \dot x_2 = -x_2 $
+\item $ \dot x_1 = -x_2 \\ \dot x_2 = 0 \\$
+\item $ \dot x = 0 \qquad \textrm{if} \qquad |x| > 1 \\ \dot x = -x \quad \textrm{if} \qquad |x| \le 1  $
+\end{enumerate}
+\end{multicols}
+\justify
+Carefully justify your answers, using only the definitions of stability. (Do not use eigenvalue methods or Lyapunov’s method.)
+
+%----------------------------------------
+\subsection*{Solution}
+\begin{enumerate}[(a), noitemsep]
+\item
+Equilibrium set: $\Omega = \{x: x_2=0\}$. Starting from $x^0 = [x_1^0, x_2^0]$, $x(t) = [x_1^0, e^{-t} x_2^0] \to [x_1^0, 0]$. For any $x_e \in \Omega$, $\forall \epsilon > 0$, there exists $\delta = \epsilon$ such that if $||x_0 - x_e||^2 < \delta$, $||x(t) - x_e||^2 < \epsilon,~\forall t \geq 0$. Therefore all equilibrium points are stable in sense of Lyapunov. However, $\forall \delta > 0$, there exisits $x_0$ such that $||x_0 - x_e|| < \delta$ but $x(t)$ doesn't converge to $x_e$, and thus all equilibrium points are not asypototically statble.
+\item
+Equilibrium set: $\Omega = \{x: x_2=0\}$. Starting from $x^0 = [x_1^0, x_2^0]$, $x(t) = [x_1^0 - x_2^0 t, x_2^0]$. For any $x_e \in \Omega$, $\forall \delta > 0$, there exists $x_0$ such that $||x_0 - x_e||^2 < \delta$, but $x_2^0 > 0$ and $x(t)$ goes to $[-\infty, x_2^0]$. Therefore all equilibrium points are not stable in sense of Lyapunov.
+\item
+Equilibrium set: $\Omega = \{x: |x| > 1~\text{or}~x = 0\}$. Starting from $\{x_0: |x_0| \leq 1\}$, $x(t) = e^{-t} x_0 \to 0$. Starting from $\{x_0: |x_0| > 1\}$, $x(t) = x_0$.
+
+For $x_e = 0$, $\forall \epsilon > 0$, there exists $\delta = min\{\epsilon, 1\}$ such that if $||x_0 - x_e||^2 < \delta$, $||x(t) - x_e||^2 < \epsilon,~\forall t \geq 0$. Therefore equilibrium point 0 is stable in sense of Lyapunov. Moreover, let $\delta = 1$, then if $||x_0 - 0|| < \delta$, $x(t)$ converges to 0. Therefore, 0 is a asypototically state equilibrium point. However, $\delta$ cannot be greater than 1, and thus 0 is not global asypototically stable.
+
+For $x_e \in \{x: |x| > 1\}$, $\forall \epsilon > 0$, there exists $\delta = min\{\epsilon, ||+1-x_e||^2, ||-1-x_e||^2\}$ such that if $||x_0 - x_e||^2 < \delta$, $||x(t) - x_e||^2 = ||x_0 - x_e||^2 < \epsilon,~\forall t \geq 0$. Therefore, $x_e$ is stable in sense of Lyapunov. However, $\forall \delta > 0$, there exisits $x_0$ such that $||x_0 - x_e|| < \delta$ but $x(t)$ doesn't converge to $x_e$, and thus the equilibrium points are not asypototically statble.
+\end{enumerate}
+
+%==========================================================================================
+\section*{Problem 2}
+Prove the variation-of-constants formula for linear time-varying ordinary differential equations, stated
+in Section 3.7 of the course reader and repeated here:
+\begin{equation}
+\xlr{x}{t} = \xlr{\phi}{t, t_0} x_0 + \int \limits_{t_0} ^{t} \xlr{\phi}{t, s} \xlr{B}{s} \xlr{u}{s} ds
+\end{equation}
+
+%----------------------------------------
+\subsection*{Solution}
+For $t = t_0$, $\xlr{x}{t} = t_0$. Differentiate both sides of the equation with the Leibniz Rule, then we have
+\begin{multline*}
+\xlr{\dot{x}} = \xlr{\dot{\phi}}{t, t_0} x_0 + \int_{t_0}^{t} \xlr{\dot{\phi}}{t, s} \xlr{B}{s} \xlr{u}{s} ds + \xlr{\phi}{t, t}B(t)u(t) \\= A(t)\xlr{\phi}{t, t_0} x_0 + A(t) \int_{t_0}^{t} \xlr{\phi}{t, s} \xlr{B}{s} \xlr{u}{s} ds + B(t)u(t) = A(t)x(t) + B(t)u(t)
+\end{multline*}
+Therefore, this equation is a solution of the LTV model.
+
+%==========================================================================================
+\section*{Problem 3}
+Let $M$ be a symmetric real-valued $n\times n$ matrix. Show that the following three statements are equivalent:
+
+\begin{enumerate}[(a), noitemsep]
+\item $M$ is positive definite.
+\item All eigenvalues of $M$ are positive definite.
+\item $ M = N^T N$ for some nonsingular $n \times n $ matrix $N$.
+\end{enumerate}
+%----------------------------------------
+\subsection*{Solution}
+\begin{enumerate}[.]
+\item
+(a)$\implies$(b). We proceed by contradiction: suppose there exists a eigenvalue $\lambda \leq 0$ of $M$ and the corresponding eigenvector $v \neq \upvartheta$, then we have $v^* M v = v^* \lambda v = \lambda |v|^2 \leq 0$, which is contradictive to (a). Therefore all eigenvalues of $M$ are positive definite.
+\item
+(b)$\implies$(c). Since $M$ is a symmetric real-valued matrix, there exisits orthogonal matrix $P$ which can diagnolize $M$, i.e. $M = P \Lambda P^T$. Since all eigenvalues of $M$ is positive, we have $N = P \sqrt{\Lambda} P^T$. $N$ is a nonsingular matrix, and $N^T N = P \sqrt{\Lambda} P^T P \sqrt{\Lambda} P^T = M$.
+\item
+(c)$\implies$(a). (Here we suppose $N$ is real-valued matrix, and thus $N^* = N^T$.) $\forall x \in \mathbb{C}$ and $x \neq \upvartheta$, $x^* M x = x^* N^T N x = (Nx)^*(Nx) = ||Nx||^2$. Because $N$ is non-singular, $Nx \neq \upvartheta$, and thus $x^* M x > 0$. Therefore, $M$ is positive definite.
+\end{enumerate}
+
+%==========================================================================================
+\section*{Problem 4}
+Suppose $\xlr{V}{x} = x^T A x $ for a real matrx $A$. Prove that if the function $V$ is positive definite then the matrix $M = \dfrac{1}{2} \xlr{}{A + A^T} $ is positive definite. Provide an example of a positive definite $V$ where the matrix $A$ itself is not symmetric.
+
+%----------------------------------------
+\subsection*{Solution}
+Because $A$ is a real matrix, $M^* = M^T = M$, and thus $M$ is Hermitian. $\forall x \in \mathbb{C}$, let $\Re(x)$ and $\Im(x)$ denote the real and imaginary part of $x$ respectively. $\forall x \in \mathbb{C}$ and $x \neq \upvartheta$, $x^* M x = \dfrac{1}{2} (x^* A x + x^* A^T x) = \dfrac{1}{2} (x^* A x + \overline{x^* A x}) = \Re(x^* A x)$. Since $x^* A x = (\Re(x)^T-j\Im(x)^T) A (\Re(x)+j\Im(x)) = \Re(x)^T A \Re(x) + \Im(x)^T A \Im(x) + j(\ldots)$, $\Re(x^* A x) = \Re(x)^T A \Re(x) + \Im(x)^T A \Im(x) = \xlr{V}{\Re(x)} + \xlr{V}{\Im(x)} > 0$. Therefore, $M$ is positive definite.
+
+$A = \begin{bmatrix}1 &10\\ -10 & 1\end{bmatrix}$, and we have $\frac{A + A^T}{2} = I$ which is positive definite. Thus $V(x)$ is positive definite.
+%==========================================================================================
+\section*{Problem 5}
+Consider the LTI system described by:
+$$
+\dot x = \begin{bmatrix} -1 &1 \\ -2 &3  \end{bmatrix} x
+$$
+Investigate asymptotic stability using the Lyapunov equation:
+$$
+A ^T P + PA = -Q \qquad Q = I
+$$
+Can you arrive at any definite conclusion?
+
+%----------------------------------------
+\subsection*{Solution}
+Solve the Lyapunov equation, and we have $P = \begin{bmatrix} 3 &-\frac{5}{4}\\ -\frac{5}{4} &\frac{1}{4} \end{bmatrix}$. $P$ is not positive definite. We cannot arrive at any definite conclusion.
+
+%==========================================================================================
+\section*{Problem 6}
+In this problem, we will investigate Lyapunov functions for discrete-time systems. Consider the discrete-time system:
+$$
+\clr{x}{k+1} = \xlr{f}{\clr{x}{k}} \qquad k = 0, 1 \dots
+$$
+\begin{enumerate}[(a), noitemsep]
+\item Suppose we have a Lyapunov function $\xlr{V}{x} = x^T P x$ for some symmetric positive definite $P$. What is $\xlr{V}{\xlr{f}{x}} - \xlr{V}{x}$? This is analogous to $ \xlr{\dot V}{\xlr{x}{t}}$ in continous time which is given by $\nabla V \cdot f$.
+\item In the LTI case where $\xlr{f}{x} = A x$ show that the origin is asmymptotically stable if for some $Q >0$ there exists $P >0$ that solves:
+$$A^TPA - P = -Q$$
+\justify
+\textbf{Hint:} Try to bound the norm $| x_n |^2$ as a function of $n$. You may also need the linear algebra fact that for a symmetric matrix $M$:
+$$
+\lambda_{\textrm{min}} |x|^2 \le x^T M x \le \lambda_{\textrm{max}} |x|^2
+$$
+where $\lambda_{\textrm{min}}$ is the smallest eigenvalue of $M$ and $\lambda_{\textrm{max}}$ is the largest eigenvalue of $M$.
+\textbf{Note:} For LTI systems in discrete-time, the equivalent of the state transition matrix $e^{At}$ is $A^k$. In other words:
+$$
+\clr{x}{n} = A^n \clr{x}{0} + \sum\limits_{k = 0}^{n - 1} {{A^{n - k}}Bu\left[ k \right]}
+$$
+\end{enumerate}
+%----------------------------------------
+\subsection*{Solution}
+\begin{enumerate}[(a), noitemsep]
+\item
+\begin{multline*}
+\xlr{V}{\xlr{f}{x[k]}} - \xlr{V}{x[k]} = \xlr{V}{x[k+1]} - \xlr{V}{x[k]} \\= (x[k+1] + x[k])^T P (x[k+1] - x[k]) = \nabla \xlr{V}{\frac{x[k+1] + x[k]}{2}} (x[k+1] - x[k])
+\end{multline*}
+\item
+\begin{multline*}
+\xlr{V}{x[k+1]} - \xlr{V}{x[k]} = (x[k+1] + x[k])^T P (x[k+1] - x[k])\\
+= \xlr{}{(A+I)x[k]}^T P \xlr{}{(A-I)x[k]} = x[k]^T (A^T P A + PA - A^T P - P) x[k]
+\end{multline*}
+Because $\xlr{}{x[k]^T (A^T P A + PA - A^T P - P) x[k]}^T = \xlr{}{x[k]^T (A^T P A + A^T P - PA - P) x[k]}$, we have $2\xlr{}{x[k]^T (A^T P A + PA - A^T P - P) x[k]} = 2\xlr{}{x[k]^T (A^T P A - P) x[k]} = -2 x[k]^T Q x[k]$, and thus we have
+$\xlr{V}{x[k+1]} - \xlr{V}{x[k]} = -x[k]^T Q x[k] < 0,~\forall k$.
+
+Next, we proceed by contradiction: suppose that $x[k]$ does not converge to $\upvartheta$, i.e. $\exists r > 0,~\forall k, |x[k]|^2 \geq r^2$. Since $-x^T Q x$ is strictly negative, and as $|x|$ goes to $\infty$, $-x^T Q x$ goes to $-\infty$, we have that there exists a $\epsilon < 0$ such that in the region $\Omega = \{x: |x|^2 \geq r^2\}$, $-x^T Q x \leq \epsilon$ holds. Because $\xlr{V}{x[k+1]} - \xlr{V}{x[k]} = -x[k]^T Q x[k]$, we have $\xlr{V}{x[k]} \leq k \epsilon + \xlr{V}{x[0]}$. As $k$ goes to $\infty$, $\xlr{V}{x[k]}$ goes to $-\infty$, but we should have $\xlr{V}{x[k]} > 0$, and thus we have a contradiction. Therefore, $x[k] \to \upvartheta$ no matter what $x[0]$ is.
+
+% Therefore, $|x[k]|^2 \leq \frac{1}{\lambda_{min}} \xlr{V}{x[k]}$, where $\lambda_{min}$ the smallest eigenvalue of $P$, and $\lambda_{min} > 0$. As $k \to \infty$, $\xlr{V}{x[k]} \to 0$, and thus $x[k] \to \upvartheta$.
+\end{enumerate}
+
+
+\end{document}

@@ -1,0 +1,4 @@
+python simulator.py --n 3 --init_x 1.0 1.0 1.0 --a 1.0 2.0 3.0 --max_steps 30000
+
+# output
+# duration in each mode: 16.121, 8.326, 5.552
