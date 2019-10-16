@@ -1,0 +1,178 @@
+\documentclass[11pt]{report}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage{graphicx}
+
+\usepackage{upgreek}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{ECE 515 - Fall 2019 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{HW5 - Template}}
+\lfoot{Submitted by: \textcolor{red}{\textit{daweis2}}}
+\rfoot{Due: Thursday, October 17 at 2pm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 1}
+
+Consider the following LTI model:
+\[
+\dot x =
+\begin{bmatrix}
+-7 & -2 & 6 \\
+2 & -3 & -2 \\
+-2 & -2 & 1
+\end{bmatrix}
+x +
+\begin{bmatrix}
+1 & 1 \\
+1 & -1 \\
+1 & 0
+\end{bmatrix}
+u
+\]
+\[
+y =
+\begin{bmatrix}
+-1 & -1 & 2 \\
+1 & 1 & -1
+\end{bmatrix}
+x
+\]
+
+Check controllability using:
+\begin{enumerate}[label=\alph*)]
+\item
+the controllability matrix.
+\item
+the rows of $\overline B = M^{-1} B$, where $M$ is chosen such that $M^{-1} A M$ is diagonal.
+\item
+the Hautus-Rosenbrock condition.
+\end{enumerate}
+
+You may use a calculator, MATLAB, or another computational device, but be sure you would know how to do this manually if needed.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Solution}
+\begin{enumerate}[label=\alph*)]
+\item
+We have $C = [B | AB | A^2B]$, and $C = \begin{bmatrix} 1 & 1 & -3 & -5 & 9 & 25\\  1 & -1 & -3 & 5 & 9 & -25\\  1 & 0 & -3 & 0 & 9 & 0 \end{bmatrix}$, and thus $\text{rank}(C) = 2$. So, the model is uncontrollable.
+\item
+We have $M = \begin{bmatrix} 0.707 & 0.707 & -0.577\\ 0 & -0.707 & -0.577\\ 0.707 & 0 & -0.577\end{bmatrix}$, and $\overline B = M^{-1} B = \begin{bmatrix} 0 & 0\\ 0 & 1.414\\ -1.732 & 0\end{bmatrix}$. There is a $0$-row in $\overline B$, so the model is uncontrollable.
+\item
+The eigen values of $A$ are $s = [-1, -5, -3]$. For $s_1 = -1$, we have $\text{rank}(-I - A|B) = 2$, and thus the model is uncontrollable.
+
+\end{enumerate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagebreak
+\section*{Problem 2}
+
+Let $A$ be an $n \times n$ matrix and $B$ be an $n \times r$ matrix, both with real entries. Suppose $(A,B)$ is controllable. Prove or disprove the following statements. (If the statement is false, then producing a counterexample will suffice.)
+
+\begin{enumerate}[label=\alph*)]
+\item The pair $(A^2,B)$ is controllable.
+\item Let $k(\cdot)$ be a known $n$-dimensional function, piecewise continuous in $t$. Consider the model:
+\[
+\dot x = Ax + Bu + k(t)
+\]
+This model is controllable, in the sense that for any initial state $x_0$ and any target final state $x_f$, there exists a control $u(\cdot)$ that directs the system from $x_0$ to $x_f$ in finite time.
+\item Given that the model $\dot x = Ax + Bu$ has the initial condition $x(0) = x_0 \neq 0$, it is possible to find a piecewise continuous control, defined on $[0,\infty)$, such that the model is brought to rest at $t = 1$, i.e. $x(t) = 0$ for all $t \ge 1$.
+\item Suppose the model starts at $x(0) = 0$; there exists a piecewise continuous control which will bring the state to $x_f \in \mb{R}^n$ by time $t \ge 1$ and maintain that value $x(t) = x_f$ for all $t \ge 1$.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Solution}
+\begin{enumerate}[label=\alph*)]
+\item
+False. Let $A = \begin{bmatrix} 0&1\\1&0 \end{bmatrix}$, then $A^2 = I$. Let $B=[1,3]^T$, then $\text{rank}([B, AB]) = 2$, $\text{rank}([B, A^2B]) = 1$.
+\item
+True. Decompose $x$ into two components, $x = x_1 + x_2$, and $\dot{x_1} = A x_1 + B u$, $\dot{x_2} = A x_2 + k(t)$. Because $(A, B)$ is controllable, there exists $t_f$, such that for any $x_0$ and $x_f$ we can find a control $u(t)$. Fix this $t_f$ and set the initial state of $x_2$ to $0$, i.e. $x_2(0) = 0$, then $x_2(t_f)$ is fixed. Then, let $x_1(0) = x_0$, we can find a $u(t)$ such that $x_1(t_f) = x_f - x_2(t_f)$. This $u(t)$ will dirve the original model from $x_0$ to $x_f$.
+\item
+True. According to the part ($ii$) of the proof of Theorem 5.3.1 in the reader, we know if there exists $t_f>0$ such that $W(0, t_f)$ is singular, then we have $\text{rank}(\mathbb{C})<n$. This implies that if $\text{rank}(\mathbb{C})=n$, then $\forall t_f>0$, $W(0, t_f)$ is nonsingular. So, we know that if a LTI model is controllable, then $t_f$ can be any positive real number. For this specific problem, we choose $t_f=1$. Then, we can find a control $u(t)$ which will direct the model from $x_0$ to $0$ when $t=0$. For $t \geq 1$, set $u(t) = 0$ such that $\dot{x} = 0$, and thus the model rest on $0$.
+\item
+False. Let $A = \begin{bmatrix}1&2\\3&4\end{bmatrix}$, and $B = \begin{bmatrix}1&0\\0&0\end{bmatrix}$. Then, we have $\text{rank}(\mathbb{C})=2$, and model is controllable. However, for $x_f = [1,1]^T$, there doesn't exist a $u$ such that $\dot{x} = Ax_f+Bu=0$. Therefore, the model can not rest on $x_f$.
+\end{enumerate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagebreak
+\section*{Problem 3}
+
+Define the operator $\mc{A}$ as follows:
+\[
+\mc{A}(u) = \int_{t_0}^{t_f} \phi(t_f,\tau) B(\tau) u(\tau) d\tau
+\]
+The domain of $\mc{A}$ is the set of all piecewise continuous time functions on $[t_0,t_f]$. The co-domain is $\mb{R}^n$.
+
+\begin{enumerate}[label=\alph*)]
+\item
+Compute the adjoint $\mc{A}^*$.
+\item
+Compute the composition $V = \mc{A} \circ \mc{A}^*$. Note $V: \mb{R}^n \rightarrow \mb{R}^n$, so $V$ should be a $n \times n$ matrix. What is the relationship with $V$ and the controllability Grammian $W$? Adapt Theorem 5.2.2 from the reader to a statement about $V$.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Solution}
+\begin{enumerate}[label=\alph*)]
+\item
+According to the definition of adjoint, for all $x \in \mb{R}^n$ and $u$, a piecewise continuous function on $[t_0,t_f]$, $\langle\mc{A}(u), x\rangle = \langle u, \mc{A}^*(x)\rangle$.
+\begin{multline*}
+  \langle\mc{A}(u), x\rangle = (\mc{A}(u))^* x = \int_{t_0}^{t_f} u^*(\tau) B^*(\tau) \phi^*(t_f,\tau) x d\tau\\
+  = \langle u, \mc{A}^*(x)\rangle = \int_{t_0}^{t_f} u^*(\tau) \mc{A}^*(x)(\tau) d\tau
+\end{multline*}
+Because $x$ and $u$ are chosen arbitrarily, we have $\mc{A}^*(x)(t) = B^*(t) \phi^*(t_f,t) x,~t \in [t_0, t_f]$.
+\item
+\begin{multline*}
+V(x) = \mc{A}(\mc{A}^*(x)) = \mc{A}(B^*(t) \phi^*(t_f,t) x)\\
+= (\int_{t_0}^{t_f} \phi(t_f,\tau) B(\tau) B^*(t) \phi^*(t_f,t) d\tau) x
+= \phi(t_f,t_0) W(t_0, t_f) \phi^*(t_f,t_0) x
+\end{multline*}
+
+Because $\phi(t_f,t_0)$ is invertible, we can say ``The LTV model is controllable at time $t_0$ if and only if there exists a finite time $t_f>t_0$ such that $\forall x \neq \upvartheta$, $V(x) \neq \upvartheta$."
+\end{enumerate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
