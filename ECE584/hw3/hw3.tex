@@ -174,8 +174,7 @@
 \paragraph{Solution}
 \begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid, align=center]
   \node[state,initial]   (q_0)       {$q_0$\\$\{a\}$};
-  \node[state]           (q_1) [right = of q_0]       {$q_1$\\$\{a\}$};
-  \path[->] (q_0) edge (q_1);
+  \path[->] (q_0) edge [loop above] (q_0);
 \end{tikzpicture}
 
 \paragraph{Problem 3. CTL model checking (32 points)}
@@ -197,6 +196,28 @@ Consider the following CTL formulas:
 	For each formula $\phi_i$, determine the set of states that satisfy it, and state whether $\A$ satisfies it.
 	(Problem 6.3 from~\cite{Baier:2008:PMC})
 
+\paragraph{Solution}
+\begin{enumerate}
+\item For every sub-formula we write the states satisfing it.\\
+${\bf AG} b$: $s_4$;\\
+${\bf EXAG} b$: $s_0,~s_4$;\\
+${\bf A} (a {\bf U} b)$: $s_1,~s_2,~s_3,~s_4$;\\
+$\phi_1$: $s_0,~s_1,~s_2,~s_3,~s_4$; The automaton satisfies it.
+
+\item For every sub-formula we write the states satisfing it.\\
+${\bf A} (a {\bf U} b)$: $s_1,~s_2,~s_3,~s_4$;\\
+$\phi_2$: $s_4$; The automaton doesn't satisfy it.
+
+\item For every sub-formula we write the states satisfing it.\\
+${\bf A} (a {\bf U} b \vee {\bf G} a)$: $s_1,~s_2,~s_3,~s_4$;
+${\bf EXA} (a {\bf U} b \vee {\bf G} a)$: $s_0,~s_1,~s_2,~s_3,~s_4$;\\
+${\bf EGEXA} (a {\bf U} b \vee {\bf G} a)$: $s_0,~s_1,~s_2,~s_3,~s_4$;\\
+$\phi_3 = \lnot(a \wedge b) \vee {\bf EGEXA} (a {\bf U} b \vee {\bf G} a)$: $s_0,~s_1,~s_2,~s_3,~s_4$; The automaton satisfies it.
+
+\item For every sub-formula we write the states satisfing it.\\
+$\phi_4$: $s_0,~s_1,~s_2,~s_3,~s_4$; The automaton satisfies it.
+\end{enumerate}
+
 \paragraph{Problem 4. CTL equivalences (30 points)}
 	\label{ex:CTL:mc}
 Let $\phi, \psi$ be arbitrary CTL formulas. Which of the following equivalences for CTL formulas are correct. Either give a proof or a counterexample.
@@ -208,25 +229,19 @@ Let $\phi, \psi$ be arbitrary CTL formulas. Which of the following equivalences 
 
 \paragraph{Solution}
 \begin{enumerate}
-\item False. This is a counterexample satisfying the LHS while not satisfying the RHS.
+\item True. First, for state $q$, we write the semantic of the LHS and RHS. LHS $\iff$ ``$\forall \alpha$ such that $\alpha[0] = q$ and $\forall \beta$ such that $\beta[0] = \alpha[1]$, we have $\exists i \geq 0$, $\beta[i] \models \phi$" $\iff$ ``$\forall \alpha$ such that $\alpha[0] = q$, we have $\exists i \geq 1$, $\alpha[i] \models \phi$". RHS $\iff$ ``$\forall \alpha$ such that $\alpha[0] = q$, $\exists i \geq 0$, $\forall \beta$ such that $\beta[0] = \alpha[i]$, we have $\beta[1] \models \phi$".
+
+Then we prove RHS $\implies$ LHS. For all path starting from $q$, suppose  for some $i \geq 0$, $\forall \beta$ such that $\beta[0] = \alpha[i]$, we have $\beta[1] \models \phi$. We can simplily choose $\beta$ as the suffix of $\alpha$, then we get $\alpha[i+1] \models \phi$, which implies the LHS.
+
+Finally, we prove LHS $\implies$ RHS. We preceeds by contradiction. Suppose there exists a path $\alpha$ such that $\forall i \geq 0$, $\alpha[i]$ always has a next state which doesn't satisfy $\phi$. Then, we can always follow these next states which don't satisfy $\phi$, and thus we find a path where $\phi$ is never satisfied, which is contradicted to the LHS. Thus, we proved LHS $\implies$ RHS.
+
+\item False. This is a counterexample satisfying the RHS while not satisfying the LHS.
 
 \begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid, align=center]
-  \node[state,initial]   (q_0)       {$q_0$\\$\{\}$};
-  \node[state]           (q_1) [right=of q_0]       {$q_1$\\$\{\}$};
-  \node[state]           (q_2) [right=of q_1]      {$q_2$\\$\{\phi\}$};
-  \node[state]           (q_3) [above=of q_0]       {$q_3$\\$\{\phi\}$};
+  \node[state,initial]   (q_0)       {$q_0$\\$\{\phi\}$};
+  \node[state]           (q_1) [right=of q_0]       {$q_1$\\$\{\psi\}$};
   \path[->] (q_0) edge (q_1)
-            (q_1) edge (q_2)
-            (q_0) edge (q_3);
-\end{tikzpicture}
-\end{enumerate}
-
-\item False. This is a counterexample satisfying the LHS while not satisfying the RHS.
-
-\begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid, align=center]
-  \node[state,initial]   (q_0)       {$q_0$\\$\{\}$};
-  \node[state]           (q_1) [right=of q_0]       {$q_1$\\$\{\}$};
-  \path[->] (q_0) edge (q_1);
+            (q_1) edge [loop above] (q_1);
 \end{tikzpicture}
 
 \item False. This is a counterexample satisfying the RHS while not satisfying the LHS.
@@ -234,12 +249,24 @@ Let $\phi, \psi$ be arbitrary CTL formulas. Which of the following equivalences 
 \begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid, align=center]
   \node[state,initial]   (q_0)       {$q_0$\\$\{\phi\}$};
   \node[state]           (q_1) [right=of q_0]       {$q_1$\\$\{\}$};
-  \path[->] (q_0) edge (q_1);
+  \path[->] (q_0) edge (q_1)
+            (q_1) edge [loop above] (q_1);
 \end{tikzpicture}
 
 \paragraph{Problem 5. Composition (10 points)}
 	\label{ex:composition}
 Give an example of a pair of compatible HIOAs whose composition is a not an HIOA.
+
+\paragraph{Solution}
+
+\begin{figure}[h!]
+\centering
+	\includegraphics[width=0.3\textwidth]{compo.png}
+	\caption{Composition of two HIOA's is not an HIOA.}
+  \label{fig:compoistion_of_HIOA}
+\end{figure}
+
+As shown in Fig.~\ref{fig:compoistion_of_HIOA}, ``Plant" and ``Controller" are two compatible HIOA's. However, after composition, we have $x_1 = x_1 + 1$, which is because there is a cyclic dependence in the variables.
 
 \bibliography{sayan1}
 	\bibliographystyle{plain}
