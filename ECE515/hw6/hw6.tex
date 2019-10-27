@@ -1,0 +1,224 @@
+\documentclass[11pt]{report}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage{graphicx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathcal}
+
+\newcommand{\T}{\intercal}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{ECE 515 - Fall 2019 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{HW6 - Template}}
+\lfoot{Submitted by: \textcolor{red}{\textit{daweis2}}}
+\rfoot{Due: Thursday, October 31 at 2pm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 1}
+
+Consider the linear, time-varying system:
+\[
+\dot x(t) = A(t) x(t) + B(t)u(t)
+\]
+\[
+y(t) = C(t) u(t)
+\]
+Recall the definition of the observability Grammian:
+\[
+H(t_1,t_0) = \int_{t_0}^{t_1} \phi^\T(\tau, t_0) C^\T(\tau) C(\tau) \phi(\tau, t_0) d\tau
+\]
+Consider the function from $\mb{R}$ to $\mb{R}^{n \times n}$:
+\[
+X : t_0 \mapsto H(t_1,t_0)
+\]
+(Two other ways to write this are: $X(t_0) = H(t_1,t_0)$, or $X(\cdot) = H(t_1,\cdot)$.)
+
+Show that the function $X$ satisfies the linear matrix differential equation:
+\[
+\dot X(t) = -A^\T(t) X(t) - X(t) A(t) - C^\T(t) C(t) \qquad \qquad X(t_1) = 0_{n \times n}
+\]
+Here, the initial condition $0_{n \times n}$ is the zero matrix in $\mb{R}^{n \times n}$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Solution}
+Denoting $$X(t) = \int_{t}^{t_1} \phi^T(\tau, t)C^T(\tau)C(\tau)\phi(\tau, t)d\tau = \int_{t}^{t_1} f(t, \tau) d\tau$$
+Using the Leibniz rule:
+\begin{multline}
+  \dot{X}(t) = -f(t,t) + \int_{t}^{t_1}\frac{\partial f(t,\tau)}{\partial t} d\tau\\
+  = -I C^\T(t) C(t) I + \int_{t}^{t_1}\left[-A(t)^\T\phi^\T(\tau, t)C^\T(\tau)C(\tau)\phi(\tau, t) + \phi^\T(\tau, t)C^\T(\tau)C(\tau)\phi(\tau, t)(-A(t))\right] d\tau\\
+  = -A^\T(t) X(t) - X(t) A(t) - C^\T(t) C(t)
+\end{multline}
+ and we have
+$$X(t_1) = \int_{t_1}^{t_1} f(t, \tau) d\tau = 0_{n \times n}$$
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagebreak
+\section*{Problem 2}
+
+Consider a linear time-varying system with dynamics:
+\[
+\dot x(t) = A(t) x(t) + B(t) u(t)
+\]
+\[
+y(t) = C(t) x(t)
+\]
+Let's call this system $R$.
+
+As we've covered before, the dual system is given by the dynamics:
+\[
+\dot{\tilde{x}}(t) = -A^\T(t)\tilde x(t) - C^\T(t) \tilde u(t)
+\]
+\[
+\tilde y(t) = B^\T(t) \tilde x(t)
+\]
+Let's call this dual system $\tilde R$.
+
+Consider any state $x_0$ that is controllable to zero on $[t_0,t_1]$ for $R$, and any state $\tilde x_0$ that is unobservable on $[t_0,t_1]$ for $\tilde R$. Show that $x_0$ and $\tilde x_0$ are orthogonal, i.e. $\langle x_0, \tilde x_0 \rangle = 0$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Solution}
+Because $x_0$ is controllable to zero, there exists a $u(t)$ such that $x_0 = \int_{t_0}^{t_1} \phi(t_0, \tau) B(\tau) u(\tau) d\tau$. Because $\tilde x_0$ is unobservable, $B^\T(t) \phi^\T(t_0, t) \tilde x_0 = 0,~\forall t \in [t_0, t_1]$. Therefore, $\langle x_0, \tilde x_0 \rangle = x_0^\T \tilde x_0 = \int_{t_0}^{t_1} u^\T(\tau) B^\T(\tau) \phi^\T(t_0, \tau) \tilde x_0 d\tau = 0$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagebreak
+\section*{Problem 3}
+
+
+
+Consider:
+\[
+A =
+\begin{bmatrix}
+-1 & 0 \\
+0 & -1
+\end{bmatrix}
+\qquad
+B =
+\begin{bmatrix}
+-1 \\
+1
+\end{bmatrix}
+\qquad
+C =
+\begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}
+\]
+\begin{itemize}
+\item Is the system controllable? If not, put it in Kalman controllability canonical form.
+\item Is the system observable? If not, put it in Kalman observability canonical form.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Solution}
+\begin{itemize}
+\item Controallability matrix $\mathcal{C} = \begin{bmatrix} -1 & 1 \\1 & -1 \end{bmatrix}$. Since $\text{rank}(\mathcal{C}) = 1$, it is uncontrollable. Let $P^{-1} = \begin{bmatrix} -1 & 1 \\1 & 0 \end{bmatrix}$. Then, $\bar{A} = P A P^{-1} = \begin{bmatrix} -1 & 0 \\ -1 & 0 \end{bmatrix} \quad \bar{B} = PB = \begin{bmatrix} 1 \\ 0 \end{bmatrix} \quad \bar{C} = CP^{-1} = \begin{bmatrix} 0 & 1 \\ 1 & 1 \end{bmatrix}$
+\item Observablity matrix $\mathcal{O} = \begin{bmatrix} 1 & 0 \\0 & 1\\-1 & 0\\0 & -1 \end{bmatrix}$. Since $\text{rank}(\mathcal{O}) = 2$, it is observable.
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagebreak
+\section*{Problem 4}
+
+Take the transfer function:
+\[
+H(s) = \frac{s+3}{(s+1)(s+2)}
+\]
+\begin{itemize}
+\item Put this system into controllable canonical form.
+\item Using static linear state feedback ($u = -Kx$), find a $K$ that places the poles at $-5 \pm 2j$.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Solution}
+\begin{itemize}
+\item $H(s) = \frac{s+3}{s^2+3s+2}$. CCF: $A = \begin{bmatrix} 0 & 1 \\-2 & -3 \end{bmatrix} \quad B = \begin{bmatrix} 0 \\ 1 \end{bmatrix} \quad C = \begin{bmatrix} 3 \\ 1 \end{bmatrix}$.
+\item Let $K = [k_1 ~ k_2]$, then $A - B K = \begin{bmatrix} 0 & 1 \\-(2 + k_1) & -(3 + k_2) \end{bmatrix}$ and the closed-loop characteristic polynomial is $\Delta(s) = s^2 + (2 + k_1)s + (3 + k_2)$. Then substitute the roots, and we have $K = [-12 ~ 24]$.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagebreak
+\section*{Problem 5}
+
+Consider the following dynamical system, inspired by a linearization of the pendubot from Chapter 1 in the reader.
+\[
+\dot x =
+\begin{bmatrix}
+0 & 1 & 0 & 0 \\
+5 & 0 & -2 & 0 \\
+0 & 0 & 0 & 1 \\
+-5 & 6 & 0 & 0
+\end{bmatrix}
+x +
+\begin{bmatrix}
+0 \\
+2 \\
+0 \\
+-3
+\end{bmatrix}
+u
+\]
+\[
+y =
+\begin{bmatrix}
+1 & 0 & 0 & 0
+\end{bmatrix}
+x
+\]
+
+Design a reduced-order Luenberger observer for this system. You may freely use MATLAB or any other computer assistance to do so (and are encouraged to do so!), but still show your work.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Solution}
+\textcolor{red}{Type your solution here}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
