@@ -154,7 +154,7 @@ C =
 
 \subsection*{Solution}
 \begin{itemize}
-\item Controallability matrix $\mathcal{C} = \begin{bmatrix} -1 & 1 \\1 & -1 \end{bmatrix}$. Since $\text{rank}(\mathcal{C}) = 1$, it is uncontrollable. Let $P^{-1} = \begin{bmatrix} -1 & 1 \\1 & 0 \end{bmatrix}$. Then, $\bar{A} = P A P^{-1} = \begin{bmatrix} -1 & 0 \\ -1 & 0 \end{bmatrix} \quad \bar{B} = PB = \begin{bmatrix} 1 \\ 0 \end{bmatrix} \quad \bar{C} = CP^{-1} = \begin{bmatrix} 0 & 1 \\ 1 & 1 \end{bmatrix}$
+\item Controallability matrix $\mathcal{C} = \begin{bmatrix} -1 & 1 \\1 & -1 \end{bmatrix}$. Since $\text{rank}(\mathcal{C}) = 1$, it is uncontrollable. Let $P^{-1} = \begin{bmatrix} -1 & 1 \\1 & 0 \end{bmatrix}$. Then, $\bar{A} = P A P^{-1} = \begin{bmatrix} -1 & 0 \\ 0 & -1 \end{bmatrix} \quad \bar{B} = PB = \begin{bmatrix} 1 \\ 0 \end{bmatrix} \quad \bar{C} = CP^{-1} = \begin{bmatrix} -1 & 1 \\1 & 0 \end{bmatrix}$.
 \item Observablity matrix $\mathcal{O} = \begin{bmatrix} 1 & 0 \\0 & 1\\-1 & 0\\0 & -1 \end{bmatrix}$. Since $\text{rank}(\mathcal{O}) = 2$, it is observable.
 \end{itemize}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -176,7 +176,7 @@ H(s) = \frac{s+3}{(s+1)(s+2)}
 \subsection*{Solution}
 \begin{itemize}
 \item $H(s) = \frac{s+3}{s^2+3s+2}$. CCF: $A = \begin{bmatrix} 0 & 1 \\-2 & -3 \end{bmatrix} \quad B = \begin{bmatrix} 0 \\ 1 \end{bmatrix} \quad C = \begin{bmatrix} 3 \\ 1 \end{bmatrix}$.
-\item Let $K = [k_1 ~ k_2]$, then $A - B K = \begin{bmatrix} 0 & 1 \\-(2 + k_1) & -(3 + k_2) \end{bmatrix}$ and the closed-loop characteristic polynomial is $\Delta(s) = s^2 + (2 + k_1)s + (3 + k_2)$. Then substitute the roots, and we have $K = [-12 ~ 24]$.
+\item Let $K = [k_1 ~ k_2]$, then $A - B K = \begin{bmatrix} 0 & 1 \\-(2 + k_1) & -(3 + k_2) \end{bmatrix}$ and the closed-loop characteristic polynomial is $\Delta(s) = s^2 + (3 + k_2)s + (2 + k_1)$. Then substitute the roots, and we have $K = \begin{bmatrix}27 & 7\end{bmatrix}$.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -215,8 +215,12 @@ Design a reduced-order Luenberger observer for this system. You may freely use M
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection*{Solution}
-\textcolor{red}{Type your solution here}
+Using the notations in the reader, we have $A_{11} = 0$, $A_{21} = \begin{bmatrix}5\\ 0\\ -5\end{bmatrix}$, $A_{12} = \begin{bmatrix}1 & 0 & 0\end{bmatrix}$, $A_{22} = \begin{bmatrix}0 & -2 & 0\\0 & 0 & 1\\6 & 0 & 0\end{bmatrix}$, $B_1 = 0$, $B_2 = \begin{bmatrix} 2\\ 0\\ -3\end{bmatrix}$ and $y=x_1$, $x = \begin{bmatrix}x_1\\ x_2\end{bmatrix}$.
 
+Then, the matrix for the observer is $A_{22} - L A_{12} = \begin{bmatrix}-\ell_1 & -2 & 0\\ -\ell_2 & 0 & 1\\ 6 - \ell_3 & 0 & 0\end{bmatrix}$. The characteristic polynomial is $\Delta (s) = s^3 + \ell_1 s^2 - 2\ell_2 s - 2\ell_3 + 12$. Putting all the poles at $-1$, we have $L = \begin{bmatrix}3 & -\frac{3}{2} & \frac{11}{2}\end{bmatrix}^\T$.
+
+
+The observer is $\dot{\hat{x}}_2 = A_{22} \hat{x}_2 + A_{21} y + B_2 u + L(\dot{y} - A_{12}\hat{x}_2)$. Then, $x$ can be recovered from $y$ and $x_2$, i.e. $\hat{x} = \begin{bmatrix}y\\ \hat{x}_2\end{bmatrix}$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
