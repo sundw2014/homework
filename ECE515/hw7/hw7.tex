@@ -1,0 +1,223 @@
+\documentclass[11pt]{report}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage{graphicx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+
+\newcommand{\T}{\intercal}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{ECE 515 - Fall 2019 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{HW7 - Template}}
+\lfoot{Submitted by: \textcolor{red}{\textit{netid}}}
+\rfoot{Due: Thursday, November 7 at 2pm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\tikzset{%
+    block/.style={draw, fill=white, rectangle,
+            minimum height=2em, minimum width=3em},
+    input/.style={inner sep=0pt},
+    output/.style={inner sep=0pt},
+    sum/.style = {draw, fill=white, circle, minimum size=2mm, node distance=1.5cm, inner sep=0pt},
+    pinstyle/.style = {pin edge={to-,thin,black}}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\pagebreak
+\section*{Problem 1}
+
+Let
+\[
+\dot x =
+\begin{bmatrix}
+0 & 1 \\
+5 & 4
+\end{bmatrix}
+x +
+\begin{bmatrix}
+0 \\ 1
+\end{bmatrix}
+u
+\]
+\[
+y = \begin{bmatrix} 1 & 0 \end{bmatrix} x = x_1
+\]
+\begin{itemize}
+\item
+Draw a block diagram representing this system.
+\item
+Design a reduced-order Luenberger observer, and draw the block diagram for the system and the observer.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Solution}
+\begin{itemize}
+\item
+\begin{tikzpicture}[auto, node distance=2cm, on grid, >=latex']
+
+\node [input] (input) {};
+\node [sum, right = of input] (sum) {$\sum$};
+\node [block, right = of sum] (int1) {$\int$};
+\node [block, right = 3cm of int1] (int2) {$\int$};
+\node [block, below = 2cm of int1] (amp1) {$4$};
+\node [block, below = 3cm of int2] (amp2) {$5$};
+\node [output, right = of int2] (output) {};
+
+\draw [draw,->] (input) node[above right] {$u$} -- (sum);
+\draw [->] (sum) -- node[name=x2dot, pos=.3] {$\dot{x_2}$} (int1);
+\draw [->] (int1) -- node[name=x2, pos=.3] {$x_2$} (int2);
+\draw [->] (int2) -- node[name=y, pos=.7] {$y$} (output);
+\draw [->] (x2.east|-int2) |- (amp1);
+\draw [->] (amp1) -| (sum);
+\draw [->] (y.west|-int2) |- (amp2);
+\draw [->] (amp2) -| (sum);
+%
+\end{tikzpicture}
+
+\item
+Using the notations in the reader, we have $A_{11} = 0$, $A_{12} = 1$, $A_{21} = 5$, $A_{22} = 4$, $B_1 = 0$, $B_2 = 1$ and $y=x_1$, $x = \begin{bmatrix}x_1\\ x_2\end{bmatrix}$.
+
+Considering the gain of the observer feedback $L$, we must have $A_{22} - L A_{12} = 4 - L < 0$. Choose $L = 5$. Then, the observer equation is
+$$ \dot{\hat{x}}_2 = 4\hat{x}_2 + 5 y + u + L(\dot{y} - \hat{x}_2) = -\hat{x}_2 + 5y + u + 5\dot{y}$$
+
+\begin{tikzpicture}[auto, node distance=2cm, on grid, >=latex']
+
+\node [input] (input1) {};
+\node [sum, right = of input1] (sum1) {$\sum$};
+\node [block, right = of sum1] (int1) {$\int$};
+\node [sum, right = of int1] (sum2) {$\sum$};
+\node [block, right = of sum] (int1) {$\int$};
+\node [block, below = of int1] (amp1) {$-1$};
+\node [output, right = of sum2] (output) {};
+\node [input, above = of input1] (input2) {};
+\node [block, right = of input2] (amp2) {$5$};
+
+\draw [draw,->] (input1) node[above right] {$u$} -- (sum1);
+\draw [->] (sum1) -- (int1);
+\draw [->] (int1) -- (sum2);
+\draw [->] (sum2) -- node[name=hatx_2, pos=.7] {$\hat{x}_2$} (output);
+\draw [->] (hatx_2.west|-sum2) |- (amp1);
+\draw [->] (amp1) -| (sum1);
+\draw [->] (input2) node[above right] {$y$} -- (amp2);
+\draw [->] (amp2) -- (sum1);
+\draw [->] (amp2) -| (sum2);
+%
+\end{tikzpicture}
+
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagebreak
+\section*{Problem 2}
+
+Take any matrix $A \in \mb{R}^{m \times n}$. Prove the following statements:
+\begin{itemize}
+\item $\mc{R}(A)^\bot = \mc{N}(A^\T)$
+\item $\mc{N}(A)^\bot = \mc{R}(A^\T)$
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Solution}
+\begin{itemize}
+\item
+($\Rightarrow$) If $\alpha$ is an element of $\mc{R}(A)^\bot$, then for any $x \in \mb{R}^n,~Ax \in \mc{R}(A)$, we have $\alpha^\T A x = 0$. Because this equation holds for all $x$ in $\mb{R}^n$, we must have $\alpha^\T A = 0$ and $\alpha \in \mc{N}(A^\T)$.
+
+($\Leftarrow$) If $\alpha$ is an element of $\mc{N}(A^\T)$, then $A^\T \alpha = 0$. For all $x \in \mb{R}^n,~Ax \in \mc{R}(A)$, we have $(A x)^\T \alpha  = x^\T A^\T \alpha = 0$ and $\alpha \in \mc{R}(A)^\bot$.
+
+\item
+$\mc{N}(A)^\bot = (\mc{R}(A^\T)^\bot)^\bot = \mc{R}(A^\T)$.
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagebreak
+\section*{Problem 3}
+
+Consider the following dynamics:
+\[
+A =
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & 2 & 0 & 0 \\
+0 & 0 & 3 & 0 \\
+0 & 0 & 0 & 4
+\end{bmatrix}
+\qquad
+B =
+\begin{bmatrix}
+1 \\ 1 \\ 0 \\ 0
+\end{bmatrix}
+\qquad
+C =
+\begin{bmatrix}
+1 & 0 & 1 & 0
+\end{bmatrix}
+\]
+In this problem, you will be asked to calculate two Kalman decompositions for this system.
+\begin{itemize}
+\item Calculate $\Sigma_{c \bar o} = \mc{R}(\mc{C}) \cap \mc{N}(\mc{O})$
+\item Calculate a $\Sigma_{c o}$ such that $\Sigma_{c \bar o} \oplus \Sigma_{c o} = \mc{R}(\mc{C})$
+\item Calculate a $\Sigma_{\bar c \bar o}$ such that $\Sigma_{c \bar o} \oplus \Sigma_{\bar c \bar o} = \mc{N}(\mc{O})$
+\item Calculate a $\Sigma_{\bar c o}$ such that $\Sigma_{c \bar o} \oplus \Sigma_{c o} \oplus \Sigma_{\bar c \bar o} \oplus \Sigma_{\bar c o} = \mb{R}^n$
+\item As we discussed in class, this need not be unique; calculate a different $\Sigma_{c o}$, $\Sigma_{\bar c \bar o}$, and $\Sigma_{\bar c o}$ for the same system
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Solution}
+We have $\mc{C} = \begin{bmatrix}1 & 1 & 1 & 1\\ 1 & 2 & 4 & 8\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\end{bmatrix}$ and $\mc{O} = \begin{bmatrix}1 & 0 & 1 & 0\\ 1 & 0 & 3 & 0\\ 1 & 0 & 9 & 0\\ 1 & 0 & 27 & 0\end{bmatrix}$. Let $e_1,~e_2,~e_3,~e_4$ be the standard basis of $R^4$. Then, we have $\mc{R}(\mc{C}) = <e_1, e_2>,~\mc{N}(\mc{O}) = <e_2, e_4>$, where $<e_1, e_2>$ refers to the subspace spanned by $e_1$ and $e_2$.
+\begin{itemize}
+\item $\Sigma_{c \bar o} = \mc{R}(\mc{C}) \cap \mc{N}(\mc{O}) = <e_2>$
+\item $\Sigma_{c o} = <e_1>$
+\item $\Sigma_{\bar c \bar o} = <e_4>$
+\item $\Sigma_{\bar c o} = <e_3>$
+\item $\Sigma_{c \bar o} = <e_2>,~\Sigma_{c o} = <e_1+e_2>,~\Sigma_{\bar c \bar o} = <e_2+e_4>,~\Sigma_{\bar c o} = <e_1+e_2+e_3+e_4>$
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
