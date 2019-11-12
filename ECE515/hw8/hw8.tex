@@ -1,0 +1,168 @@
+\documentclass[11pt]{report}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage{graphicx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+
+\newcommand{\T}{\intercal}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{ECE 515 - Fall 2019 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{HW8 - Template}}
+\lfoot{Submitted by: \textcolor{red}{\textit{netID}}}
+\rfoot{Due: Thursday, November 14 at 2pm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\pagebreak
+\section*{Problem 1}
+
+Suppose we have an LTI system with an input disturbance:
+\[
+\dot x = Ax + B(u+w)
+\]
+\[
+y = Cx
+\]
+If we knew $w(t)$, we could control the system with $u(t) = -w(t) - K \widehat x(t)$, where $\widehat x(t)$ is our state estimate from some observer.
+
+However, we don't know $w(t)$. Suppose that we know the dynamics of $w(t)$:
+\[
+\dot z = A_m z
+\]
+\[
+w = C_m z
+\]
+Thus, we know $A_m, C_m$, but not the value of $z$ or $w$.
+Let's augment our state-space model as follows:
+\[
+\begin{bmatrix}
+\dot x \\
+\dot z
+\end{bmatrix} =
+\begin{bmatrix}
+A & B C_m \\
+0 & A_m
+\end{bmatrix}
+\begin{bmatrix}
+x \\
+z
+\end{bmatrix} +
+\begin{bmatrix}
+B \\
+0
+\end{bmatrix} u
+\]
+\[
+y =
+\begin{bmatrix}
+C & 0
+\end{bmatrix} x
+\]
+\begin{itemize}
+\item
+Is the new system controllable?
+\item
+Derive a full-state observer for this augmented system. Leave the observer gain as $L = \begin{bmatrix}L_1 \\ L_2 \end{bmatrix}$.
+\item
+Use the state estimate from this observer for a control law $u = -C_m \widehat z - K \widehat x$. (Note that our estimate of the unknown noise term $w$ is $C_m \widehat z$.) Write out the dynamics of the controller and observer, viewing $y$ as the input to this system and $u$ as the output. What are the eigenvalues of these `controller and observer' dynamics? (Again, leave the controller gain as $K$.)
+\item
+Write out the closed-loop dynamics for the controller, observer, and original system, using the states $(x, z, \widehat x, \widehat z)$.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Solution}
+\begin{itemize}
+\item The input $u$ doesn't effect $z$ directly, nor indirectly via $x$, thus it is not controllable. Formally, choose $s$ as an eigenvalue of $A_m$, then last $m$ rows of $\begin{bmatrix} sI-A & -BC_m & B\\0 & sI-A_m & 0 \end{bmatrix}$ is not linearly independent, and thus the rank is less than $n+m$.
+\item $$\begin{bmatrix} \dot{\hat{x}}\\ \dot{\hat{z}} \end{bmatrix} = \begin{bmatrix} A & BC_m \\0 & A_m \end{bmatrix} \begin{bmatrix} \hat{x}\\ \hat{z} \end{bmatrix} + \begin{bmatrix} B\\ 0 \end{bmatrix}u + \begin{bmatrix} L_1\\ L_2 \end{bmatrix} (y - C\hat{x})$$
+\item $$\begin{bmatrix} \dot{\hat{x}}\\ \dot{\hat{z}} \end{bmatrix} = \begin{bmatrix} A-BK-L_1C & 0 \\-L_2C & A_m \end{bmatrix} \begin{bmatrix} \hat{x}\\ \hat{z} \end{bmatrix} + \begin{bmatrix} L_1\\ L_2 \end{bmatrix} y$$
+$$u = \begin{bmatrix} -K & -C_m \end{bmatrix} \begin{bmatrix} \hat{x}\\ \hat{z} \end{bmatrix}$$
+According to a conclusion from HW2, we know the eigevalues of $\begin{bmatrix} A-BK-L_1C & 0 \\-L_2C & A_m \end{bmatrix}$ is the union of eigenvalues of $A-BK-L_1C$ and $A_m$.
+\item $$\begin{bmatrix} \dot{x} \\ \dot{z} \\ \dot{\hat{x}}\\ \dot{\hat{z}} \end{bmatrix} = \begin{bmatrix} A & BC_m & -BK & -BC_m\\ 0 & A_m & 0 & 0\\ L_1C & 0 & A-BK-L_1C & 0 \\ L_2C & 0 & -L_2C & A_m \end{bmatrix} \begin{bmatrix} x \\ z \\ \hat{x}\\ \hat{z} \end{bmatrix}$$
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagebreak
+\section*{Problem 2}
+
+Suppose we have the same setup as the previous problem, with system dynamics given by
+\[
+\dot x = Ax + B(u+w)
+\]
+\[
+y = Cx
+\]
+and noise dynamics given by
+\[
+\dot z = A_m z
+\]
+\[
+w = C_m z
+\]
+Rather than explicitly estimate the unknown state, let's filter the output. Let's add the following states:
+\[
+\dot x_a = A_m^\T x_a + C_m^\T y
+\]
+\begin{itemize}
+\item
+Derive an observer for $\widehat x$, ignoring the $w$ term.
+%using $C_m \widehat z$ as a substitute for $w$. (We assume we can directly observe $\widehat z$ and do not need to estimate it.)
+Again, leave $L$ in the equations without explicitly calculating these values.
+\item
+Stabilize the system with $u = -K_1 \widehat x - K_2 x_a$. Derive the dynamics for your controller and filter $(\widehat x,x_a)$, viewing $y$ as an input and $u$ as the output.
+\item
+What are the eigenvalues of your `controller and filter' dynamics?
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Solution}
+\begin{itemize}
+\item $\dot{\hat{x}} = A \hat{x} + Bu + L(y - C\hat{x})$
+\item $$\begin{bmatrix} \dot{\hat{x}}\\ \dot{x}_a \end{bmatrix} = \begin{bmatrix} A-BK_1-LC & -BK_2 \\0 & A_m^\T \end{bmatrix} \begin{bmatrix} \hat{x}\\ x_a \end{bmatrix} + \begin{bmatrix} L\\ C_m^\T \end{bmatrix} y$$
+$$u = \begin{bmatrix} -K_1 & -K_2 \end{bmatrix} \begin{bmatrix} \hat{x}\\ x_a \end{bmatrix}$$
+\item According to a conclusion from HW2, we know the eigevalues of $\begin{bmatrix} A-BK_1-LC & -BK_2 \\0 & A_m^\T \end{bmatrix}$ is the union of eigenvalues of $A-BK_1-LC$ and $A_m^\T$.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
