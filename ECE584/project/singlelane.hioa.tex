@@ -1,0 +1,10 @@
+if $i = 1$ 
+	$s_i \gets s_i + \mathsf{vc}$ $\label{ln:lead_p}$
+else 	
+	$\mathit{gap}_i \gets s_{i-1} - s_i$
+	if $\mathit{gap}_i \leq \mathsf{near}$
+		$s_i \gets s_i + \mathsf{vc}$ w.p. $\mathsf{pnear}$ $\label{ln:other_p1}$ 
+		$s_i \gets s_i + \mathsf{vb}$ w.p. $1 - \mathsf{pnear}$ $\label{ln:other_p2}$ 
+	else
+		$s_i \gets s_i + \mathsf{vc}$ w.p. $\mathsf{pfar}$ $\label{ln:other_p3}$
+		$s_i \gets s_i + \mathsf{vb}$ w.p. $1- \mathsf{pfar}$ $\label{ln:other_p4}$ 

@@ -1,0 +1,24 @@
+if $\mathit{d\_left}[i] > \mathsf{th\_clear}$
+		$\mathit{p\_l} = \mathsf{pturn}$
+else
+		$\mathit{p\_l} = 0$
+
+if $\mathit{d\_right}[i] > \mathsf{th\_clear}$
+		$\mathit{p\_r} = \mathsf{pturn}$
+else
+		$\mathit{p\_r} = 0$
+
+$\mathit{p\_keep} = (1 - \mathit{p\_l} - \mathit{p\_r})$
+
+if $\mathit{d\_ahead}[i] < \mathsf{th\_close}$
+		$\mathit{p\_x} = \mathsf{pclose}$
+else if $\mathit{d\_ahead}[i] < \mathsf{th\_far}$
+		$\mathit{p\_x} = \mathsf{pfine}$
+else
+		$\mathit{p\_x} = \mathsf{pfar}$
+
+$s_i \gets s_i + \mathsf{vcruise}$; $y_i \gets y_i - 1$; w.p. $\mathit{p\_l}$
+$s_i \gets s_i + \mathsf{vcruise}$; $y_i \gets y_i + 1$; w.p. $\mathit{p\_r}$
+$s_i \gets s_i + \mathsf{vbrake}$; $y_i \gets y_i$; w.p. $\mathit{p\_keep} * \mathit{p\_x}[brake]$
+$s_i \gets s_i + \mathsf{vcruise}$; $y_i \gets y_i$; w.p. $\mathit{p\_keep} * \mathit{p\_x}[cruise]$
+$s_i \gets s_i + \mathsf{vspeedup}$; $y_i \gets y_i$; w.p. $\mathit{p\_keep} * \mathit{p\_x}[speedup]$

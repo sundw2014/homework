@@ -1,0 +1,14 @@
+if $i == 1$
+		$s_i \gets s_i + \mathsf{vcruise}$;
+		return
+else
+    if $\mathit{gap}_i < \mathsf{th\_close}$
+		    $\mathit{p} = \mathsf{pclose}$
+    else if $\mathit{gap}_i < \mathsf{th\_far}$
+		    $\mathit{p} = \mathsf{pfine}$
+    else
+		    $\mathit{p} = \mathsf{pfar}$
+
+$s_i \gets s_i + \mathsf{vbrake}$; w.p. $\mathit{p}[brake]$
+$s_i \gets s_i + \mathsf{vcruise}$; w.p. $\mathit{p}[cruise]$
+$s_i \gets s_i + \mathsf{vspeedup}$; w.p. $\mathit{p}[speedup]$
