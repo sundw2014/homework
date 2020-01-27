@@ -1,0 +1,103 @@
+\documentclass[11pt]{report}
+% this template is originally from Roy Dong's ECE 515.
+% Editted by Dawei Sun
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{upgreek}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage{graphicx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+
+\newcommand{\T}{\intercal}
+\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{ECE 543 - Spring 2020 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{HOMEWORK1}}
+\lfoot{Submitted by: Dawei Sun (\textcolor{red}{\textit{daweis2}})}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\pagebreak
+\section*{Problem 1}
+\subsection*{Solution}
+Let $X_i$ be a random variable. If the $i$-th bin is not empty, then $X_i = 1$. Ohterwise, $X_i = 0$. For all $i$, we have $P\{X_i = 1\} = 1 - (1-\frac{1}{n})^m$. Thus, the expected number of non-empty bins is $\E{\sum_{i=1}^{n} X_i} = \sum_{i=1}^{n}\E{X_i} = n(1 - (1-\frac{1}{n})^m)$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 2}
+\subsection*{Solution}
+\begin{itemize}
+  \item Let $X \sim Ber(0.5)$. PMF of $X$ is $P\{X = 0\} = 0.5; P\{X = 1\} = 0.5$. MGF of $X$ is $M(\theta) = \E{e^{\theta X}} = 0.5 + 0.5 e^\theta$.
+  \item Let $X \in \mathbb{N}^+$ be a random variable, and $P\{X = i\} = \frac{1}{2^i},~i=1,2,3,\dots$. Then, $M(\theta) = \sum_{i=1}^{\infty}(\frac{e^\theta}{2})^i$, which only exists when $\theta \in (-\infty, \ln 2)$.
+  \item Let $X \in \{\pm 2^i,~i=1,2,3,\dots\}$ be a random variable, and $P\{X = 2^i\} = \frac{1}{2^{i+1}},~P\{X = -2^i\} = \frac{1}{2^{i+1}},~i=1,2,3,\dots$. Then, $M(\theta) = \sum_{i=1}^{\infty}\frac{1}{2^{i+1}}(e^{2^i\theta}+e^{-2^i\theta}) > \sum_{i=1}^{\infty}\frac{e^{2^i\left|\theta\right|}}{2^{i+1}}$. The term in the summation $\frac{e^{2^i\left|\theta\right|}}{2^{i+1}}$ diverges to $\infty$ when $\theta \neq 0$. Thus, $M(\theta)$ only exists when $\theta = 0$.
+  \item (i) Yes. Let $X, Y$ be i.i.d. random variables. If $M(\theta)$ is the MGF of $X$, then the MGF of $X+Y$ is $M(\theta)^2$. (ii) Yes. $M(k\theta) = \E{e^{k \theta X}}$ which is the MGF of $kX$. (iii) No. $k M(0) = k \neq 1$. (iv) Yes. $e^{k\theta}M(\theta) = \E{e^{\theta(X+k)}}$ which is the MGF of $X+k$.
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 3}
+\subsection*{Solution}
+\begin{itemize}
+  \item Markov's inequality: If $Y$ is a nonnegative random variable, then for $c > 0$, $$P\{Y \geq c\} \leq \frac{\E{Y}}{c}.$$
+  \item For $\theta \geq 0$,
+  \begin{multline*}
+  P\{\sum_{i=1}^{n}X_i \geq nx\} = P\{e^{\theta(\sum_{i=1}^{n}X_i - nx)} \geq 1\}\\\leq \E{e^{\theta(\sum_{i=1}^{n}X_i - nx)}} = \E{e^{\theta X_1}}^n e^{-\theta n x} = e^{-n(\theta x - \ln\E{e^{\theta X_1}})} \leq e^{-n \sup_{\theta > 0}(\theta x - \ln\E{e^{\theta X_1}})}
+  \end{multline*}
+  \item This only holds for $x>p$. Let $g(\theta) = \theta x - \log(\E{e^{\theta X}}) = \theta x - \log(1-p+pe^\theta)$. Sovle $g'(\theta) = 0$, and we have $\theta^* = \log(\frac{x}{p} \cdot \frac{1-p}{1-x})$. Because $x>p$, $\theta^* > 0$, and $\sup_{\theta > 0}g(\theta) = g(\theta^*) = \mathbb{D}(x||p)$.
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 4}
+\subsection*{Solution}
+\begin{itemize}
+  \item \textit{Positive definite matrix:} A symmetric real-valued matrix $A$ is said to be positive definite if and only if for all column vector $x \neq \upvartheta$, $x^\T A x > 0$. Such a matrix has only positive eigenvalues. For such a matrix, a decomposition $A = Q^\T \Lambda Q$ is always possible, where $Q^\T Q = I$ and $\Lambda$ is a diagonal matrix with only positive elements. Thus, we can decompose $\Sigma$ by $\Sigma = Q^\T \Lambda Q$. Let $A = \sqrt{\Lambda}^{-1} Q$, where $\sqrt{\Lambda}$ is the element-wise square root of $\Lambda$, and $\sqrt{\Lambda}^{-1}$ is valid because $\Sigma$ has only positive eigenvalues. Because $Y$ is a finite linear combination of $X$, $Y$ is also a Gaussian random vector. Then, we have $\E{Y} = A(\E{X} - \mu) = 0$, and
+  \begin{multline*}
+  Cov(Y) = \E{Y Y^\T} = \E{A (X-\mu)(X-\mu)^\T A^\T} = A \Sigma A^\T \\= \sqrt{\Lambda}^{-1} Q \Sigma Q^\T \sqrt{\Lambda}^{-1} = \sqrt{\Lambda}^{-1} \Lambda \sqrt{\Lambda}^{-1} = I.
+  \end{multline*}
+  Thus, $Y \sim N(0, I)$.
+  \item $A = \begin{bmatrix} 1 &10 &0\\ 10 &1 &0\\ 0 &0 &1 \end{bmatrix}$ cannot be a covariance matrix. The 2nd principal minor of $A$ is negative, so $A$ is not positive definite. On the other hand, the first two random variables do not satisfy the Cauchy–Schwarz inequality, i.e. $Var(X_1)Var(X_2) < Cov(X_1, X_2)^2$.
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 5}
+\subsection*{Solution}
+\begin{itemize}
+  \item Jensen's inequality: Let $\phi$ be a convex function and let $X$ be a random variable such that $\E{X}$ is finite. Then, $\E{\phi(X)} \geq \phi(\E{X})$.
+  \item Let $\phi(X) = -\log(X), X > 0$. Then $\phi$ is a convex function. Let $X$ be a random variable, and $P\{X = \frac{q_i}{p_i}\} = p_i$. Then, $\mb{D}(p||q) = \E{\phi(X)} \geq \phi(\E{X}) = \phi(\sum_{i=1}^{m}p_i\frac{q_i}{p_i}) = \phi(1) = 0$.
+\end{itemize}
+\end{document}
