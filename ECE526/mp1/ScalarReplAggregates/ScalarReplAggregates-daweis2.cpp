@@ -51,6 +51,7 @@ namespace {
     // getAnalysisUsage - List passes required by this pass.  We also know it
     // will not alter the CFG, so say so.
     virtual void getAnalysisUsage(AnalysisUsage &AU) const {
+      AU.addRequired<DominatorTreeWrapperPass>();
       AU.setPreservesCFG();
     }
 
@@ -94,15 +95,29 @@ bool SROA::runOnFunction(Function &F) {
   while (!finished) {
     finished = true;
     // step 1: promote mem to reg
-//    for (inst_iterator I = inst_begin(F), E = inst_end(F); I != E; ++I) {
-//      if (AllocaInst *AI = dyn_cast<AllocaInst>(&*I))
-//        if (isAllocaPromotable(AI)) {
-//          DominatorTree *DT = &getAnalysis<DominatorTreeWrapperPass>(F).getDomTree();
-//          PromoteMemToReg(AI, *DT);
-//          finished = false;
-//          Changed = true;
-//        }
-//    }
+    std::set<AllocaInst*> worklist_step1;
+    for (inst_iterator I = inst_begin(F), E = inst_end(F); I != E; ++I) {
+      if (AllocaInst *AI = dyn_cast<AllocaInst>(&*I)) {
+        if (isAllocaPromotable(AI)) {
+          worklist_step1.insert(AI);
+        }
+      }
+    }
+    while (!worklist_step1.empty()){
+      AllocaInst *AI = *worklist_step1.begin();
+      worklist_step1.erase(worklist_step1.begin());
+      errs() << "Promotable AI: ";
+      AI->print(errs());
+      errs() << "\n";
+      DominatorTree *DT = &getAnalysis<DominatorTreeWrapperPass>().getDomTree();
+      errs() << "got DT\n";
+      PromoteMemToReg(AI, *DT);
+      ++NumPromoted;
+      errs() << "promoted\n";
+      finished = false;
+      Changed = true;
+     }
+
     // step 2: expand allocas
     std::set<AllocaInst*> worklist;
     for (inst_iterator I = inst_begin(F), E = inst_end(F); I != E; ++I) {
@@ -121,6 +136,7 @@ bool SROA::runOnFunction(Function &F) {
       worklist.erase(worklist.begin());
       if (isExpandable(AI)) {
         expandAggreateAlloca(AI, &worklist);
+        ++NumReplaced;
         finished = false;
         Changed = true;
       }
@@ -292,6 +308,9 @@ bool SROA::expandAggreateAlloca(AllocaInst *AI, std::set<AllocaInst *> *worklist
 }
 
 bool SROA::isAllocaPromotable(const AllocaInst *AI) {
+  errs() << "isAllocaPromotable, AI: ";
+  AI->print(errs());
+  errs() << "\n";
   auto type = AI->getType()->getElementType();
   if (!(type->isFPOrFPVectorTy() || type->isIntOrIntVectorTy()\
    || type->isPtrOrPtrVectorTy()))
