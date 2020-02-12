@@ -1,4 +1,4 @@
-// RUN: clang -O0 -S -emit-llvm %s -o - | opt -load /home/daweis2/llvm-8.0.1.src/build/lib/LLVMSRAOdaweis2.so -scalarrepl-daweis2 -S 2<&1 | FileCheck %s
+// RUN: clang -O0 -S -emit-llvm %s -o - | opt -load /home/daweis2/llvm-8.0.1.src/build/lib/LLVMSRAOdaweis2.so -inline -globaldce -instcombine -argpromotion -sccp -dce -simplifycfg -globaldce -scalarrepl-daweis2 -mem2reg -verify -S 2<&1 | FileCheck %s
 
 // CHECK: NUM_OUTER_ITERATIONS 7
 
@@ -10,7 +10,7 @@ struct ST {
 void foo(int x) {
 }
 
-void test(void) {
+int test(void) {
   struct ST st1;
   struct ST st2;
   struct ST st3;
@@ -29,4 +29,5 @@ void test(void) {
   foo(st5.x);
 // CHECK: @test
 // CHECK-NOT: alloca
+  return st1.p->p->p->p->x;
 }

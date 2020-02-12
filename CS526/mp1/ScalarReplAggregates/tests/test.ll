@@ -1,4 +1,4 @@
-; RUN: opt < %s -load /home/daweis2/llvm-8.0.1.src/build/lib/LLVMSRAOdaweis2.so -scalarrepl-daweis2 -S | FileCheck %s
+; RUN: opt < %s -load /home/daweis2/llvm-8.0.1.src/build/lib/LLVMSRAOdaweis2.so -inline -globaldce -argpromotion -sccp -dce -simplifycfg -globaldce -scalarrepl-daweis2 -mem2reg -verify -S | FileCheck %s
 
 %struct.RT = type { i32, i32, i32 }
 %struct.ST = type { i32, double, %struct.RT }
@@ -9,7 +9,8 @@ define i32 @foo(i32 %x) {
 }
 
 define i32 @bar(%struct.RT* %ptr) {
-  ret i32 0
+  %int = ptrtoint %struct.RT* %ptr to i32
+  ret i32 %int
 }
 
 ; alloca of a struct. struct in a struct
@@ -31,10 +32,15 @@ entry:
   %0 = call i32 @foo(i32 %v1)
   %1 = call i32 @foo(i32 %v4)
   %2 = call i32 @foo(i32 %v5)
-  ret i32 0
+
+  %3 = add i32 %v1, %v4
+  %4 = add i32 %3, %v5
+
+  ret i32 %4
 ; CHECK: @test1
 ; CHECK-NOT: alloca
 ; CHECK: ret
+
 }
 
 ; icmp
@@ -62,12 +68,17 @@ define i32 @test2() {
   call i32 @foo(i32 %vv3)
   call i32 @foo(i32 %vv4)
 
-  ret i32 0
+  %t1 = add i32 %vv1, %vv2
+  %t2 = add i32 %t1, %vv3
+  %t3 = add i32 %t2, %vv4
+  ret i32 %t3
 ; CHECK: @test2
 ; CHECK-NOT: alloca %struct.ST
 ; CHECK: alloca i32
 ; CHECK: %vv1 = zext i1 true to i32
 ; CHECK: %vv2 = zext i1 false to i32
+; CHECK: ret
+
 }
 
 ; address of a struct is used in store's operand 0. This needs two outer iteration.
@@ -84,11 +95,12 @@ entry:
   %v_i32 = load i32, i32* %p_i32 ; v_i32 = *p_i32
 
   call i32 @foo(i32 %v_i32)
-  ret i32 0
+  ret i32 %v_i32
 
 ; CHECK: @test3
 ; CHECK-NOT: alloca
 ; CHECK: ret
+
 }
 
 
@@ -101,12 +113,15 @@ entry:
   %v_i32 = load i32, i32* %p_i32 ; v_i32 = *p_i32
 
   call i32 @foo(i32 %v_i32)
-  call i32 @bar(%struct.RT* %p_rt)
-  ret i32 0
+  %int_ptr = call i32 @bar(%struct.RT* %p_rt)
+
+  %t1 = add i32 %v_i32, %int_ptr
+  ret i32 %t1
 
 ; CHECK: @test4
 ; CHECK: alloca %struct.RT
 ; CHECK: ret
+
 }
 
 ; volatile
@@ -118,11 +133,12 @@ entry:
   %v_i32 = load volatile i32, i32* %p_i32 ; v_i32 = *p_i32
 
   call i32 @foo(i32 %v_i32)
-  ret i32 0
+  ret i32 %v_i32
 
 ; CHECK: @test5
 ; CHECK: alloca %struct.RT
 ; CHECK: ret
+
 }
 
 ; alloca of an array
@@ -140,10 +156,11 @@ entry:
   %v_i32 = load i32, i32* %p_i32 ; v_i32 = *p_i32
 
   call i32 @foo(i32 %v_i32)
-  ret i32 0
+  ret i32 %v_i32
 ; CHECK: test6
 ; CHECK-NOT: alloca
 ; CHECK: ret
+
 }
 
 ; non-const index. Do not touch it.
@@ -163,9 +180,10 @@ entry:
   %v_i32 = load i32, i32* %p_i32 ; v_i32 = *p_i32
 
   call i32 @foo(i32 %v_i32)
-  ret i32 0
-; CHECK: test7
+  ret i32 %v_i32
+; CHECK: @test7
 ; CHECK: alloca i32
 ; CHECK: alloca [3 x %struct.QT]
 ; CHECK: ret
+
 }
