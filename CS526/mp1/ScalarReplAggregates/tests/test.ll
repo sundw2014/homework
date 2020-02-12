@@ -33,10 +33,10 @@ entry:
   %1 = call i32 @foo(i32 %v4)
   %2 = call i32 @foo(i32 %v5)
 
-  %3 = add i32 %v1, %v4
-  %4 = add i32 %3, %v5
-
-  ret i32 %4
+  ; avoid dce
+  %t1 = add i32 %v1, %v4
+  %t2 = add i32 %t1, %v5
+  ret i32 %t2
 ; CHECK: @test1
 ; CHECK-NOT: alloca
 ; CHECK: ret
@@ -68,6 +68,7 @@ define i32 @test2() {
   call i32 @foo(i32 %vv3)
   call i32 @foo(i32 %vv4)
 
+  ; avoid dce
   %t1 = add i32 %vv1, %vv2
   %t2 = add i32 %t1, %vv3
   %t3 = add i32 %t2, %vv4
@@ -115,6 +116,7 @@ entry:
   call i32 @foo(i32 %v_i32)
   %int_ptr = call i32 @bar(%struct.RT* %p_rt)
 
+  ; avoid dce
   %t1 = add i32 %v_i32, %int_ptr
   ret i32 %t1
 
