@@ -1,0 +1,124 @@
+\documentclass[11pt]{report}
+% this template is originally from Roy Dong's ECE 515.
+% Editted by Dawei Sun
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{bm}
+\usepackage{upgreek}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage{graphicx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+\newcommand{\vect}[1]{\boldsymbol{\mathbf{#1}}}
+\newcommand{\T}{\intercal}
+\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{ECE 543 - Spring 2020 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{HOMEWORK2}}
+\lfoot{Submitted by: Dawei Sun (\textcolor{red}{\textit{daweis2}})}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\pagebreak
+\section*{Problem 1}
+\subsection*{Solution}
+\begin{enumerate}[(a)]
+  \item Because $\forall i$, $f_i$ is postive non-decreasing, $\prod_{i=1}^{k'} f_i$, $\forall 1 \leq k' \leq k$ is also non-decreasing. Thus,
+  \[
+  \E{\prod_{i=1}^{k} f_i(\vect{X})} \leq \E{\prod_{i=1}^{k-1} f_i(\vect{X})} \E{f_k(\vect{X})} \leq \dots \leq \prod_{i=1}^{k}\E{f_i(\vect{X})}.
+  \]
+  \item NA r.v.s $\{X_1, \dots, X_n\}$ may not be independent. If we can prove that Chernoff's trick also holds for NA r.v.s, then Hoeffding's inequality holds too.
+  \[
+    P(\sum_{i=1}^{n} X_i \geq a) \leq \frac{\E{\prod_{i=1}^{n} e^{\theta X_i}}}{e^{\theta a}} \leq \frac{\prod_{i=1}^{n} \E{e^{\theta X_i}}}{e^{\theta a}}
+  \]
+  where the last derivation uses the result in (a).
+\end{enumerate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 2}
+\subsection*{Solution}
+\begin{enumerate}[(a)]
+  \item Lemmas: 1. zero-one principle. 2. union of independent groups.
+  \item Let $Y_i$ be an indicator random variable to indicate if the $i$-th bin is non-empty. We have $Y_i \sim Ber(1-(\frac{n-1}{n})^m)$, and $\E{Y_i} = 1-(\frac{n-1}{n})^m$. Lemma: mapping. Thus, $\{Y_1, \dots, Y_n\}$ is NA. With the results in Problem 1 (b), we have $\forall o > 0$,
+  \begin{multline*}
+    P\left(O-\E{O} = \sum_{i=1}^{n} (Y_i - \E{Y_i}) \geq o \right) \leq \exp\left(\sum_{i=1}^{n} \frac{(b_i-a_i)^2}{8}\theta^2 - \theta o \right) = \exp\left(\frac{n}{8} \theta^2 - \theta o \right)\\ \leq e^{\frac{-2 o^2}{n}}
+  \end{multline*}
+\end{enumerate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 3}
+\subsection*{Solution}
+Let $Z_i \in \{1,2,3, \dots, n\}$ be the ID of the bin into which the $i$-th ball is put. Let $f$ be a function such that $f(Z_1, Z_2, Z_3, \dots, Z_m)$ is the number of non-empty bins. Obviously, $Z_i$'s are independent, and $\left|f(Z_1, \dots, Z_i, \dots, Z_m) - f(Z_1, \dots, Z_i', \dots, Z_m)\right| < 1$. Thus, McDiarmid's inequality applys:
+\[
+  P(O-\E{O} = f(Z_1, Z_2, Z_3, \dots, Z_m) - \E{f(Z_1, Z_2, Z_3, \dots, Z_m)} \geq o) \leq e^\frac{-2 o^2}{n},
+\]
+which is the same as the Hoeffding bound.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 4}
+\subsection*{Solution}
+\begin{enumerate}[(a)]
+  \item
+  We have $\E{\exp(-\theta X)} \leq \exp(\nu^2\theta^2/2)$. Thus for any $\theta > 0$,
+  \begin{multline*}
+    P(|X| > t) = P(X > t) + P(-X > t) = P(e^{\theta X} > e^{\theta t}) + P(e^{-\theta X} > e^{\theta t}) \\\leq \frac{\E{e^{\theta X}}}{e^{\theta t}} + \frac{\E{e^{-\theta X}}}{e^{\theta t}} \leq 2 \exp(\nu^2\theta^2/2  - \theta t) \leq 2 \exp(-\frac{t^2}{2 \nu^2})
+  \end{multline*}
+  \item Let the CDF of $|X|$ be $F$. Then, $F(x) = 0$, $\forall x \leq 0$. Because $g(x) = x^k$ is an increasing function, we have $$\E{|X|^k} = \int_{0}^{\infty} g'(x) P(|X|>x) dx \leq 2 \int_{0}^{\infty} kx^{k-1} \exp(-\frac{x^2}{2 \nu^2}) dx.$$ Subtitute $\frac{x^2}{2 \nu^2}$ with $y$, and we have $$\E{|X|^k} \leq 2 k \int_{0}^{\infty} \nu^2 (2 \nu^2 y)^{k/2-1} \exp(-y) dy = k (2\nu^2)^{k/2} \Gamma(\frac{k}{2}).$$
+\end{enumerate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 5}
+\subsection*{Solution}
+First, we partation the indices into $K$ index group such that $G_k = \{j: X_j \in A_k\}$. We also have for any $f \in F$ and $j_1,\,j_2 \in G_i$, $f(X_{j_1}) = f(X_{j_2})$. Thus,
+\begin{multline*}
+  R_n(F(X^n)) = \E{\sup\limits_{f \in F} \left|\frac{1}{n}\sum_{i=1}^{n}\sigma_i f(X_i)\right|} = \E{\sup\limits_{f \in F} \left|\frac{1}{n}\sum_{k=1}^{K} \sum_{i \in G_k} \sigma_i f(X_i)\right|} = \E{\frac{1}{n}\sum_{k=1}^{K} \left|\sum_{i \in G_k} \sigma_i\right|} \\\leq \E{\frac{1}{n}\sum_{k=1}^{K} \sqrt{\sum_{i \in G_k} \sigma_i^2}} = \E{\frac{1}{n}\sum_{k=1}^{K} \sqrt{n_k}} = \frac{1}{n}\sum_{k=1}^{K} \sqrt{n_k}
+\end{multline*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 6}
+\subsection*{Solution}
+For $n = 3$, we can choose $z_2 = z_1 + 0.55$ and $z_3 = z_2 + 0.55$. It is easy to verify $z_1$, $z_2$, and $z_3$ can be shattered by $F$. When $n = 4$, no matter what $z_1$, $z_2$, $z_3$, and $z_4$ are, they cannot be assigned values $1,\,0,\,1,\,0$. Thus $VC(F) = 3$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 7}
+\subsection*{Solution}
+For $n$ points, we can choose $x_i = 2^i \pi$, $i=1,\,2,\,3,\,\dots,\,n$. Then $x^n$ can be shattered by $F$. Actually, we can find $2^n$ intervals $(1, \frac{2^n}{2^n-1})$, $(\frac{2^n}{2^n-1}, \frac{2^n}{2^n-2})$, $\dots$, $(\frac{2^n}{1}, \infty)$ such that when $\theta$ belongs to different intervals, $f$ assigns different values to $x^n$.
+\end{document}
