@@ -32,7 +32,7 @@
 \newcommand{\vect}[1]{\boldsymbol{\mathbf{#1}}}
 \newcommand{\T}{\intercal}
 \newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
-
+\newcommand{\condi}[2]{#1 \ | \ #2}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -71,7 +71,17 @@
 \section*{Problem 2}
 \subsection*{Solution}
 \begin{enumerate}[(a)]
-  \item Lemmas: 1. zero-one principle. 2. union of independent groups.
+  \item
+  \begin{enumerate}[(i)]
+    \item If $f(X,\,Y)$ is an increasing function of $(X,\,Y)$, then given $Y=y$, $f(X,\,y)$ is an increasing function of $X$. Also, as a function of $Y$, $\E{\condi{f(X,\,Y)}{Y}}$ is also increasing. Thus, for any increasing function $f$ and $g$,
+    \begin{multline*}
+      \E{f(X,\,Y) \cdot g(X,\,Y)} = \E{\E{\condi{f(X,\,Y) \cdot g(X,\,Y)}{Y}}} \\\leq \E{\E{\condi{f(X,\,Y)}{Y}} \cdot \E{\condi{g(X,\,Y)}{Y}}} \leq \E{\E{\condi{f(X,\,Y)}{Y}}} \cdot \E{\E{\condi{g(X,\,Y)}{Y}}} \\= \E{f(X,\,Y)}\E{g(X,\,Y)}
+    \end{multline*}
+    \item For any two monotone functions $g$ and $h$ depending on disjoint subsets of $Y$, $g(Y) = g(Y_1, \dots, Y_k) = g(\{f_i(X),~i \in \mc I\}$ and $h(Y) = h(\{f_i(X),~i \in \mc J\}$. Since $\{f_i(X),~i \in [k]\}$ depends on disjoint subsets of $X$, $g$ and $h$ also depends on disjoint subsets of $X$. Also, since monotone functions are closed under composition, both $g(X)$ and $h(X)$ are still monotone (either increasing or decreasing). Thus, $\E{g(Y)h(Y)} \leq \E{g(Y)} \E{h(Y)}$, and thus $Y^k$ are NA.
+  \end{enumerate}
+  \item Let $I_{i,j}$ be an indicator random variable to show if the $i$-th ball falls into the $j$-th bin. Then, for any $i \in [m]$, $\sum_{j=1}^{n} I_{i,j} = 1$. Next, we will show $\{I_{i,j}, i \in [m]\}$ are NA. For any increasing functions $f$ and $g$, denoting $\tilde{f}(I)$ and $\tilde{g}(I)$ as $f(I)-f(\vect{0})$ and $g(I)-g(\vect{0})$ respectively, then we have $\tilde{f}(I) \geq 0$ and $\tilde{g}(I) \geq 0$. Since only one element of $I$ can be 1, at least one of $\tilde{f}(I)$ and $\tilde{g}(I)$ is zero, so $\E{\tilde{f}(I) \cdot \tilde{g}(I)} = 0$. Thus, $LHS = \E{f(I) \cdot g(I)} = \E{(\tilde{f}(I) + f(\vect{0})) \cdot (\tilde{g}(I) + g(\vect{0}))} = g(\vect{0}) \E{\tilde{f}(I)} + f(\vect{0})\E{\tilde{g}(I)} + f(\vect{0})g(\vect{0})$, and $RHS = (\E{\tilde{f}(I)}+ f(\vect{0})) (\E{\tilde{g}(I)}+ g(\vect{0})) \geq LHS$. Thus, $\{I_{i,j}, i \in [m]\}$ are NA.
+
+  Using the results in (a.i), we have $\{I_{i,j},\text{ for any }i \in [m] \text{ and }j \in [n]\}$ are NA. Using the results in (a.ii), we have $X_i = \sum_{j=1}^{m} I_{j,i}$ are NA.
   \item Let $Y_i$ be an indicator random variable to indicate if the $i$-th bin is non-empty. We have $Y_i \sim Ber(1-(\frac{n-1}{n})^m)$, and $\E{Y_i} = 1-(\frac{n-1}{n})^m$. Lemma: mapping. Thus, $\{Y_1, \dots, Y_n\}$ is NA. With the results in Problem 1 (b), we have $\forall o > 0$,
   \begin{multline*}
     P\left(O-\E{O} = \sum_{i=1}^{n} (Y_i - \E{Y_i}) \geq o \right) \leq \exp\left(\sum_{i=1}^{n} \frac{(b_i-a_i)^2}{8}\theta^2 - \theta o \right) = \exp\left(\frac{n}{8} \theta^2 - \theta o \right)\\ \leq e^{\frac{-2 o^2}{n}}
