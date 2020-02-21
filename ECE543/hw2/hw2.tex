@@ -24,9 +24,23 @@
 % Colored text and include images.
 \usepackage{color}
 \usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{bbm}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\urlstyle{same}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Some custom macros to make life easier.
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 \newcommand{\mc}{\mathcal}
 \newcommand{\mb}{\mathbb}
 \newcommand{\vect}[1]{\boldsymbol{\mathbf{#1}}}
@@ -59,11 +73,14 @@
   \[
   \E{\prod_{i=1}^{k} f_i(\vect{X})} \leq \E{\prod_{i=1}^{k-1} f_i(\vect{X})} \E{f_k(\vect{X})} \leq \dots \leq \prod_{i=1}^{k}\E{f_i(\vect{X})}.
   \]
-  \item NA r.v.s $\{X_1, \dots, X_n\}$ may not be independent. If we can prove that Chernoff's trick also holds for NA r.v.s, then Hoeffding's inequality holds too.
+  \item NA r.v.s $\{X_1, \dots, X_n\}$ may not be independent, but if we can prove that Chernoff's trick also holds for NA r.v.s, then Hoeffding's inequality holds too. Using the results in Problem 2.(a).ii, $\{X_1 - \E{X_1}, \dots, X_n - \E{X_n}\}$ are also NA. For any $a > 0$ and $\theta > 0$, we have
   \[
-    P(\sum_{i=1}^{n} X_i \geq a) \leq \frac{\E{\prod_{i=1}^{n} e^{\theta X_i}}}{e^{\theta a}} \leq \frac{\prod_{i=1}^{n} \E{e^{\theta X_i}}}{e^{\theta a}}
+    P(\sum_{i=1}^{n} X_i - \E{X_i} \geq a) \leq \frac{\E{\prod_{i=1}^{n} e^{\theta (X_i - \E{X_i})}}}{e^{\theta a}} \leq \frac{\prod_{i=1}^{n} \E{e^{\theta (X_i - \E{X_i})}}}{e^{\theta a}},
   \]
-  where the last derivation uses the result in (a).
+  where the first derivation uses Markov's inequality, and the last derivation uses the result in (a). Suppose $X_i \in [a_i, b_i]$, then we have
+  \[
+    P(\sum_{i=1}^{n} X_i - \E{X_i} \geq a) \leq \exp\left(\prod_{i=1}^{n} \frac{(b_i - a_i)^2}{8} \theta^2 - \theta a\right) \leq \exp\left(\frac{-2x^2}{\sum_{i=1}^{n} (b_i - a_i)^2}\right)
+  \]
 \end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -73,16 +90,16 @@
 \begin{enumerate}[(a)]
   \item
   \begin{enumerate}[(i)]
-    \item If $f(X,\,Y)$ is an increasing function of $(X,\,Y)$, then given $Y=y$, $f(X,\,y)$ is an increasing function of $X$. Also, as a function of $Y$, $\E{\condi{f(X,\,Y)}{Y}}$ is also increasing. Thus, for any increasing function $f$ and $g$,
+    \item Here, we only consider increasing functions. Proof for decreasing functions is similar. If $f(X,\,Y)$ is an increasing function of $(X,\,Y)$, then given $Y=y$, $f(X,\,y)$ is an increasing function of $X$. Also, for any $y_1 \leq y_2$, we have $\forall X$, $f(X,\,y_1) \leq f(X,\,y_2)$ and thus $\E{f(X,\,y_1)} \leq \E{f(X,\,y_2)}$. Therefore, as a function of $Y$, $\E{\condi{f(X,\,Y)}{Y}}$ is also increasing. Thus, for any increasing function $f$ and $g$,
     \begin{multline*}
-      \E{f(X,\,Y) \cdot g(X,\,Y)} = \E{\E{\condi{f(X,\,Y) \cdot g(X,\,Y)}{Y}}} \\\leq \E{\E{\condi{f(X,\,Y)}{Y}} \cdot \E{\condi{g(X,\,Y)}{Y}}} \leq \E{\E{\condi{f(X,\,Y)}{Y}}} \cdot \E{\E{\condi{g(X,\,Y)}{Y}}} \\= \E{f(X,\,Y)}\E{g(X,\,Y)}
+      \E{f(X,\,Y) \cdot g(X,\,Y)} = \E{\E{\condi{f(X,\,Y) \cdot g(X,\,Y)}{Y}}} \\\leq \E{\E{\condi{f(X,\,Y)}{Y}} \cdot \E{\condi{g(X,\,Y)}{Y}}} \leq \E{\E{\condi{f(X,\,Y)}{Y}}} \cdot \E{\E{\condi{g(X,\,Y)}{Y}}} \\= \E{f(X,\,Y)} \cdot \E{g(X,\,Y)}
     \end{multline*}
-    \item For any two monotone functions $g$ and $h$ depending on disjoint subsets of $Y$, $g(Y) = g(Y_1, \dots, Y_k) = g(\{f_i(X),~i \in \mc I\}$ and $h(Y) = h(\{f_i(X),~i \in \mc J\}$. Since $\{f_i(X),~i \in [k]\}$ depends on disjoint subsets of $X$, $g$ and $h$ also depends on disjoint subsets of $X$. Also, since monotone functions are closed under composition, both $g(X)$ and $h(X)$ are still monotone (either increasing or decreasing). Thus, $\E{g(Y)h(Y)} \leq \E{g(Y)} \E{h(Y)}$, and thus $Y^k$ are NA.
+    \item For any two monotone functions $g$ and $h$ depending on disjoint subsets of $Y$, $g(Y) = g(\{Y_i,~i \in \mc I\}) = g(\{f_i(X),~i \in \mc I\})$ and $h(Y) = h(\{f_i(X),~i \in \mc J\})$. Since $\{f_i(X),~i \in [k]\}$ depends on disjoint subsets of $X$, $g$ and $h$ also depend on disjoint subsets of $X$. Also, since monotone functions are closed under composition, both $g$ and $h$ are still monotone (either increasing or decreasing) functions of $X$ depending disjoint subsets of $X$. Thus, $\E{g(Y) \cdot h(Y)} \leq \E{g(Y)} \cdot \E{h(Y)}$, and thus $Y^k$ are NA.
   \end{enumerate}
-  \item Let $I_{i,j}$ be an indicator random variable to show if the $i$-th ball falls into the $j$-th bin. Then, for any $i \in [m]$, $\sum_{j=1}^{n} I_{i,j} = 1$. Next, we will show $\{I_{i,j}, i \in [m]\}$ are NA. For any increasing functions $f$ and $g$, denoting $\tilde{f}(I)$ and $\tilde{g}(I)$ as $f(I)-f(\vect{0})$ and $g(I)-g(\vect{0})$ respectively, then we have $\tilde{f}(I) \geq 0$ and $\tilde{g}(I) \geq 0$. Since only one element of $I$ can be 1, at least one of $\tilde{f}(I)$ and $\tilde{g}(I)$ is zero, so $\E{\tilde{f}(I) \cdot \tilde{g}(I)} = 0$. Thus, $LHS = \E{f(I) \cdot g(I)} = \E{(\tilde{f}(I) + f(\vect{0})) \cdot (\tilde{g}(I) + g(\vect{0}))} = g(\vect{0}) \E{\tilde{f}(I)} + f(\vect{0})\E{\tilde{g}(I)} + f(\vect{0})g(\vect{0})$, and $RHS = (\E{\tilde{f}(I)}+ f(\vect{0})) (\E{\tilde{g}(I)}+ g(\vect{0})) \geq LHS$. Thus, $\{I_{i,j}, i \in [m]\}$ are NA.
+  \item Let $I_{j,i}$ be an indicator random variable to show if the $j$-th ball falls into the $i$-th bin. Then, for any $j \in [m]$, $\sum_{i=1}^{n} I_{j,i} = 1$. Next, we will show $I = \{I_{j,i}, j \in [m]\}$ are NA. For any increasing functions $f$ and $g$, denoting $\tilde{f}(I)$ and $\tilde{g}(I)$ as $f(I)-f(\vect{0})$ and $g(I)-g(\vect{0})$ respectively, then we have $\tilde{f}(I) \geq 0$ and $\tilde{g}(I) \geq 0$. Since only one element of $I$ can be 1, and $f$ and $g$ depend on disjoint subsets of $I$, at least one of $\tilde{f}(I)$ and $\tilde{g}(I)$ is zero, so $\E{\tilde{f}(I) \cdot \tilde{g}(I)} = 0$. Thus, $LHS = \E{f(I) \cdot g(I)} = \E{(\tilde{f}(I) + f(\vect{0})) \cdot (\tilde{g}(I) + g(\vect{0}))} = g(\vect{0}) \E{\tilde{f}(I)} + f(\vect{0})\E{\tilde{g}(I)} + f(\vect{0})g(\vect{0})$, and $RHS = (\E{\tilde{f}(I)}+ f(\vect{0})) (\E{\tilde{g}(I)}+ g(\vect{0})) \geq LHS$. Thus, $\{I_{j,i}, j \in [m]\}$ are NA.
 
-  Using the results in (a.i), we have $\{I_{i,j},\text{ for any }i \in [m] \text{ and }j \in [n]\}$ are NA. Using the results in (a.ii), we have $X_i = \sum_{j=1}^{m} I_{j,i}$ are NA.
-  \item Let $Y_i$ be an indicator random variable to indicate if the $i$-th bin is non-empty. We have $Y_i \sim Ber(1-(\frac{n-1}{n})^m)$, and $\E{Y_i} = 1-(\frac{n-1}{n})^m$. Lemma: mapping. Thus, $\{Y_1, \dots, Y_n\}$ is NA. With the results in Problem 1 (b), we have $\forall o > 0$,
+  Using the results in (a.i), we have $\{I_{j,i},\text{ for any }j \in [m] \text{ and }i \in [n]\}$ are NA. Using the results in (a.ii), we have $X_i = \sum_{j=1}^{m} I_{j,i}$ are NA.
+  \item Let $Y_i$ be an indicator random variable to indicate if the $i$-th bin is non-empty. We have $Y_i \sim Ber(1-(\frac{n-1}{n})^m)$, and $\E{Y_i} = 1-(\frac{n-1}{n})^m$. Using the results in (a.ii), $Y_i = \min\{1, X_i\}$ is NA. Using the results in Problem 1 (b), we have $\forall o > 0$,
   \begin{multline*}
     P\left(O-\E{O} = \sum_{i=1}^{n} (Y_i - \E{Y_i}) \geq o \right) \leq \exp\left(\sum_{i=1}^{n} \frac{(b_i-a_i)^2}{8}\theta^2 - \theta o \right) = \exp\left(\frac{n}{8} \theta^2 - \theta o \right)\\ \leq e^{\frac{-2 o^2}{n}}
   \end{multline*}
@@ -92,7 +109,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Problem 3}
 \subsection*{Solution}
-Let $Z_i \in \{1,2,3, \dots, n\}$ be the ID of the bin into which the $i$-th ball is put. Let $f$ be a function such that $f(Z_1, Z_2, Z_3, \dots, Z_m)$ is the number of non-empty bins. Obviously, $Z_i$'s are independent, and $\left|f(Z_1, \dots, Z_i, \dots, Z_m) - f(Z_1, \dots, Z_i', \dots, Z_m)\right| < 1$. Thus, McDiarmid's inequality applys:
+Let $Z_i \in \{1,2,3, \dots, n\}$ be the index of the bin into which the $i$-th ball is put. Let $f$ be a function such that $f(Z_1, Z_2, Z_3, \dots, Z_m)$ is the number of non-empty bins. Obviously, $Z_i$'s are independent, and $\left|f(Z_1, \dots, Z_i, \dots, Z_m) - f(Z_1, \dots, Z_i', \dots, Z_m)\right| < 1$. Thus, McDiarmid's inequality applys: $\forall o > 0$,
 \[
   P(O-\E{O} = f(Z_1, Z_2, Z_3, \dots, Z_m) - \E{f(Z_1, Z_2, Z_3, \dots, Z_m)} \geq o) \leq e^\frac{-2 o^2}{n},
 \]
@@ -104,11 +121,11 @@ which is the same as the Hoeffding bound.
 \subsection*{Solution}
 \begin{enumerate}[(a)]
   \item
-  We have $\E{\exp(-\theta X)} \leq \exp(\nu^2\theta^2/2)$. Thus for any $\theta > 0$,
+  We have $\E{\exp(-\theta X)} \leq \exp(\nu^2\theta^2/2)$. Thus for any $t > 0$ and $\theta > 0$,
   \begin{multline*}
     P(|X| > t) = P(X > t) + P(-X > t) = P(e^{\theta X} > e^{\theta t}) + P(e^{-\theta X} > e^{\theta t}) \\\leq \frac{\E{e^{\theta X}}}{e^{\theta t}} + \frac{\E{e^{-\theta X}}}{e^{\theta t}} \leq 2 \exp(\nu^2\theta^2/2  - \theta t) \leq 2 \exp(-\frac{t^2}{2 \nu^2})
   \end{multline*}
-  \item Let the CDF of $|X|$ be $F$. Then, $F(x) = 0$, $\forall x \leq 0$. Because $g(x) = x^k$ is an increasing function, we have $$\E{|X|^k} = \int_{0}^{\infty} g'(x) P(|X|>x) dx \leq 2 \int_{0}^{\infty} kx^{k-1} \exp(-\frac{x^2}{2 \nu^2}) dx.$$ Subtitute $\frac{x^2}{2 \nu^2}$ with $y$, and we have $$\E{|X|^k} \leq 2 k \int_{0}^{\infty} \nu^2 (2 \nu^2 y)^{k/2-1} \exp(-y) dy = k (2\nu^2)^{k/2} \Gamma(\frac{k}{2}).$$
+  \item Let the CDF of $|X|$ be $F$. Then, $F(x) = 0$, $\forall x \leq 0$. Because $g(x) = x^k$ is an increasing function, using the Integration-by-parts Theorem \footnote{See Example 7 in \url{https://www.math.arizona.edu/~jwatkins/g-expectation.pdf}}, we have $$\E{|X|^k} = \int_{0}^{\infty} g'(x) P(|X|>x) dx \leq 2 \int_{0}^{\infty} kx^{k-1} \exp(-\frac{x^2}{2 \nu^2}) dx.$$ Subtitute $\frac{x^2}{2 \nu^2}$ with $y$, and we have $$\E{|X|^k} \leq 2 k \int_{0}^{\infty} \nu^2 (2 \nu^2 y)^{k/2-1} \exp(-y) dy = k (2\nu^2)^{k/2} \cdot \Gamma(\frac{k}{2}).$$
 \end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -124,11 +141,13 @@ First, we partation the indices into $K$ index group such that $G_k = \{j: X_j \
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Problem 6}
 \subsection*{Solution}
-For $n = 3$, we can choose $z_2 = z_1 + 0.55$ and $z_3 = z_2 + 0.55$. It is easy to verify $z_1$, $z_2$, and $z_3$ can be shattered by $F$. When $n = 4$, no matter what $z_1$, $z_2$, $z_3$, and $z_4$ are, they cannot be assigned values $1,\,0,\,1,\,0$. Thus $VC(F) = 3$.
+For $n = 3$, we can choose $z_2 = z_1 + 0.55$ and $z_3 = z_2 + 0.55$. It is easy to verify $z_1$, $z_2$, and $z_3$ can be shattered by $F$. When $n = 4$, no matter what $z_1 < z_2 < z_3 < z_4$ are, they cannot be assigned values $1,\,0,\,1,\,0$. Thus $VC(F) = 3$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Problem 7}
 \subsection*{Solution}
-For $n$ points, we can choose $x_i = 2^i \pi$, $i=1,\,2,\,3,\,\dots,\,n$. Then $x^n$ can be shattered by $F$. Actually, we can find $2^n$ intervals $(1, \frac{2^n}{2^n-1})$, $(\frac{2^n}{2^n-1}, \frac{2^n}{2^n-2})$, $\dots$, $(\frac{2^n}{1}, \infty)$ such that when $\theta$ belongs to different intervals, $f$ assigns different values to $x^n$.
+% First, $\bm 1_{\{\sin(\theta z > 0)\}} = \bm 1_{\{\floor*{\frac{\theta z}{\pi}} \text{ is even}\}}$
+For $n$ points, we can choose $z_i = 2^i \pi$, $i=1,\,2,\,3,\,\dots,\,n$. Then $z^n$ can be shattered by $F$. Given a valuation $b_1,\,\dots,\,b_n$, we can choose $\theta = 2^{-n-1} + \sum_{i=1}^{n} 2^{-i} b_i$. Then, $\theta z_i = \pi (b_i + \sum_{j<i} 2^{i-j} b_j + \sum_{j>i}^{n} 2^{i-j} b_j + 2^{i-n-1})$, where $\sum_{j<i} 2^{i-j} b_j$ is an even number, and $\sum_{j>i}^{n} 2^{i-j} b_j + 2^{i-n-1}~\in~(0, 1)$. Thus, $\bm 1_{\{\sin(\theta z_i > 0)\}} = b_i$.
+% Actually, we can find $2^n$ intervals $(1, \frac{2^n}{2^n-1})$, $(\frac{2^n}{2^n-1}, \frac{2^n}{2^n-2})$, $\dots$, $(\frac{2^n}{1}, \infty)$ such that when $\theta$ belongs to different intervals, $f$ assigns different values to $x^n$.
 \end{document}
