@@ -1,0 +1,96 @@
+\documentclass[11pt]{report}
+% this template is originally from Roy Dong's ECE 515.
+% Editted by Dawei Sun
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{bm}
+\usepackage{upgreek}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{bbm}
+\usepackage{diagbox}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\urlstyle{same}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+\newcommand{\vect}[1]{\boldsymbol{\mathbf{#1}}}
+\newcommand{\T}{\intercal}
+\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+\newcommand{\condi}[2]{#1 \ | \ #2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{CS 526 - Spring 2020 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{EC1}}
+\lfoot{Submitted by: Dawei Sun (\textcolor{red}{\textit{daweis2}})}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{enumerate}
+  \item The lattice records a value for each variable. Suppose we have $n$ variables $v_1,\dots,v_n$ in the program. Then an example element of the lattice is $[v_1 \rightarrow \{+,0\}, \dots, v_n \rightarrow \{0,-\}]$.
+  \item Forward analysis.
+  \item $x_1 \vee x_2 = [x_1[v_1] \cup x_2[v_1], \dots, x_1[v_n] \cup x_2[v_n]]$.
+  \item Here, $c$ is a constant. $f_{x=c}(V) = \begin{cases}
+  V[x\rightarrow\{+\}]\text{ if }c\text{ is positive},\\
+  V[x\rightarrow\{-\}]\text{ if }c\text{ is negative},\\
+  V[x\rightarrow\{0\}]\text{ if }c=0\\\end{cases}.$
+  \item Here, $c$ is a constant. The transfer function is shown as following
+
+  \begin{tabular}{ c | c | c | c }
+    \backslashbox{x}{c} & - & 0 & + \\\hline
+    \{+\} & \{-,0,+\} & \{+\} & \{+\}\\\hline
+    \{0,+\} & \{-,0,+\} & \{0,+\} & \{+\}\\\hline
+    \{0\} & \{-\} & \{0\} & \{+\}\\\hline
+    \{-,0\} & \{-\} & \{-,0\} & \{-,0,+\}\\\hline
+    \{-\} & \{-\} & \{-\} & \{-,0,+\}\\\hline
+    \{-,+\} & \{-,0,+\} & \{-,+\} & \{-,0,+\}\\\hline
+    \{-,0,+\} & \{-,0,+\} & \{-,0,+\} & \{-,0,+\}\\\hline
+    $\phi$ & $\phi$ & $\phi$ & $\phi$\\
+  \end{tabular}
+  \item $f_{x=c}(V)$ is distributive.
+  \begin{multline*}
+  f_{x=c}(V_1 \vee V_2) = f_{x=c}([V_1[x_1] \cup V_2[x_1],\dots,V_1[x] \cup V_2[x],\dots,V_1[x_n] \cup V_2[x_n]]) \\= [V_1[x_1] \cup V_2[x_1],\dots,sgn(c),\dots,V_1[x_n] \cup V_2[x_n]]
+  \end{multline*}
+  \begin{multline*}
+  f_{x=c}(V_1) \vee f_{x=c}(V_2) \\= [V_1[x_1],\dots,sgn(c),\dots,V_1[x_n]] \vee [V_2[x_1],\dots,sgn(c),\dots,V_2[x_n]] \\= [V_1[x_1] \cup V_2[x_1],\dots,sgn(c),\dots,V_1[x_n] \cup V_2[x_n]] = f_{x=c}(V_1 \vee V_2)
+  \end{multline*}
+
+  $f_{x=x+c}(V)$ is distributive. By enumerating all the possible value of $V_1[x]$, $V_2[x]$, an $c$, we can prove that $f_{x=x+c}(V_1) \vee f_{x=x+c}(V_2) = f_{x=x+c}(V_1 \vee V_2)$ always holds.
+  \item Yes. Since $F$ is distributive, it is monotone. Also, the lattice is finite, and thus the algorithm always terminates.
+  \item Yes. According to [Kildall, 1973], since $F$ is distributive, MOP = MFP.
+\end{enumerate}
+\end{document}
