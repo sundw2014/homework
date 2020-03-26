@@ -87,4 +87,21 @@ By substituting $w = \sum_{i=1}^{n} \mu_i y_i x_i$, we have $D(\mu, \lambda) = \
 \section*{Problem 3}
 \subsection*{Solution}
 Let $L_t(\alpha) = \sum_{i=1}^{n} \exp\left(-\sum_{s=1}^{t-1} \alpha_s y_i h_s(x_i) - \alpha y_i h_t(x_i)\right)$. Then, $\alpha_t = \arg\min L_t(\alpha)$. Suppose that $h_{t+1} = h_t$. Then, $L_{t+1}(\alpha) = L_t(\alpha +\alpha_t)$. Thus, $\alpha_{t+1} = 0 = \arg\min L_{t+1}(\alpha)$. However, since $\epsilon_t < \frac{1}{2}$, $\alpha_{t+1} = \frac{1}{2} \ln \frac{1-\epsilon_{t+1}}{\epsilon_{t+1}} > 0$. Thus, by contradiction, $h_{t+1} \neq h_t$.
+\section*{Problem 4}
+\subsection*{Solution}
+\begin{enumerate}[(a)]
+\item $91\%$.
+\item As shown in Fig.~\ref{fig:adaboost}, test accuracy improves as number of learners increases.
+\begin{figure}
+  \includegraphics{adaboost.png}
+  \caption{Results of AdaBoost.}
+  \label{fig:adaboost}
+\end{figure}
+\end{enumerate}
+\section*{Problem 4}
+\subsection*{Solution}
+\begin{enumerate}[(a)]
+\item Accuracies are $50\%, 50\%, 52\%, 69\%, 97\%, 98\%$ respectively.
+\item Linear kernel: $98\%$. Poly kernel: $99\%$. RBF kernel: $100\%$. Sigmoid kernel: $81\%$.
+\end{enumerate}
 \end{document}
