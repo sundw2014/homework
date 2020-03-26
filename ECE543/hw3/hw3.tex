@@ -82,7 +82,7 @@ $$\nabla_w L = w - \sum_{i=1}^{n} \mu_i y_i x_i = 0,$$
 $$\nabla_b L = \sum_{i=1}^{n} \mu_i y_i = 0,$$
 $$\nabla_{\xi_i} L = C - \lambda_i - \mu_i = 0,~\forall i.$$
 Since $C = \lambda_i - \mu_i = 0,~\forall i$ and $\lambda_i \geq 0$, we have $\mu_i \leq C$.
-By substituting $w = \sum_{i=1}^{n} \mu_i y_i x_i$, we have $D(\mu, \lambda) = \sum_{i=1}^{n} \mu_i - \frac{1}{2}\sum_{i=1}^{n}\sum_{j=1}^{n}\mu_i\mu_jy_iy_j(x_i^\T x_j)$. Thus the dual problem is of the same form as the soft-margin version with additional constraints that $\mu_i \leq C,~\forall i$.
+By substituting $w = \sum_{i=1}^{n} \mu_i y_i x_i$, we have $D(\mu, \lambda) = \sum_{i=1}^{n} \mu_i - \frac{1}{2}\sum_{i=1}^{n}\sum_{j=1}^{n}\mu_i\mu_jy_iy_j(x_i^\T x_j)$, and $\lambda$ doesn't appear in the objective function and constraints. Thus, the dual problem is of the same form as the soft-margin version with additional constraints that $\mu_i \leq C,~\forall i$.
 
 \section*{Problem 3}
 \subsection*{Solution}
