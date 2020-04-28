@@ -1,0 +1,88 @@
+\documentclass[11pt]{report}
+% this template is originally from Roy Dong's ECE 515.
+% Editted by Dawei Sun
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{bm}
+\usepackage{upgreek}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{bbm}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\urlstyle{same}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+\newcommand{\vect}[1]{\boldsymbol{\mathbf{#1}}}
+\newcommand{\T}{\intercal}
+\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+\newcommand{\condi}[2]{#1 \ | \ #2}
+\newcommand{\reals}{\mathbb{R}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{ECE 543 - Spring 2020 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{HOMEWORK5}}
+\lfoot{Submitted by: Dawei Sun (\textcolor{red}{\textit{daweis2}})}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\pagebreak
+\section*{Problem 1}
+\subsection*{Solution}
+Let $\gamma(s)$ be the line connecting $u$ and $v$, i.e. $\gamma(s) = v + s(u-v)$. By integrating along $\gamma(s)$, we have
+\begin{multline*}
+  f(u) = f(v) + \int_{0}^{1} \nabla^\T f(\gamma(s)) \frac{d\gamma(s)}{ds} ds = f(v) + \int_{0}^{1} \nabla^\T f(v+s(u-v)) (u-v) ds \\= f(v) + \int_{0}^{1} \left(\nabla^\T f(v+s(u-v)) + \nabla^\T f(v) - \nabla^\T f(v)\right) (u-v) ds \\= f(v) + \nabla^\T f(v) (u-v) + \int_{0}^{1} \left(\nabla^\T f(v+s(u-v)) - \nabla^\T f(v)\right) (u-v) ds \\\leq f(v) + \nabla^\T f(v) (u-v) + \int_{0}^{1} \left||\nabla^\T f(v+s(u-v)) - \nabla^\T f(v)|\right| \left||u-v|\right| ds \\\leq f(v) + \nabla^\T f(v) (u-v) + \int_{0}^{1} sL\left||u-v|\right| \cdot \left||u-v|\right| ds \\= f(v) + (u-v)^\T \nabla f(v) + \frac{1}{2} L\left||u-v|\right|^2.
+\end{multline*}
+\section*{Problem 2}
+\subsection*{Solution}
+Starting from any point $w$ in $\reals^d$, we can follow the direction of the gradient of $f$ and reach a local minima $w^*$ such that $\nabla f(w^*) = 0$, i.e. we found a regular curve $\gamma: [0,1] \mapsto \reals^n$ such that $\gamma(0) = w^*$, $\gamma(1) = w$, and the velocity vector at $\gamma(s)$ is $\frac{d \gamma(s)}{ds} = c(s) \nabla f(\gamma(s))$, where $c(s)>0$ is a scalar. We denote $\gamma_s(s) = \frac{d \gamma(s)}{ds}$ the velocity. Then, we integrate along $\gamma(s)$. Since, $f(w^*)>0$, we have
+$$2L \cdot f(w) = 2L \cdot \left(f(w^*) + \int_{0}^{1} \nabla^\T f(\gamma(\bm{\mathsf{s}})) \gamma_s(\bm{\mathsf{s}}) d\bm{\mathsf{s}}\right) \geq 2L \cdot \int_{0}^{1} \nabla^\T f(\gamma(\bm{\mathsf{s}})) \gamma_s(\bm{\mathsf{s}}) d\bm{\mathsf{s}}.$$
+Since $\nabla f(w)$ is L-Lipschitz continuous, and $\nabla^\T f(\gamma(\bm{\mathsf{s}})) \cdot \gamma_s(\bm{\mathsf{s}}) = c(\bm{\mathsf{s}}) \nabla^\T f(\gamma(\bm{\mathsf{s}})) \cdot \nabla f(\gamma(\bm{\mathsf{s}}))$ is always non-negative, we have that the increament of $||\nabla f(w)||^2$ is bounded, and
+%
+$$||\nabla f(w)||^2 = ||\nabla f(w)||^2 - ||\nabla f(w^*)||^2 \leq \int_{0}^{1} 2L \cdot \nabla^\T f(\gamma(\bm{\mathsf{s}})) \gamma_s(\bm{\mathsf{s}}) d\bm{\mathsf{s}}.$$
+% Since $f(w)$ is L-smooth, $L I - \nabla^2 f(w)$ is positive semi-definite for all $w$. We have
+%
+% $$2L \cdot f(w) - ||\nabla f(w)||^2 \geq 2 \int_{0}^{1} \nabla^\T f(\gamma(\bm{\mathsf{s}})) \left(LI - \nabla^2 f(\gamma(\bm{\mathsf{s}}))\right) \nabla f(\gamma(\bm{\mathsf{s}})) c(\bm{\mathsf{s}}) d\bm{\mathsf{s}} \geq 0.$$
+Thus, we have
+$$||\nabla f(w)||^2 \leq 2L \cdot f(w).$$
+\end{document}

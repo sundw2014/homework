@@ -1,0 +1,78 @@
+\documentclass[11pt]{report}
+% this template is originally from Roy Dong's ECE 515.
+% Editted by Dawei Sun
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{bm}
+\usepackage{upgreek}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{bbm}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\urlstyle{same}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+\newcommand{\vect}[1]{\boldsymbol{\mathbf{#1}}}
+\newcommand{\T}{\intercal}
+\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+\newcommand{\condi}[2]{#1 \ | \ #2}
+\newcommand{\reals}{\mathbb{R}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{ECE 543 - Spring 2020 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{HOMEWORK6}}
+\lfoot{Submitted by: Dawei Sun (\textcolor{red}{\textit{daweis2}})}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\pagebreak
+\section*{Problem 1}
+\subsection*{Solution}
+We denote the ReLU function by $\sigma$. The neural network is $\tilde{f}(x) = \sigma(a_2\sigma(a_1 x + b_1)+b_2)$, where $a_1 = -1/\epsilon$, $b_1 = 1$, $a_2 = -1$ and $b_2 = 1$.
+\section*{Problem 2}
+\subsection*{Solution}
+We denote the ReLU function by $\sigma$. First, we construct a neural network $\tilde{f}(x)$ to mimic $\mathbb{I}_{x \geq 0}$ except in the region $x \in [-\epsilon, 0]$. Simillar to Problem 1, $\tilde{f}(x) = \sigma(a_2\sigma(a_1 x + b_1)+b_2)$, where $a_1 = -1/\epsilon$, $b_1 = 0$, $a_2 = -1$ and $b_2 = 1$.
+
+\noindent Then, the final neural network is $4\sigma(\sum_{i=1}^{4} \tilde{f}(z_i) - 3.5)-1$, where $z_1 = 1 - (x_1 + x_2)$, $z_2 = 1 - (x_1 - x_2)$, $z_3 = 1 - (-x_1 + x_2)$, $z_4 = 1 - (-x_1 - x_2)$. This neural network mimics the groud truth except for $\{x |\ 1 \leq |x_1| + |x_2| \leq 1 + \epsilon\}$. For $x \in \{x |\ |x_1| + |x_2| < 1\}$, we must have $z_i > 0$ and $\tilde{f}(z_i) = 1$ for all $i$. Thus, the output is 1. For $x \in \{x |\ |x_1| + |x_2| > 1 + \epsilon \}$, at least one $z_i < -\epsilon$ and $\tilde{f}(z_i) = 0$. Thus, $\sum_{i=1}^{4} \tilde{f}(z_i) \leq 3$, and the output is $-1$.
+\end{document}
