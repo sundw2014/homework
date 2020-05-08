@@ -77,17 +77,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-From ealier lectures, we already know that the performance of a hypothesis class $\F$ can be guaranteed by the expected Rademacher average $\E{R_n(\F(X^n))}$. Next, we will give a bound on $\E{R_n(\F(X^n))}$ for function class $\F$ induced by neural networks and $X_i \in \reals^d$.
+From ealier lectures, we already know that the performance of a hypothesis class $\F$ can be bounded in terms of the expected Rademacher average $\E{R_n(\F(X^n))}$. Next, we will give a bound on $\E{R_n(\F(X^n))}$ for function class $\F$ induced by neural networks and $X_i \in \reals^d$.
 
 First, consider the Rademacher average of the function class induced by the linear component of a single layer neural network, i.e. $\F = \{\langle w, \cdot \rangle :\ \forall w \in \reals^d\text{ and }||w|| \leq B\}$. Since $\F$ is a $d$-dimensional Dudley class, a naive bound imediately follows. However, since we have some constraints on functions in $\F$ (linear and bounded weights), we can derive a tighter bound. Rademacher aveage for this class can be bounded as follows.
 \begin{align*}
   R_n(\F(X^n)) &= \frac{1}{n}\E{\sup\limits_{w \in \reals^d, ||w|| \leq B} \left| \sum_{i=1}^{n} \epsilon_i \langle w, X_i \rangle \right|}\\ &= \frac{1}{n}\E{\sup\limits_{w \in \reals^d, ||w|| \leq B} \left| \langle w, \sum_{i=1}^{n} \epsilon_i X_i \rangle \right|}\\ &= \frac{1}{n}\E{B \left|\left| \sum_{i=1}^{n} \epsilon_i X_i \right|\right|}\\ &= \frac{B}{n}\E{\sqrt{\sum_{i=1}^{n}\sum_{j=1}^{n} \epsilon_i \epsilon_j \langle X_i, X_j \rangle}}\\ &\leq \frac{B}{n} \cdot \sqrt{\E{\sum_{i=1}^{n}\sum_{j=1}^{n} \epsilon_i \epsilon_j \langle X_i, X_j \rangle}}\\ &= \frac{B}{n} \cdot \sqrt{\sum_{i=1}^{n} \left|\left| X_i \right|\right|^2},
 \end{align*}
-where $\epsilon_i$ the Rademacher random variable. In the third step of the derivation, we use the fact that $w^* = B \cdot \frac{\sum_{i=1}^{n} \epsilon_i X_i}{||\sum_{i=1}^{n} \epsilon_i X_i||}$. In the fifth step, we use Jensen's inequality. In the last step, we use the fact that $\E{\epsilon_i \epsilon_j} = \bm 1_{\{i=j\}}$. Furthermore, if random variables $||X_i|| \leq R$ for all $i$, then we have
+where $\epsilon_i$'s the Rademacher random variables. In the third step of the derivation, we use the fact that $w^* = B \cdot \frac{\sum_{i=1}^{n} \epsilon_i X_i}{||\sum_{i=1}^{n} \epsilon_i X_i||}$. In the fifth step, we use Jensen's inequality. In the last step, we use the fact that $\E{\epsilon_i \epsilon_j} = \bm 1_{\{i=j\}}$. Furthermore, if random variables $||X_i|| \leq R$ for all $i$, then we have
 \begin{align}
   \E{R_n(\F(X^n))} \leq \frac{BR}{\sqrt{n}}.
 \end{align}
-Note that since we use the linearity and bounded norm constriants of the function class, the derived bound is dimension-free.
+Note that since we use the linearity and bounded-norm constriants of the function class, the derived bound is dimension-free.
 
 Now, consider the above linear model composed with nonlinear operations (activations), i.e. the function class $\F = \{\sigma(\langle w, \cdot \rangle) :\ \forall w \in \reals^d\text{ and }||w|| \leq B\}$, where $\sigma : \reals \mapsto \reals$ is the activation function. Suppose $\sigma$ is Lipschitz-continuous with Lipschitz constant $L$ and $\sigma(0) = 0$. Using the contraction principle, we have
 \begin{align*}
@@ -100,7 +100,7 @@ Again, if random variables $||X_i||$ for all $i$ are supported on a ball with ra
 
 Now, we consider a multi-layer neural network. First, define a function $N_{\sigma, w}: \reals^m \mapsto \reals$ which charateristic a single neuron with $\sigma$ as activation and $w \in \reals^m$ as weights: $$N_{\sigma, w}(x_1, \cdots, x_m) = \sigma(\sum_{i=1}^{n}w_i x_i),$$ and denote $N_{\sigma, w}$ composed with $m$ real-valued functions $h_1, \cdots, h_m$ by $$N_{\sigma, w} \circ (h_1, \cdots, h_m)(x) = N_{\sigma, w}(h_1(x), \cdots, h_m(x)).$$
 
-Let $\mathcal{G}$ be a family of base classifiers from $\reals^d$ to $\reals$. A multi-layer neural networks are created by repeating this composition operation. For a $\ell$-layer neural network, let $\sigma_1, \cdots, \sigma_\ell$ be a sequence of activation functions for each layer respectively. Suppose that $\sigma_i$ is Lipschitz continuous with Lipschitz constant $L_i$ and $\sigma_i(0) = 0$ for all $i \in [\ell]$. Let $B_1, \cdots, B_\ell$ be a sequence of positive reals. We can define $\ell+1$ function classes $\F_0, \cdots, \F_\ell$ recursively as follows: $$\F_0 = \mathcal{G},$$ and for $1 \leq j \leq \ell,$ $$\F_j = \left\{N_{\sigma_j, w} \circ (f_1, \cdots, f_m) :\ m \in \mathbb{N};\ \sum_{i=1}^{n} |w_i| \leq B_j;\ f_k \in \F_{j-1}, \forall k \in [m]\right\}.$$
+Let $\mathcal{G}$ be a family of base classifiers from $\X \subseteq \reals^d$ to $\reals$. A multi-layer neural networks are created by repeating this composition operation. For a $\ell$-layer neural network, let $\sigma_1, \cdots, \sigma_\ell$ be a sequence of activation functions for each layer respectively. Suppose that $\sigma_i$ is Lipschitz continuous with Lipschitz constant $L_i$ and $\sigma_i(0) = 0$ for all $i \in [\ell]$. Let $B_1, \cdots, B_\ell$ be a sequence of positive reals. We can define $\ell+1$ function classes $\F_0, \cdots, \F_\ell$ recursively as follows: $$\F_0 = \mathcal{G},$$ and for $1 \leq j \leq \ell,$ $$\F_j = \left\{N_{\sigma_j, w} \circ (f_1, \cdots, f_m) :\ m \in \mathbb{N};\ \sum_{i=1}^{n} |w_i| \leq B_j;\ f_k \in \F_{j-1}, \forall k \in [m]\right\}.$$
 
 First, we notice that $\left\{ \sum_{i=1}^{m} w_i f_i :\ m \in \mathbb{N};\ \sum_{i=1}^{n} |w_i| \leq 1;\ f_k \in \F_{j-1}, \forall k \in [m] \right\}$ is the absoulte convex hull of $\F_{j-1}$. Thus, $$\F_j = \sigma_j \circ (B_j \cdot \text{absconv}(\F_{j-1})).$$ Consider the last layer, we have $\F_\ell = \sigma_\ell \circ (B_\ell \cdot \text{absconv}(\F_{\ell-1}))$, and thus $\F_\ell(X^n) = \sigma_\ell \circ (B_\ell \cdot \text{absconv}(\F_{\ell-1}(X^n)))$. Therefore,
 \begin{align*}
@@ -116,23 +116,23 @@ In a recent paper\cite{golowich2017size}, the authors showed that the factor $2^
 
 \begin{lemma}
   \label{lemma1}
-  Let $\F'$ be a real-valued function class on $\X \subseteq \reals^d$ and $\F$ be $\sigma \circ (B \cdot \text{absconv}(\F'))$, for some Lipschitz continuous function $\sigma :\ \reals \mapsto \reals$ with Lipschitz constant $L$ and $\sigma(0) = 0$. Let $G:\ \reals \mapsto \reals$ be a convex nondecreasing positive\footnote{We added the ``positive" constraint on $G$. In the following proof, $G$ is the exponential function and satisfies this constriant. We need this constriant to show $G(|u|) \leq G(u) + G(-u)$.} function. Then $$\E{\sup\limits_{f \in \F}G\left(\left|\sum_{i=1}^{n}\epsilon_i f(X_i)\right|\right)} \leq 2 \cdot \E{\sup\limits_{f' \in \F'}G\left(LB \cdot \left|\sum_{i=1}^{n}\epsilon_i f'(X_i)\right|\right)}.$$
+  Let $\F'$ be a real-valued function class on $\X \subseteq \reals^d$ and $\F$ be $\sigma \circ (B \cdot \text{absconv}(\F'))$, for some Lipschitz continuous function $\sigma :\ \reals \mapsto \reals$ with Lipschitz constant $L$ and $\sigma(0) = 0$. Let $G:\ \reals \mapsto \reals$ be a convex nondecreasing positive\footnote{We added the ``positive" constraint on $G$. In the following proof, $G$ is an exponential function and satisfies this constriant. We need this constriant to show $G(|u|) \leq G(u) + G(-u)$.} function. Then $$\E{\sup\limits_{f \in \F}G\left(\left|\sum_{i=1}^{n}\epsilon_i f(X_i)\right|\right)} \leq 2 \cdot \E{\sup\limits_{f' \in \F'}G\left(LB \cdot \left|\sum_{i=1}^{n}\epsilon_i f'(X_i)\right|\right)}.$$
 \end{lemma}
 \begin{proof}(sketch) First, use the fact that $G(|u|) \leq G(u) + G(-u)$ to remove the absolute value sign. Then use a generalization of the contraction principle to involve $\F'$. Finally, use H\"older's inequality to add the absolute value sign back. \qed
 \end{proof}
 
 \begin{lemma}
   \label{lemma2}
-  Let $\mathcal{A}$ be a bounded subset of $\reals^n$. Then, for any $\lambda > 0$, $$\E{\exp\left(\lambda \sup\limits_{a \in \mathcal{A}}\left|\sum_{i=1}^{n}\epsilon_i a_i\right|\right)} \leq \exp\left(\frac{\lambda^2}{2}\sum_{i=1}^{n}\sup\limits_{a \in \mathcal{A}}|a_i|\right)\exp\left(\lambda n R_n(\mathcal{A})\right).$$
+  Let $\mathcal{A}$ be a bounded subset of $\reals^n$. Then, for any $\lambda > 0$, $$\E{\exp\left(\lambda \sup\limits_{a \in \mathcal{A}}\left|\sum_{i=1}^{n}\epsilon_i a_i\right|\right)} \leq \exp\left(\frac{\lambda^2}{2}\sum_{i=1}^{n}\sup\limits_{a \in \mathcal{A}}|a_i|^2\right)\exp\left(\lambda n R_n(\mathcal{A})\right).$$
 \end{lemma}
 \begin{proof}(sketch) The proof uses the fact that $\sup\limits_{a \in \mathcal{A}}\left|\sum_{i=1}^{n}\epsilon_i a_i\right|$ is a deterministic function of $\epsilon^n$ and has bounded difference. Then, mimicking the proof of McDiarmid's inequality gives the result. \qed
 \end{proof}
 
-With these two lemmas, we can drive the following theorem.
+With these two lemmas, we can derive the following theorem.
 \begin{theorem}
   For any $X_1, \cdots, X_n$, $$R_n(\F_\ell(X^n)) \leq M \cdot \left(R_n(\mathcal{G}(X^n)) + \frac{2}{n}\sqrt{\ell \log 2 \cdot \sum_{i=1}^{n}\sup\limits_{g \in \mathcal{G}}|g(X_i)|^2}\right).$$
 \end{theorem}
-\begin{proof} (sketch) First, define a function $G(u) = e^{\lambda u}$ for some $\lambda > 0$ which will be finally removed by maximizing over $\lambda$. Use the log-exp trick and Jensen's inequality to insert $G$ into the Rademacher average. Then apply Lemma~\ref{lemma1} recursively. Then using Lemma~\ref{lemma2} and then optimizing the result over $\lambda$ gives the result. \qed
+\begin{proof} (sketch) First, define a function $G(u) = e^{\lambda u}$ for some $\lambda > 0$ which will be finally removed by maximizing over $\lambda$. Use the log-exp trick and Jensen's inequality to insert $G$ into the Rademacher average. Then apply Lemma~\ref{lemma1} recursively. Finally using Lemma~\ref{lemma2} and then optimizing the result over $\lambda$ gives the result. \qed
 \end{proof}
 
 Compared with the previous bound we have derived, although both are linear with regard to $M$, the latter has square root order instead of exponential order with regard to $\ell$, which makes it much tighter.
