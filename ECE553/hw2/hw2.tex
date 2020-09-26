@@ -1,0 +1,112 @@
+\documentclass[11pt]{report}
+% this template is originally from Roy Dong's ECE 515.
+% Edited by Dawei Sun
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{upgreek}
+\usepackage{mathtools}
+\usepackage{bbm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+\usepackage{algorithm2e}
+\usepackage[noend]{algpseudocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage{graphicx}
+
+\usepackage{listings}
+\usepackage{multicol}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+\newcommand{\reals}{\mathbb{R}}
+
+\newcommand{\T}{\intercal}
+\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{ECE 553 - Fall 2020 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{Dawei Sun (daweis2)}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Exercise 2.1}
+For example, the problem of finding the geodesic given a metric is a variational problem. Given a metric function $M(x):\reals^n \mapsto S_n^{>0}$, where $S_n^{>0}$ the set of positive definite $n \times n$ matrices, and two points $x_1, x_2 \in \reals^n$. Considering the admissible curves $c \in \mathcal{C}^1([0,1], \reals^n)$ with boundary conditions $c(0) = x_1$ and $c(1) = x_2$. We want to find the curve $c(s)$ that minimizes the Riemannian length, i.e. the cost functional is $J(c) := \int_0^1 \sqrt{\frac{dc}{ds}(\mathbbmtt{s})^\T M(c(\mathbbmtt{s})) \frac{dc}{ds}(\mathbbmtt{s})} d\mathbbmtt{s}$. In particular, for constant metric function $M(x) \equiv C$, the solution is just the straight line segment connecting $x_1$ and $x_2$.
+\section*{Exercise 2.2}
+Yes, $y \equiv 0$ is a weak minima. Let $0 < \epsilon < 1$, considering any $\eta \not\equiv 0$ such that $\|\eta\|_1 \leq \epsilon < 1$. Then, obviously we have $|\eta'(x)| < 1, \forall x \in [0,1]$. Thus, $(\eta')^2 (1-(\eta')^2) \geq 0$. Since $\eta \in \mathcal{C}^1$ and $\eta \not\equiv 0$, we can find an interval $[c, d] (d>c)$ such that on this interval $|\eta'| > 0$ everywhere. Thus, $J(y + \eta) \geq \int_{c}^{d} (\eta')^2 (1-(\eta')^2) > 0$.
+
+\noindent However, $y \equiv 0$ is not a strong minima. For any small enough $\epsilon > 0$, let $p = 1 / \lceil\frac{1}{\epsilon}\rceil$ and consider the triangle wave perturbation $\eta = 2p \left|\frac{x+0.5p}{p} - \lfloor\frac{x+0.5p}{p}\rfloor - 0.5\right|$. Then, $\|\eta\|_0 = p \leq \epsilon$, and $\eta'(x)$ exists and equals $2$ except for finitely many points, and $\eta(0) = 0$ and $\eta(1) = 0$. However, $J(y+\eta) = \int_0^1(-12)dx < 0$.
+
+\section*{Exercise 2.3}
+As $\|\eta\|_1 \to 0$, $\eta(x) \to 0$ and $\eta'(x) \to 0$ for all $x \in [a, b]$. Thus, we can write down the Taylor expansion of $J$ as
+\[J(y+\eta) = \int_{0}^{1} \left(L(x,y,y') + L_y(x,y,y')\eta(x) + o(\eta(x)) + L_{y'}(x,y,y')\eta'(x) + o(\eta'(x))\right) dx.\]
+Moreover, for all $x \in [a, b]$, $\frac{|o(\eta(x)) + o(\eta'(x))|}{\|\eta\|_1} \leq \frac{|o(\eta(x))| + |o(\eta'(x))|}{\|\eta\|_1} \leq \frac{|o(\eta(x))|}{\max |\eta(x)|} + \frac{|o(\eta'(x))|}{\max |\eta'(x)|} \leq \frac{|o(\eta(x))|}{|\eta(x)|} + \frac{|o(\eta'(x))|}{|\eta'(x)|} \to 0$. Thus, $o(\eta(x)) + o(\eta'(x)) = o(\|\eta\|_1)$.
+
+\noindent However, it does not hold with $0$-norm. Considering a sequence of piecewise $\mathcal{C}^1$ perturbations $\eta$ such that $\|\eta\|_0 \to 0$, but $|\eta'(x)| = 1$ almost everywhere (e.g. the triangle wave in the above problem). Then,
+\begin{align*}
+&J(y+\eta) \\= &\int_{0}^{1} \left(L(x,y,y'+\eta') + L_y(x,y,y')\eta(x) + o(\eta(x))\right) dx \\= &\int_{0}^{1} \left(L(x,y,y'+\eta') + L_y(x,y,y')\eta(x) + o(\|\eta\|_0)\right) dx.
+\end{align*}
+However, $\int_0^1 L(x,y,y'+\eta') dx \neq \int_0^1 \left(L(x,y,y') + L_{y'}(x,y,y')\eta'\right) dx + o(\|\eta\|_0)$, since as $\|\eta\|_0$ goes to $0$, $|\eta'|$ is $1$ almost everywhere, the approximation error $\int_0^1 \left(L(x,y,y'+\eta') - L(x,y,y') - L_{y'}(x,y,y')\eta'\right) dx$ does not necessarily go to zero.
+
+\section*{Exercise 2.4}
+Suppose that there exist two points $c,d \in [a, b]$ such that $\xi(c) > \xi(d)$. Since $\xi$ is continuous, there must exist two intervals $c \in [c_1, c_2]$ and $d \in [d_1, d_2]$ such that $\min\limits_{x \in [c_1, c_2]} \xi(x) > \max\limits_{x \in [d_1, d_2]} \xi(x)$ and $d_2 - d_1 = c_2 - c_1$. Let $\eta'(x) > 0$ on $(c_1, c_2)$ and then reflect this part over x-axis and move it to $(d_1, d_2)$, and set $\eta'(x) = 0$ everywhere else. Then, $\int_a^b \xi(x)\eta'(x) dx > 0$. Therefore, $\xi$ must be a constant function.
+
+\section*{Exercise 2.5}
+First, by definition $L(y,y') = \frac{\sqrt{1+y'^2}}{\sqrt{y}}$ and $L_{y'} = \frac{y'}{\sqrt{y(1+y'^2)}}$. Thus, $L_{y'}y' - L = -\frac{1}{\sqrt{y(1+y'^2)}}$ is a constant. Let $\sqrt{y(1+y'^2)} = 2c$. We have the ode $\sqrt{\frac{y}{2c-y}}dy = dx$. Introduce the independent parameter $\theta \in [0, \2\pi]$, and let $y(\theta) = c(1-\cos(\theta))$. Then the ode becomes $\sqrt{\frac{1-\cos(\theta)}{1+\cos(\theta)}}c\sin(\theta)d\theta = c(1-\cos(\theta))d\theta = dx$. Thus, $x = x(0) + c(\theta - \sin(\theta))$. Thus, the curve is given by Eq. (2.7).
+
+% % Along the curve given by Eq. (2.7), we have that $y' = \frac{dy}{dx} = \frac{dy/d\theta}{dx/d\theta} = \frac{\sin(\theta)}{1-\cos(\theta)}$.
+% Thus,
+% \begin{align*}
+% & L_{y'}y' - L \\
+% = &-\frac{1}{\sqrt{y(1+y'^2)}}
+% % = &-\frac{1}{\sqrt{c(1-\cos(\theta))(1+\frac{\sin^2(\theta)}{(1-\cos(\theta))^2}}}
+% % = &-\frac{1}{\sqrt{2c}},
+% \end{align*}
+% which is a constant. Thus, $\sqrt{y(1+y'^2)} = C$.
+% % Thus this curve satisfies the Euler-Lagrange equation.
+
+\section*{Exercise 2.6}
+Boundary condition for the admissible perturbations is $\eta(a) = 0$. Thus, $\eta(x_f)$ is free. As $\alpha$ goes to $0$, considering the following constraint for the endpoint, where $y(x_f) = \phi(x_f)$,
+\begin{align*}
+& y(x_f + dx_f) + \alpha \eta(x_f + dx_f) = \phi(x_f + dx_f) \\ \implies & y(x_f) + y'(x_f) dx_f + o(dx_f) + \alpha (\eta(x_f) + \eta'(x_f) dx_f + o(dx_f)) = \phi(x_f) + \phi'(x_f) dx_f + o(dx_f) \\ \implies & \alpha \eta(x_f) = (\phi'(x_f) - y'(x_f)) dx_f + o(dx_f).
+\end{align*}
+Assume that $\phi'(x_f) - y'(x_f) \neq 0$, we have that $dx_f = \frac{\eta(x_f)}{\phi'(x_f) - y'(x_f)} \alpha$. Now, considering the cost functional with perturbation
+\begin{align*}
+&J(y+\alpha \eta)\\ = &\int_a^{x_f + \alpha\frac{\eta(x_f)}{\phi'(x_f) - y'(x_f)}} L(x, y+\alpha \eta, y'+\alpha \eta') dx\\ = &\int_a^{x_f} L(x, y+\alpha \eta, y'+\alpha \eta') dx + \alpha\frac{\eta(x_f)}{\phi'(x_f) - y'(x_f)}L(x_f, y(x_f), y'(x_f)) + o(\alpha)\\ = &J(y) + \alpha \int_a^{x_f} \left(L_y(x, y, y') - \frac{d}{dx}L_{y'}(x,y,y')\right)\eta(x) dx \\ + &\alpha \left(L_{y'}(x_f, y(x_f), y'(x_f))\eta(x_f) + \frac{\eta(x_f)}{\phi'(x_f) - y'(x_f)}L(x_f, y(x_f), y'(x_f))\right) + o(\alpha).
+\end{align*}
+First, we already proved in the book that Euler-Lagrange equation must hold in this case. Additionally, since $\eta(x_f)$ is a free variable, it is necessary that $\phi'(x_f)-y'(x_f) = 0$ or $L_{y'}(x_f, y(x_f), y'(x_f)) + \frac{1}{\phi'(x_f) - y'(x_f)}L(x_f, y(x_f), y'(x_f)) = 0$, i.e.
+\begin{multline*}
+(\phi'(x_f)-y'(x_f))\left(L_{y'}(x_f, y(x_f), y'(x_f)) + \frac{1}{\phi'(x_f) - y'(x_f)}L(x_f, y(x_f), y'(x_f))\right) \\= (\phi'(x_f)-y'(x_f))L_{y'}(x_f, y(x_f), y'(x_f)) + L(x_f, y(x_f), y'(x_f)) = 0.
+\end{multline*}
+
+\section*{Exercise 2.7}
+\paragraph{``no $y$".} In this case, $L = L(x, y')$. From Eq. (2.30), $p' = -H_y = L_y = 0$. Thus, $p$ is a constant.
+\paragraph{``no $x$".} In this case, $L = L(y, y')$. By definition $H = H(y,y',p)$, along the extremal we have that $\frac{d}{dx}H = H_y y' + H_{y'} y'' + H_p p' = -p' y' + (p - L_{y'})y'' + y'p' = 0$.
+\end{document}
