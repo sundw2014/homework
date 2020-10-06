@@ -1,0 +1,191 @@
+\documentclass[11pt]{report}
+% this template is originally from Roy Dong's ECE 515.
+% Edited by Dawei Sun
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{upgreek}
+\usepackage{mathtools}
+\usepackage{bbm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+\usepackage{algorithm2e}
+\usepackage[noend]{algpseudocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx}
+
+\usepackage{listings}
+\usepackage{multicol}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+\newcommand{\reals}{\mathbb{R}}
+
+\newcommand{\T}{\intercal}
+\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{ECE 553 - Fall 2020 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{Dawei Sun (daweis2)}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Exercise 2.8}
+Assume that we have $N$ particles with mass $m_1, m_2, \cdots, m_N$. The configuration vector $q = [q_1, q_2, \cdots, q_N]$ is their positions.
+
+Newton’s second law of motion for a conservative system:
+\[
+\frac{d}{dt} (m_i\dot{q}_i) = -U_{q_i}, i = 1, 2, \cdots, N,
+\]
+where $U = U(q)$ is the potential.
+
+Let the Lagrangian be $L(t, q, \dot{q}) = \frac{1}{2}\sum_{i=1}^{N} m_i \left(\dot{q}_i \cdot \dot{q}_i\right) - U(q)$. Then, considering rows of the Euler-Lagrange equation $\frac{d}{dt}L_{\dot{q}} = L_q$, we have that $\frac{d}{dt}L_{\dot{q}_i} = L_{q_i}$ for $i = 1, 2, \cdots, N$. Thus,
+\[
+\frac{d}{dt} (m_i\dot{q}_i) = -U_{q_i}, i = 1, 2, \cdots, N.
+\]
+
+Let the kinetic be $T = \frac{1}{2}\sum_{i=1}^{N} m_i \left(\dot{q}_i \cdot \dot{q}_i\right)$. Then, we have the Hamilton’s principle of least action: Trajectories of mechanical systems are extremals of the functional
+\[
+J(q(\cdot)) = \int_{t_0}^{t_1} (T - U) dt,
+\]
+which is the action integral.
+
+The Hamiltonian still has a clear physical meaning.
+\[
+H = L_{\dot{q}} \cdot \dot{q} - L = \sum_{i=1}^{N} m_i \left(\dot{q}_i \cdot \dot{q}_i\right) - \frac{1}{2}\sum_{i=1}^{N} m_i \left(\dot{q}_i \cdot \dot{q}_i\right) + U = T + U = E.
+\]
+
+\section*{Exercise 2.9}
+Considering the mapping $F : (\alpha_1, \alpha_2) \mapsto (J(y + \alpha_1 \eta_1 + \alpha_2 \eta_2, C(y + \alpha_1 \eta_1 + \alpha_2 \eta_2))$ for some perturbations $\eta_1$ and $\eta_2$. Then the Jacobian of $F$ at $(0,0)$ is
+\[
+\begin{bmatrix}
+\delta J|_y(\eta_1) & \delta J|_y(\eta_2)\\
+\delta C|_y(\eta_1) & \delta C|_y(\eta_2)
+\end{bmatrix}.
+\]
+As shown in Figure 1.6, this matrix must be singular for all $\eta_1$ and $\eta_2$. Since $y$ is not an extremal of the constraint $C$, there exists an $\eta_1$ such that $C|_y(\eta_1) \neq 0$. Let $\lambda^*$ be such that $\delta J|_y(\eta_1) = \lambda^* \delta JC|_y(\eta_1)$. Then, since the matrix is singular for all $\eta_2$, we have that $\delta J|_y(\eta_2) - \lambda^* \delta C|_y(\eta_2) = 0$. Since $\eta_2$ is arbitrary, we get Eq. (2.49). Thus, the solution is an extremal of Eq. (2.50).
+
+\section*{Exercise 2.10}
+\paragraph{Dido’s isoperimetric problem} Let $L = y - \lambda \sqrt{1+y'^2}$. Since this is the ``no x" case, the Hamiltonian is a constant, i.e.
+\[
+L_{y'} \cdot y' - L = \frac{\lambda}{\sqrt{1+y'^2}} - y = C_1.
+\]
+Thus, we get the following ODE
+\[
+\frac{y+C_1}{\sqrt{\lambda^2 - (y+C_1)^2}} dy = dx.
+\]
+Introduce an independent parameter $\theta \in (0, \pi)$ and let $y + C_1 = \lambda \cos(\theta)$. Then the above ODE becomes
+\[
+-\lambda \cos(\theta) d\theta = dx.
+\]
+Thus, $x+C_2 = -\lambda \sin(\theta)$. Therefore, $(x+C_2)^2 + (y+C_1)^2 = \lambda^2$, which is a circle.
+
+\paragraph{Catenary}
+Let $L = (y - \lambda) \sqrt{1+y'^2}$. Again, this is the ``no x" case. The Hamiltonian is a constant, i.e. for some $c > 0$
+\[
+L_{y'} \cdot y' - L_y = \frac{\lambda - y}{\sqrt{1+y'^2}} = c.
+\]
+Then, we get the ODE
+\[
+\frac{c}{\sqrt{(y-\lambda)^2 - c^2}} dy = dx.
+\]
+Let $y - \lambda = c\cosh(\theta)$. Then, the above ODE becomes
+\[
+\frac{1}{\sinh(\theta)} c\sinh(\theta) d\theta = dx.
+\]
+Thus, $x = c\theta + C_2$, and $y = \lambda + c\cosh\left(\frac{x-C_2}{c}\right)$, which is a translation of $y = c\cosh\left(\frac{x}{c}\right)$.
+\section*{Exercise 2.11}
+First, the augmented Lagrangian is $L = \frac{1}{2}m(\dot{x}^2 + \dot{y}^2) - mgy + \lambda(t)(x^2 + y^2 - \ell^2)$. Then, by Euler-Lagrange equation, we have that
+\begin{align*}
+m \ddot{x} = 2\lambda x --- (1)\\
+m \ddot{y} = -mgx + 2\lambda y --- (2).
+\end{align*}
+Then, $y * (1) - x * (2)$ results in $y\ddot{x} = x\ddot{y}+gx$.
+Since $x^2 + y^2 = \ell^2$, let $x = \ell \sin(\theta)$ and $y = - \ell \cos(\theta)$. Then, we have $\ddot{x} = \ell (\cos(\theta) \ddot{\theta} - \sin(\theta) \dot{\theta}^2)$ and $\ddot{y} = \ell (\sin(\theta) \ddot{\theta} + \cos(\theta) \dot{\theta}^2)$. Substitute it into the differential equation, and then we have that $\ddot{\theta} = -\frac{g}{\ell}\sin(\theta)$.
+
+\section*{Exercise 2.12}
+We expand $L(x,y+\alpha \eta, y'+\alpha \eta')$ using Taylor's theorem.
+\begin{align*}
+& J(y+\alpha \eta) = \int_a^b L(x,y+\alpha \eta, y'+\alpha \eta') dx\\
+= & J(y) + \alpha \delta J|_y(\eta) + \alpha^2 \delta^2 J|_y(\eta)\\ &+ \int_a^b \alpha^3 \Big(\frac{1}{6} L_{yyy}(x,y+\beta, y'+\gamma)\eta^3 + \frac{1}{2} L_{yyy'}(x,y+\beta, y'+\gamma)\eta^2\eta'\\ &+ \frac{1}{2} L_{yy'y'}(x,y+\beta, y'+\gamma)\eta\eta'^2 + \frac{1}{6} L_{y'y'y'}(x,y+\beta, y'+\gamma)\eta'^3\Big)dx\\
+= & J(y) + \alpha \delta J|_y(\eta) + \alpha^2 \delta^2 J|_y(\eta)\\ &+ \int_a^b \alpha^2 \Big(\alpha\big(\frac{1}{6} L_{yyy}(x,y+\beta, y'+\gamma)\eta + \frac{1}{2} L_{yyy'}(x,y+\beta, y'+\gamma)\eta'\big)\eta^2\\ &+ \alpha\big(\frac{1}{2} L_{yy'y'}(x,y+\beta, y'+\gamma)\eta + \frac{1}{6} L_{y'y'y'}(x,y+\beta, y'+\gamma)\eta'\big)\eta'^2\Big)dx,
+\end{align*}
+where $\beta = \beta(x,\alpha) \in [0, \alpha\eta(x)]$ and $\gamma = \gamma(x,\alpha) \in [0, \alpha\eta'(x)]$. Thus, $\bar{P}(x,\eta(x),\eta'(x),\alpha) = \alpha\big(\frac{1}{2} L_{yy'y'}(x,y+\beta, y'+\gamma)\eta + \frac{1}{6} L_{y'y'y'}(x,y+\beta, y'+\gamma)\eta'\big)$ and $\bar{Q}(x,\eta(x),\eta'(x),\alpha) = \alpha\big(\frac{1}{6} L_{yyy}(x,y+\beta, y'+\gamma)\eta + \frac{1}{2} L_{yyy'}(x,y+\beta, y'+\gamma)\eta'\big)$. Obviously, in both $\bar{P}$ and $\bar{Q}$, the expressions after $\alpha$ are bounded. Thus, $|\bar{P}|, |\bar{Q}| \to 0$ as $\alpha \to 0$. For all $\|\eta\|_1 = 1$ and all $x \in [a,b]$, we have that $|\bar{P}| \leq |\alpha|\left(\left|\frac{1}{2}L_{yy'y'}\right|\left|\eta\right| + \left|\frac{1}{6}L_{y'y'y'}\right|\left|\eta'\right|\right) \leq |\alpha|\left(\left|\frac{1}{2}L_{yy'y'}\right| + \left|\frac{1}{6}L_{y'y'y'}\right|\right)$, where we omit $\beta$ and $\gamma$ in the derivatives of $L$. Similarly, we have that $|\bar{Q}| \leq |\alpha|\left(\left|\frac{1}{2}L_{yyy'}\right| + \left|\frac{1}{6}L_{yyy}\right|\right)$. Moreover, as $\alpha \to 0$, $\beta, \gamma \to 0$. Since $L \in \mathcal{C}^3$, $L_{yyy}(x, y+\beta, y'+\gamma) \to L_{yyy}(x, y, y')$, and it is similar to other derivatives. Thus, for all $\gamma > 0$, we can find $\epsilon > 0$ such that if $|\alpha| < \epsilon$, $|\bar{P}|, |\bar{Q}| < \gamma$. However, if we only have $\|\eta\|_0 = 1$, then for all $\epsilon > 0$ and $|\alpha| = \epsilon / 2$, we can always find a $\eta$ such that $\eta'$ is large enough, and thus $|\bar{P}|, |\bar{Q}| > \gamma$. Therefore, it is in general false for $0$-norm.
+% Let $g(\alpha):=J(y+\alpha\eta)$. Then, we know that $g'(\alpha) = \delta J|_{y+\alpha \eta}(\eta)$ and $g''(\alpha) = 2\delta J^2|_{y+\alpha \eta}(\eta)$. Moreover, let functionals $P|_{y}$ and $Q|_{y}$ be $P|_{y} := \frac{1}{2}L_{yy'}(x, y, y')$ and $Q|_{y} = \frac{1}{2}\left(L_{yy}(x,y,y') - \frac{d}{dx} L_{yy'}(x,y,y')\right)$. Thus, $P|_{y}(x)$ is just the $P(x)$ in the book. Following from Taylor's theorem, $g(\alpha) = g(0) + g'(0)\alpha + \frac{1}{2}g''(\beta)\alpha^2$, where $\beta \in (0, \alpha)$. Expanding $g''(\beta)$ gives
+% \begin{align*}
+% & \frac{1}{2}g''(\beta)\\
+% = & \delta J|_{y+\beta \eta}(\eta)\\
+% = & \int_a^b \left(P|_{y+\beta \eta}(x) (\eta'(x))^2 + Q|_{y+\beta \eta}(x) (\eta(x))^2\right)dx\\
+% = & \int_a^b \left((P|_{y}(x)+\bar{P}(x,\eta(x),\eta'(x),\alpha)) (\eta'(x))^2 + (Q|_{y}+\bar{Q}(x,\eta(x),\eta'(x),\alpha)) (\eta(x))^2\right)dx\\
+% = & \delta J|_{y}(\eta) + \int_a^b \left( \bar{P}(x,\eta(x),\eta'(x),\alpha) (\eta'(x))^2 + \bar{Q}(x,\eta(x),\eta'(x),\alpha) (\eta(x))^2\right) dx\\,
+% \end{align*}
+% where $\bar{P}(x,\eta(x),\eta'(x),\alpha) = P|_{y+\beta \eta}(x) - P(x)$ and $\bar{Q}(x,\eta(x),\eta'(x),\alpha) = Q|_{y+\beta \eta}(x) - Q(x)$. Here, we use the fact that $\beta$ is a function of $\alpha$.
+
+% Since $L \in \mathcal{C}^3$ and $y$, $L_yy'$, $L_{yy}$, and $\frac{d}{dx}L$ For all $x \in [a, b]$ and all $\eta$ with $\|eta\|_1 = 1$, 
+
+\section*{Exercise 2.13}
+Here, we adopt the $2$-norm. Thus, as $\|v\| \to 0$, we have that for all $x$, $v(x) \to 0$, $v'(x) \to 0$, and $v''(x) \to 0$. Moreover, we have that $\frac{o(v(x))}{\|v(x)\|} \to 0$, $\frac{o(v'(x))}{\|v(x)\|} \to 0$, and $\frac{o(v''(x))}{\|v(x)\|} \to 0$. By definition, both $y$ and $y+v$ satisfy the Euler-Lagrange equation. For all $x$, as $\|v\| \to 0$, we have the following (we use colors to track different terms, and terms in the same color are merged.)
+\newcommand{\one}[1]{\textcolor{red}{#1}}
+\newcommand{\two}[1]{\textcolor{orange}{#1}}
+\newcommand{\three}[1]{\textcolor{green}{#1}}
+\newcommand{\four}[1]{\textcolor{blue}{#1}}
+\begin{align*}
+& \frac{d}{dx} L_{y'}(x, y+v, y'+v') \\
+= & L_{y'x}(x, y+v, y'+v') + L_{y'y}(x, y+v, y'+v')(y'+v') + L_{y'y'}(x, y+v, y'+v')(y''+v'')\\
+= &L_{y'x}(x, y, y') + L_{y'x'y}v + L_{y'x'y'}v'\\ &+ \left(L_{y'y}(x, y, y') + L_{y'yy}(x,y,y')v + L_{y'yy'}(x,y,y')v' \right)(y'+v')\\ &+ \left(L_{y'y'}(x, y, y') + L_{y'y'y}(x,y,y')v + L_{y'y'y'}(x,y,y')v' \right)(y''+v'') + o(\|v\|)\\
+= & \one{L_{y'x}(x, y, y')} + \two{L_{y'x'y}v} + \three{L_{y'x'y'}v'}\\
+&+ \left(\one{L_{y'y}(x, y, y')} + \two{L_{y'yy}(x,y,y')v} + \three{L_{y'yy'}(x,y,y')v'} \right)y' + \four{L_{y'y}(x, y, y')v'} \\
+&+ \left(\one{L_{y'y'}(x, y, y')} + \two{L_{y'y'y}(x,y,y')v} + \three{L_{y'y'y'}(x,y,y')v'} \right)y'' + \three{L_{y'y'}(x, y, y')v''} + o(\|v\|)\\
+= & \one{L_{y'x}(x, y, y') + L_{y'y}(x, y, y')y' + L_{y'y'}(x, y, y')y''}\\
+ &+ \two{L_{y'x'y}v + L_{y'yy}(x,y,y')vy' + L_{y'y'y}(x,y,y')vy''}\\
+ &+ \three{L_{y'x'y'}v' + L_{y'yy'}(x,y,y')v'y' + L_{y'y'y'}(x,y,y')v'y'' + L_{y'y'}(x, y, y')v''}\\
+ &+ \four{L_{y'y}(x, y, y')v'} + o(\|v\|)\\
+= & \one{\frac{d}{dx}L_{y'}(x,y,y')} + \two{\frac{d}{dx}L_{y'y}(x,y,y')v} + \three{\frac{d}{dx}\left(L_{y'y'}(x,y,y')v'\right)} + \four{L_{y'y}(x,y,y')v'} + o(\|v\|)
+\end{align*}
+
+Thus, 
+\begin{align*}
+& L_y(x, y+v, y'+v') - \frac{d}{dx} L_{y'}(x, y+v, y'+v') \\
+= & L_y(x, y, y') + L_{yy}(x,y,y')v + o(\|v\|) + L_{yy'}(x,y,y')v' + o(\|v\|)\\
+&- \frac{d}{dx}L_{y'}(x,y,y') - \frac{d}{dx}L_{y'y}(x,y,y')v - \frac{d}{dx}\left(L_{y'y'}(x,y,y')v'\right) - L_{y'y}(x,y,y')v' + o(\|v\|)\\
+= & 2\left(Qv + o(\|v\|) - \frac{d}{dx}(Pv')\right) = 0.
+\end{align*}
+
+% \begin{align*}
+% & L_y(x, y(x)+v(x), y'(x)+v'(x)) - \frac{d}{dx} L_{y'}(x, y(x)+v(x), y'(x)+v'(x)) \\
+% = & L_y(x, y(x), y'(x)) + L_{yy}(x,y(x),y'(x))v(x) + o(\|v\|) + L_{yy'}(x,y(x),y'(x))v'(x) + o(\|v\|) \\ &-  \frac{d}{dx} \left(L_{y'}(x, y(x), y'(x)) + L_{y'y}(x,y(x),y'(x))v(x) + o_1(v(x)) + L_{y'y'}(x,y(x),y'(x))v'(x) + o_2(v'(x))\right)\\
+% = & L_{yy}(x,y(x),y'(x))v(x) + o(\|v\|) + L_{yy'}(x,y(x),y'(x))v'(x) + o(\|v\|) \\ &- L_{y'y}(x,y(x),y'(x))v'(x) - \frac{d}{dx}(L_{y'y}(x,y(x),y'(x)))v(x) + \frac{d}{dx} \left(L_{y'y'}(x,y(x),y'(x))v'(x)\right) + o(\|v\|)\\
+% = & Qv + o(\|v\|) + \frac{d}{dx}(Pv') = 0.
+% \end{align*}
+
+\section*{Exercise 2.14}
+In the action integral, we have that $L_{\dot{q}\dot{q}} = m \mathbf{I} \succ 0$, where $\mathbf{I}$ is the identity matrix. Moreover, for a sufficiently small time interval, conjugate points can be ruled out. Thus, an extremum for this problem is automatically a minimum.
+\end{document}
