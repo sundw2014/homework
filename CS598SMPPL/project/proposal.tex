@@ -1,0 +1,308 @@
+\documentclass[11pt]{report}
+% this template is originally from Roy Dong's ECE 515.
+% Edited by Dawei Sun
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{upgreek}
+\usepackage{mathtools}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+\usepackage{algorithm2e}
+\usepackage[noend]{algpseudocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{float}
+
+\usepackage{listings}
+\usepackage{multicol}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+
+\newcommand{\T}{\intercal}
+\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+
+
+\usepackage{hyperref}
+\hypersetup{
+	pdftitle={Optimistic Optimization for Statistical Model Checking with Regret Bounds},
+	pdfauthor={Sayan Mitra},
+	colorlinks=true,
+	citecolor={blue},
+	linkcolor = {blue},
+	pagecolor={blue},
+	backref={true},
+	bookmarks=true,
+	bookmarksopen=false,
+	bookmarksnumbered=true
+}
+
+%\newtheorem{problem}{Problem Statement}
+\usepackage{amssymb,amsmath}%,amsthm}
+\usepackage{subfigure}
+\newtheorem{assumption}{Assumption}
+%\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+% \newtheorem{lemma}{Lemma}
+% \newtheorem{theorem}{Theorem}
+
+% \newtheorem{proof}{Proof}
+
+% New stuff added by Sayan
+%% Some standard libraries
+\usepackage{paralist}
+\usepackage{xspace}
+
+% strike out
+\usepackage[normalem]{ulem}
+
+\newcommand{\sayan}[1]{\textcolor{blue}{#1}}
+\newcommand{\negin}[1]{\textcolor{magenta}{#1}}
+\newcommand{\geir}[1]{\textcolor{red}{#1}}
+\newcommand{\dawei}[1]{\textcolor{green}{#1}}
+
+%% Defining some Macros to be used throughout the paper
+
+
+\newcommand{\num}[1]{\relax\ifmmode \mathbb #1\else $\mathbb #1$\fi}
+\newcommand{\nnnum}[1]{\relax\ifmmode 
+  {\mathbb #1}_{\geq 0} \else ${\mathbb #1}_{\geq 0}$
+  \fi}
+\newcommand{\npnum}[1]{\relax\ifmmode 
+  {\mathbb #1}_{\leq 0} \else ${\mathbb #1}_{\leq 0}$
+  \fi}
+\newcommand{\pnum}[1]{\relax\ifmmode 
+  {\mathbb #1}_{> 0} \else ${\mathbb #1}_{> 0}$
+  \fi}
+\newcommand{\nnum}[1]{\relax\ifmmode 
+  {\mathbb #1}_{< 0} \else ${\mathbb #1}_{< 0}$
+  \fi}
+\newcommand{\plnum}[1]{\relax\ifmmode 
+  {\mathbb #1}_{+} \else ${\mathbb #1}_{+}$
+  \fi}
+\newcommand{\nenum}[1]{\relax\ifmmode 
+  {\mathbb #1}_{-} \else ${\mathbb #1}_{-}$
+  \fi}
+
+\newcommand{\bools}{{\num B}}                    %reals
+\newcommand{\reals}{{\num R}}                    %reals
+\newcommand{\nnreals}{{\nnnum R}}                    %nonnegative reals
+\newcommand{\realsinfty}{{\num R} \cup \{\infty, -\infty\}}                    %nonnegative reals
+\newcommand{\plreals}{{\plnum R}}                    %positive reals
+\newcommand{\naturals}{{\num N}}                      %natural numbers
+\newcommand{\integers}{{\num Z}}                      %integers
+\newcommand{\nnintegers}{{\nnnum Z}}    
+\newcommand{\rationals}{{\num Q}}                      %rationals
+\newcommand{\nnrationals}{{\nnnum Q}}                   % nonnegative rationals
+\newcommand{\Time}{{\num T}}  
+
+
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\Y}{\mathcal{Y}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\pack}{\mathcal{N}_{\mathit{pack}}}
+\newcommand{\phit}[3]{{p_{#1,#2}{(#3)}}}
+\newcommand{\Expectation}[1]{\mathbb{E}\left[#1\right]}
+
+\newcommand{\observ}{y}
+\newcommand{\Observ}{y}
+\newcommand{\Prob}{{\num P}}
+\newcommand{\Trans}[3]{{#1}_{{#2,#3}}}
+\newcommand{\Unsafe}{\mathcal{U}}
+\newcommand{\uthresh}{\eta}
+\newcommand{\supp}[1]{{\rm{supp}\mathit{(#1)}}}
+\newcommand{\modelname}{NiMC\xspace}
+\newcommand{\execs}[1]{{{\rm{Execs}}_{#1}}}
+\newcommand{\partition}[2]{{\mathcal{P}_{#1,#2}}}
+\newcommand{\counter}[2]{{\mathit{count}_{#1,#2}}}
+
+\newcommand{\queried}[2]{{\mathit{q}_{#1,#2}}}
+\newcommand{\batch}{{\mathit{b}}}
+
+\newcommand{\Scar}{{$\mathsf{Singlecar}$\xspace}}
+\newcommand{\SlplatoonTwo}{{$\mathsf{SLplatoon2}$\xspace}}
+\newcommand{\SlplatoonThree}{{$\mathsf{SLplatoon3}$\xspace}}
+\newcommand{\Mlplatoon}{{$\mathsf{MLplatoon}$\xspace}}
+\newcommand{\Merging}{{$\mathsf{Merging}$\xspace}}
+\newcommand{\DetectingPedestrian}{{$\mathsf{DetectBrake}$\xspace}}
+
+\newcommand{\toolname}{{{\sf HooVer}\xspace}}
+
+
+%% transition system quick description
+\usepackage{listings}
+
+\usepackage{stmaryrd}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{upgreek}
+
+\newcommand{\two}[4]{
+  \parbox{.95\columnwidth}{\vspace{1pt} \vfill
+    \parbox[t]{#1\columnwidth}{#3}%
+    \parbox[t]{#2\columnwidth}{#4}%
+  }}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{CS598SM - Fall 2020 at UIUC}
+\rhead{\textcolor{red}{Dawei Sun (daweis2)}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \title{Estimate}
+
+\begin{document}
+% \maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Background and motivation}
+In this project, we try to solve the problem of estimating the smoothness of the output of a probabilistic program representing a Markov Decision Process (MDP). The basic idea is to get high-confidence estimates with hypothesis testing.
+
+We start by introducing basic mathematical objects needed to define our problem. Given a set $\X$, a {\em $\sigma$-algebra} is a collection $\F_\X$ of subsets of $\X$ which is closed under complementation and countable union. A {\em measurable space\/} is a pair $(\X, \F_\X)$, where $\F_\X$ is a $\sigma$-algebra over $\X$ and the elements of $\F_\X$ are referred to as {\em measurable sets}.
+% Given two measurable spaces $(\X, \F_\X)$ and $(\Y, \F_\Y)$, a function $f: \X \rightarrow \Y$ is {\em measurable} if the pre-image of every measurable set is measurable. A {\em probability measure} on $(\X, \F_\X)$ is a function $\mu: \F_\X \rightarrow [0,1]$ such that $\mu(\X) = 1$ 
+% and $\mu\left(\cup_{i\in I} \X_i\right)= \sum_{i\in I} \mu(\X_i)$ for any countable pairwise-disjoint family of sets $\{\X_i\}_{i\in I} \subset \F_\X$.
+A {\em Markovian transition kernel} on a measurable space $(\X, \F_\X)$ is  a mapping $\mathbb{P}:\X \times \F_\X \rightarrow [0, 1]$, such that \begin{inparaenum}[(i)] \item for all $x \in \X$, $\mathbb{P}(x, \cdot)$ is a probability measure on $\F_\X$; and \item for all $\mathcal{A} \in \F_\X$, $\mathbb{P}(\cdot, \mathcal{A})$ is a $\F_\X$-measurable function. \end{inparaenum}
+% A real-valued random variable\footnote{Namely, a function $X:\X\rightarrow \mathbb{R}$ for which the set $\{x\in \X: X(x)\leq r \}$  is measurable, for each $r\in \mathbb{R}$, with respect to a fixed designated measurable space $(X,\F_\X)$ equipped with a probability measure.}  $X$ is {\em $\sigma^2$-sub-Gaussian\/}, if for all $s \in \mathbb{R}$, $\mathbb{E}\left[\exp(s(X-\mathbb{E}X))\right] \leq \exp(\sigma^2 s^2/2)$ holds, where $\mathbb{E}$ denotes the expectation operation.
+
+\begin{definition}
+\label{def:mpis}
+A {\em Nondeterministically initialized Markov chain (\modelname)\/} $\M$ is defined by a triplet $((\X, \F_\X), \mathbb{P}, \Theta)$, where:
+\begin{inparaenum}[(i)]
+\item $(\X, \F_\X)$ is a measurable space and $\X$ will serve as the state space;
+% \item $\mathcal{F}$ is a $\sigma$-algebra defined over $\X$ which is the set of all measurable subsets of $\X$;
+%\item $A$ is a finite set of {\em actions},
+\item $\mathbb{P}:\X \times \F_\X \rightarrow [0, 1]$ is a Markovian {\em transition kernel}; and
+\item $\Theta \subseteq \X$ is the set of possible initial states.
+%\item $\Unsafe \subseteq \X$ is an unsafe set. 
+\end{inparaenum}
+\end{definition}
+
+% \noindent
+% In other words, the uncertainty in the initial state is modeled as a nondeterministic choice over a  set $\Theta$ and the uncertainty in the  transitions is modeled as probabilistic choices by the transition kernel $\mathbb{P}$.  From the theoretical standpoint,  \modelname{s} are interesting as a special subclass of MDPs, and they are a natural model for adversarially initialized probabilistic systems (e.g., an autonomous vehicle model that updates periodically based on  sensor measurements with worst case bounds). 
+
+Given a model $\M$ and a measurable unsafe set $\Unsafe \in \F_\X$, we are interested in evaluating the {\em worst case\/} probability of $\M$ hitting $\Unsafe$ over all possible nondeterministic choices of an initial state $x_0$ in $\Theta$. Once an initial state $x_0 \in \Theta$ is fixed, the probability of a set of paths is defined in the standard way. The details of the construction of the measure space over executions is not relevant for our work, and therefore, we give an abridged overview below.
+
+An {\em execution} of $\M$  of length $k$ is a sequence of states $\alpha = x_0 x_1 \cdots x_k$, where $x_0 \in \Theta$ and for all $i$, $x_i \in \X$. The $i^{\mathit{th}}$ state of an execution $\alpha$ is denoted by $\alpha_i = x_i$.
+%
+% Given $x_0$ and a sequence of measurable sets of states $A_1,\ldots, A_k \in \F_\X$, the measure of the set of executions $\{ \alpha \ | \ \alpha_0 = x_0 \text{ and }  \alpha_i \in A_i, \forall \ i =1,\ldots, k\}$ is given by : 
+%this probability is well defined and given by
+% \begin{multline*}
+% \Pr(\{ \alpha \ | \ \alpha_0 = x_0 \text{ and } \alpha_i \in A_i, \forall \ i =1,\ldots, k \}) = \int_{A_1 \times \cdots \times A_k} \mathbb{P}(x_0, dx_1) \cdots \mathbb{P}(x_{k-1}, dx_k),
+% \end{multline*}
+% which is a standard result and follows from the Ionescu Tulce{\u a} theorem.
+We say that an execution $\alpha$ of length $k$ \emph{hits} the unsafe set $\Unsafe$ if there exists $i\in\{0,\ldots,k\}$, such that  $\alpha_i \in \Unsafe$.
+The complement of $\Unsafe$, the  {\em safe subset} of $\X$, is denoted by $\mathcal{S}$. The safe set is also a member of the $\sigma$-algebra $\F_\X$ since $\sigma$-algebras are closed under complementation. From a given initial state $x_0 \in \Theta$, the probability of $\M$ hitting $\Unsafe$ within $k$ steps is denoted by $\phit{k}{\Unsafe}{x_0}$. By definition, $\phit{k}{\Unsafe}{x_0} = 1$, if $x_0 \in \Unsafe$. For $x_0 \notin \Unsafe$ and $k \geq 1$,   
+\begin{equation}
+\label{eq:prob_int}
+\phit{k}{\Unsafe}{x_0} = 1 - \int_{S^k} \mathbb{P}(x_0, dx_1) \cdots \mathbb{P}(x_{k-1}, dx_k),
+\end{equation}
+which follows from the Ionescu Tulce{\u a} theorem~\cite{ionescu1949mesures}~\cite{petritis2012}.
+
+The problem we will try to solve is how to estimate the smoothness, e.g. Lipschitz constant, of function $f(x) = \phit{k}{\Unsafe}{x}$ given a program representing the transition kernel $\mathbb{P}$, initial set $\Theta$, and unsafe set $\Unsafe$. We are interested in this problem because if we want to make use of black-box optimization algorithms~\cite{bubeck2009online} to find the maximum of function $f$, it is essential to know some property about the smoothness. A sample of such a program is shown in the next section.
+% We are interested in finding the {\em worst case} probability of hitting unsafe states over all possible initial states of $\M$. This can be regarded as solving, for some $k$, the following optimization problem over the set $\Theta$:
+% \begin{align}
+%     \label{eq:SMCproblem}
+% \arg \max\limits_{x_0 \in \Theta} \phit{k}{\Unsafe}{x_0}.
+% \end{align}
+
+% \noindent
+% We  note here that our verification approach solves the optimization problem of Equation~(\ref{eq:SMCproblem}) using samples of individual states from $\Theta$ and does not rely on explicitly calculating the probability measures defined by  Equation~(\ref{eq:prob_int}). More specifically, our approach relies on noisy observations about whether or not a sampled execution hits $\Unsafe$. Thus, the user  has to provide a {\em simulator} for the $\modelname$ $\M$ (i.e., the transition kernel $\mathbb{P}$), and the specifications for the initial set $\Theta$, and the unsafe set $\Unsafe$.
+% %
+% For theoretical bounds, we will  assume that the function $\phit{k}{\Unsafe}{x_0}$ is continuous in $x_0$. A sufficient condition is that the kernel-based function $\mathbb{P}(\cdot,A)$  be continuous on $\Theta$ for each $A\in \F_\X$.
+
+\subsection*{A simple example}
+\label{ex:simple}
+Figure~\ref{fig:brownian} shows an MDP model specifying a particle moving randomly on the  plane. 
+%In each step or transition, the particle  moves by a random {\em increment\/} that is distributed according to multivariate standard normal distribution with standard deviation $\sigma$. 
+% The  model \texttt{RandomMotion}  is specified as a Python class which is a subclass of \texttt{NiMC}.
+% all the components are specified as Python function or arrays.
+%
+The initial set $\Theta \subseteq \reals^2$, specified by \texttt{set\_Theta()},  defines $\Theta = \{(x_1, x_2)~|~x_1 \in [1,2],\,x_2 \in [2,3]\}$. 
+%Although $\Theta$ can be any subset of $\X$ in general, \toolname{} currently only supports hyper-rectangular initial state space. 
+The unsafe set $\Unsafe$,  specified by the member function \texttt{is\_unsafe()}, 
+%. 
+%The time bound $k$ is specified by calling \texttt{set\_k()}.
+%Given a state $x$, this function returns \texttt{True} if $x \in \Unsafe$ or \texttt{False} otherwise. 
+defines $\Unsafe = \{(x_1, x_2)~|~x_1^2+x_2^2 > 4\}$. 
+%
+The \texttt{transition()} 
+% \sayan{why a different font here?}
+function describes the transition kernel $\mathbb{P}$. Given an input (pre)state $x$, \texttt{transition()} returns the post-state $x'$ of the transition by sampling  the measure $\mathbb{P}(x, \cdot)$. For this example, $x'$ is computed by adding \texttt{inc} to $x$ where \texttt{inc} is sampled from a $2$-dimensional Gaussian distribution with mean $\mu = (0, 0)$ %Geir: we are not using the matrix algebra so this is just an ordered pair
+and covariance $\Sigma = \begin{bmatrix} \sigma^2 & 0\\ 0 & \sigma^2 \end{bmatrix}$.
+%
+We can write the  transition kernel explicitly by a density function: $ p(x')= \frac{1}{2\pi \sigma^2} \exp(-\frac{1}{2 \sigma^2}(x_1'-x_1)^2+(x_2'-x_2)^2)$.
+% This function is continuous in $x$, and  therefore,  $\phit{k}{\Unsafe}{x_0}$ is also continuous over $\Theta$. For more complicated models, for example, the ones studied in Section \ref{sec:allbenchmarks},  \toolname{} does  not rely on explicit transition kernels, but only the  \texttt{transition()} function for sampling $\mathbb{P}(x, \cdot)$.
+
+\begin{figure}
+	\centering
+	\hrule
+	\two{.46}{.54}
+	{\lstinputlisting[language=Python,lastline=11]{Brownian.py}}
+	{\lstinputlisting[language=Python,firstline=11,lastline=20,firstnumber=11]{Brownian.py}}
+	\hrule
+	\caption{\small \toolname{} model description file for a simple random motion model.}
+	\label{fig:brownian}
+% \vspace{-0.5cm}
+\end{figure}
+
+
+%When discussing  multiple \modelname's $\M_1, \M_2,$ etc, we will refer to the components of $\M_i$ by appropriate subscripts such as $\X_i, \Theta_i, P_i,$ etc.
+
+%\sayan{Stopping here. Do we want to change anything up to this point? Do we need the definitions in the rest of the section?}
+
+\section*{Estimate smoothness with hypothesis testing}
+Computing the exact Lipschitz constant of function $f$ is intractable. We instead look for some randomized algorithm to estimate the Lipschitz constant with some confidence.
+
+Hypothesis testing is a widely used technique in statistical model checking~\cite{agha2018survey}. It can be used to determine the extent to which observations ``conform" to a given specification. For example, let the specification be ``$f$ is $L$-Lipschitz continuous". By sampling some pairs of $x_1, x_2 \in \X$, we can evaluate whether $|f(x_1) - f(x_2)| \leq L \|x_1 - x_2\|$ holds. With these samples and observations, we can conclude whether the specification is true or not with some confidence.
+
+A straightforward idea of making use of hypothesis testing to solve our problem is as follows. First, we initialize $L$ to some scalar. Then, we use hypothesis testing to test the specification ``$f$ is $L$-Lipschitz continuous" with some given confidence level. If it does not pass the testing, we increase $L$ and repeat this process. Once the algorithm returns a $L$, it is guaranteed that $f$ is $L$-Lipschitz continuous with a high probability.
+
+Some problems we may encounter in this project are in order. First, when the state space $\X$ is large, how to improve the sample efficiency? Second, given $x$, evaluation of $f(x)$ is not trivial, since $f(x)$ is the mean of a Bernoulli distribution ($0$ for safe and $1$ for unsafe), but we can only observe samples from this distribution (i.e. whether the sampled execution is safe or unsafe). Of course, we can collect enough observations and compute the empirical average, but is there any more elegant way to do that? Finally, although irrelevant to the core of this project, it is necessary to discuss how to interpret the theoretical guarantee given by hypothesis testing when combining it with the black-box optimization algorithm~\cite{bubeck2009online}.
+
+
+% 1. motivation
+%  sample of transition kernel
+%  smoothness
+% 2. method
+%  hypothesis testing
+%  sequential testing
+%  guarantee
+
+% \begin{verbatim}
+% eps=1e-8;
+% chebfun(@(x) log(x), [eps, 1])
+% \end{verbatim}
+\bibliographystyle{unsrt}
+\bibliography{ref}
+\end{document}

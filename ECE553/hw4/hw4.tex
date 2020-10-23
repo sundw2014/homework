@@ -1,0 +1,138 @@
+\documentclass[11pt]{report}
+% this template is originally from Roy Dong's ECE 515.
+% Edited by Dawei Sun
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{upgreek}
+\usepackage{mathtools}
+\usepackage{bbm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+\usepackage{algorithm2e}
+\usepackage[noend]{algpseudocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx}
+
+\usepackage{listings}
+\usepackage{multicol}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+\newcommand{\reals}{\mathbb{R}}
+
+\newcommand{\T}{\intercal}
+\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{ECE 553 - Fall 2020 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{Dawei Sun (daweis2)}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Exercise 3.1}
+If $y$ is a weak minimum, we have to use the following claim in the proof: ``For $\alpha$ close to 0, the perturbed curve $y(\cdot, \alpha)$ is close to the original curve $y$ in the sense of the $1$-norm". However, this claim is not correct since the derivative of $y(\cdot, \alpha) - y$ at $c$ and $c+\alpha\Delta x$ do not converge to $0$ in general. We can add an additional constraint $\eta_1(c)=\eta_2(c)$ such that $\Delta x = 0$ and the above claim becomes true. In this case, $\Delta y$ is still free, and thus we have the first Weierstrass-Erdmann corner condition.
+\section*{Exercise 3.2}
+From Euler-Lagrange equation (2.23): for all non-corner points, we have $y'^2 \equiv C^2$, where $C$ is a constant. Due to the boundary conditions, we also have that $\int_{-1}^{1} y' = 0$. Intuitively, $y$ looks like a triangle wave: slopes can only take two values ($\pm C$). Thus, for all extremals, the first condition is naturally satisfied since $L_{y'}$ is constant. As for the second condition, $y'L_{y'}-L = 2y'^3$. For $C \neq 0$, $y'^3$ is not continuous. Thus, the only one satisfying the Weierstrass-Erdmann corner conditions is $y \equiv 0$. However, this is not even a weak minimum. Considering the perturbation \[
+\eta(x) = \begin{cases} x+1 &\mbox{if } -1 \leq x \leq 0.5 \\
+-3(x-1) & \mbox{if } 0.5 \leq x \leq 1 \end{cases}.
+\]
+For all $\alpha > 0$, $J(y+\alpha\eta) = -12\alpha < 0$ although the generalized $1$-norm of $\alpha \eta$ goes to $0$ as $\alpha \to 0$.
+
+\section*{Exercise 3.3}
+As shown in the last exercise, the first Weierstrass-Erdmann corner condition follows from the integral form of Euler-Lagrange equation. Next, we show that the second one follows from the Weierstrass theorem. Let $c$ be a corner point, consider two configurations for $E$: 1. $x = c^-$, $w = y'(c^+)$; 2. $x = c^+$, $w = y'(c^-)$. Then, for these two configurations, we have the following two inequalities respectively.
+\[
+LHS1 = L(c,y(c),y'(c^+)) - L(c,y(c),y'(c^-)) - (y'(c^+) - y'(c^-))L_{y'}(c,y(c),y'(c^-)) \geq 0,
+\]
+and
+\[
+LHS2 = L(c,y(c),y'(c^-)) - L(c,y(c),y'(c^+)) - (y'(c^-) - y'(c^+))L_{y'}(c,y(c),y'(c^+)) \geq 0.
+\]
+Since $L_{y'}(c,y(c),y'(c^-)) = L_{y'}(c,y(c),y'(c^+))$, $LHS1 = -LHS2$, and thus the above two inequalities are actually equations, which implies the second Weierstrass-Erdmann corner condition.
+
+For all non-corner point $x$ and $w$ close to $y'(x)$, we have that $L(w) = L(x,y,y')+(w-y')L_{y'}(x,y,y')+\frac{1}{2}(w-y')^2L_{y'y'}(x,y,y')+o((w-y')^2)$. Moreover, for a small region around $y'$, we have $E(w) = \frac{1}{2}(w-y')^2L_{y'y'}(x,y,y')+o((w-y')^2) \geq 0$. Thus, we must have $L_{y'y'}(x,y,y') \geq 0$.
+
+\section*{Exercise 3.4}
+First, the assumption that $f$ is continuous in $t$ and $u$ and $u$ is piece-wise continuous in $t$ implies that $\bar{f}(t,x) = f(t,x,u(t))$ is piece-wise continuous in $t$, since $\bar{f}$ is continuous at all points $t$ where $u$ is continuous and bounded at discontinuities.
+
+For the first hypothesis where $f_x$ exists, we have that $\bar{f}_x(t,x) = f_x(t,x,u(t))$. Since $f$ is $\mathcal{C}^1$ in $x$ and $f_x$ is continuous in $t$ and $u$, $\bar{f}_x$ is continuous in $x$ and piece-wise continuous in $t$. Thus, $\bar{f}(\cdot,\cdot)$ exists and is locally bounded as a function of $(t,x)$.
+
+For the second hypothesis: in a small neighborhood around $(t_0, x_0)$, since $t$ is bounded $u(t)$ is also bounded, and thus $(t, x, u(t))$ is bounded. There exists $L>0$ such that for every pair $(t, x_1)$ and $(t, x_2)$ in this neighborhood around $(t_0, x_0)$, $|\bar{f}(t,x_1) - \bar{f}(t,x_2)| = |f(t,x_1,u(t)) - f(t,x_2,u(t))| \leq L|x_1 - x_2|$. Thus, $\bar{f}(t,x_1)$ is locally Lipschitz continuous.
+
+As stated in the textbook, ``the assumption of a finite number of discontinuities on each bounded interval is actually not crucial; we can allow discontinuities to have accumulation points, as long as the function remains locally bounded (or at least locally integrable)." Thus, we can relax the assumption on $u$ to `` on each finite interval, $u$ has countably many discontinuities and is locally bounded". Then, since $f$ is continuous in $t$ and $u$, $\bar{f}$ has countably many discontinuities and is locally bounded as a function of $t$. Thus, unique solution exists.
+
+\section*{Exercise 3.5}
+In this case, we have that $f(t, x, u) = u$. Thus, $f_x = 0_{n \times n}$ and $f_u = \mathbf{I}_n$. If $u^*$ and the resulting $x^*$ satisfying (3.39) and (3.40), then $H_u(t, x^*(t), u^*(t), p^*(t)) = p^*(t) - L_u|_* = 0$. Thus, $\frac{d}{dt}L_u|_* = \dot{p}^* = -f_x^\T p^* + L_x|_* = L_x|_*$. Thus, for all $i$, $\frac{d}{dt}L_{\dot{x}_i} = L_{x_i}$.
+
+\section*{Exercise 3.6}
+In order to take advantage of matrix operations, for any vector $x$ of length $n$, let us split it into two parts, the top $k$ elements $x_\top = [x_1, \cdots, x_k]^\T$ and the bottom $n-k$ elements $x_\bot = [x_{k+1}, \cdots, x_n]^\T$. For this dynamical system, we have that $f = [f_1, \cdots, f_k, u_1, \cdots, u_{n-k}]$. Moreover, $\frac{\partial f}{\partial u} = \begin{bmatrix}\frac{\partial f_\top}{\partial u}\\\mathbf{I}\end{bmatrix}$ and $\frac{\partial f}{\partial x} = \begin{bmatrix}\frac{\partial f_\top}{\partial x}\\\mathbf{0}\end{bmatrix}$. Let $G(t,x,u) = L(t,x,\dot{x})$ be the original Lagrangian. Then, we have that $G_u = \frac{\partial f}{\partial u}^\T L_{\dot{x}} = \frac{\partial f_\top}{\partial u}^\T L_{\dot{x}_\top} + L_{\dot{x}_\bot}$ and $G_x = L_x + \frac{\partial f}{\partial x}^\T L_{\dot{x}} = L_x + \frac{\partial f_\top}{\partial x}^\T L_{\dot{x}_\top} $.
+
+We will show that for $\lambda = p_\top - L_{\dot{x}_\top}$, the Euler-Lagrange equation holds along the trajectory. Please note that we omit $*$ for simplicity.
+
+From (3.39), we have that $H_u = \frac{\partial f}{\partial u}^\T p - G_u = \frac{\partial f_\top}{\partial u}^\T p_\top + p_\bot - \left(\frac{\partial f_\top}{\partial u}^\T L_{\dot{x}_\top} + L_{\dot{x}_\bot}\right) = 0$. which implies that $\frac{\partial f_\top}{\partial u}^\T(p_\top - L_{\dot{x}_\top}) = L_{\dot{x}_\bot} - p_\bot = \frac{\partial f_\top}{\partial u}^\T \lambda$.
+
+From (3.40), we have that $\dot{p} = -H_x = G_x - \frac{\partial f}{\partial x}^\T p = L_x - \frac{\partial f_\top}{\partial x}^\T \lambda$.
+
+Next, we show that the LHS $-$ RHS of the Euler-Lagrange equation equals $0$ for each $i$. First, for the first $k$ dimensions, we have that
+\begin{multline*}
+LHS-RHS = \frac{d}{dt}\left(L_{\dot{x}_\top} + \lambda\right) - \left(L_{x_\top} - \frac{\partial f_\top}{\partial x_\top}^\T\lambda\right) = \dot{p}_\top - \left(L_{x_\top} - \frac{\partial f_\top}{\partial x_\top}^\T \lambda\right) = 0.
+\end{multline*}
+For the last $n-k$ elements, we have that
+\begin{multline*}
+LHS-RHS = \frac{d}{dt}\left(L_{\dot{x}_\bot} - \frac{\partial f_\top}{\partial u} \lambda\right) - \left(L_{x_\bot} - \frac{\partial f_\top}{\partial x_\bot}^\T\lambda\right) = \dot{p}_\bot - \left(L_{x_\bot} - \frac{\partial f_\top}{\partial x_\bot}^\T\lambda\right) = 0.
+\end{multline*}
+
+\section*{Exercise 3.7}
+Considering the three terms in $J(u)-J(u^*)$, we have
+\begin{multline*}
+K(x(t_1))-K(x^*(t_1)) = K(x^*(t_1)+\alpha \eta+\alpha^2 \zeta + o(\alpha^2)) - K(x^*(t_1)) \approx <K_x(x^*(t_1)), \alpha \eta+\alpha^2 \zeta>\\+ \frac{1}{2}\alpha^2 \eta^\T K_{xx}(x^*(t_1)) \eta + o(\alpha^2),
+\end{multline*}
+\begin{multline*}
+H(t,x,u,p) - H(t,x^*,u^*,p) = H(t, x^*+\alpha \eta+\alpha^2 \zeta + o(\alpha^2), u^* + \alpha \xi, p)\\\approx <H_x(t,x^*,u^*,p), \alpha \eta+\alpha^2 \zeta> + <H_u(t,x^*,u^*,p), \alpha\xi> + \frac{1}{2} \alpha^2 \begin{bmatrix}\eta^\T & \xi^\T\end{bmatrix} \left.\begin{bmatrix}H_{xx} & H_{xu}\\H_{xu} & H_{uu}\end{bmatrix}\right|_*\begin{bmatrix}\eta\\ \xi\end{bmatrix},
+\end{multline*}
+and
+\begin{multline*}
+\int_{t_0}^{t_1} <p(t), \dot{x}(t) - \dot{x}^*(t)>dt = <p(t), x(t)-x^*(t)>|_{t_0}^{t_1} - \int_{t_0}^{t_1} <\dot{p}(t), x(t) - x^*(t)>dt\\\approx <p(t_1), \alpha \eta(t_1)+\alpha^2 \zeta(t_1)> - \int_{t_0}^{t_1} <\dot{p}(t), \alpha \eta+\alpha^2 \zeta>dt,
+\end{multline*}
+where we use that $\eta(t_0) = 0$ and $\zeta(t_0) = 0$, and $\approx$ denotes equality up to terms of order $o(\alpha^2)$.
+
+Then, the coefficient of $\alpha^2$ is 
+\begin{align*}
+& \delta J^2|_{u^*}(\xi) = -\int_{t_0}^{t_1} <\dot{p}^* + H_x(t,x^*,u^*,p^*), \zeta> dt + <K_x(x^*(t_1)) + p^*(t_1), \zeta(t_1)> \\+&\frac{1}{2} \eta^\T K_{xx}(x^*(t_1)) \eta - \frac{1}{2}\int_{t_0}^{t_1} \begin{bmatrix}\eta^\T & \xi^\T\end{bmatrix} \left.\begin{bmatrix}H_{xx} & H_{xu}\\H_{xu} & H_{uu}\end{bmatrix}\right|_*\begin{bmatrix}\eta\\ \xi\end{bmatrix} dt\\
+=&\frac{1}{2} \eta^\T K_{xx}(x^*(t_1)) \eta - \frac{1}{2}\int_{t_0}^{t_1} \begin{bmatrix}\eta^\T & \xi^\T\end{bmatrix} \left.\begin{bmatrix}H_{xx} & H_{xu}\\H_{xu} & H_{uu}\end{bmatrix}\right|_*\begin{bmatrix}\eta\\ \xi\end{bmatrix} dt
+\end{align*}
+
+\section*{Exercise 3.8}
+(1) Canonical form: $\dot{x}^* = f(t,x^*,u^*) = Ax^* + Bu^*$ and $\dot{p}^* = 2Qx^* - A^\T p^*$. By (3.40), we have that $H_u = B^\Tp^* - 2Ru^* = 0$, and thus $u^* = \frac{1}{2}R^{-1}B^\T p^*$.
+
+\noindent (2) Since $H_{uu} = -2R \prec 0$, the above control is optimal. Specifically, this control $u^*$ is a strong minimum over all piece-wise continuous functions.
+
+\end{document}
