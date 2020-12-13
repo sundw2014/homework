@@ -1,0 +1,106 @@
+\documentclass[11pt]{report}
+% this template is originally from Roy Dong's ECE 515.
+% Edited by Dawei Sun
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{upgreek}
+\usepackage{mathtools}
+\usepackage{bbm}
+\usepackage{hyperref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+\usepackage{algorithm2e}
+\usepackage[noend]{algpseudocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx}
+
+\usepackage{listings}
+\usepackage{multicol}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+\newcommand{\reals}{\mathbb{R}}
+
+\newcommand{\T}{\intercal}
+\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{ECE 553 - Fall 2020 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{Dawei Sun (daweis2)}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Exercise 6.1}
+First, $P(t_1) = -\frac{1}{2}Y(t_1)X(t_1)^{-1} = M$.
+
+\noindent Second, using the fact that $\frac{d}{dt}{X^{-1}(t)} = -X^{-1}(t) \dot{X}(t) X^{-1}(t)$, we have
+\begin{align*}
+\dot{P}(t) = &-\frac{1}{2}\left(\dot{Y}(t)X^{-1}(t) - X^{-1}(t) \dot{X}(t) X^{-1}(t)\right)\\
+= & -\frac{1}{2}\left(\left(2Q(t)X(t) - A^\T(t)Y(t)\right)X^{-1}(t) - Y(t)X^{-1}(t)\left(A(t)X(t) + \frac{1}{2}B(t)R^{-1}(t)B^\T(t)Y(t)\right)X^{-1}(t)\right)\\
+= & - Q(t) - A^\T(t)P(t) - P(t)A(t) + P(t)B(t)R^{-1}(t)B^\T(t)P(t).
+\end{align*}
+
+\section*{Exercise 6.2}
+(1) Obviously, if $P(t)$ satisfies (6.14), then $P^\T(t)$ also satisfies (6.14):
+\begin{align*}
+\frac{d}{dt}P^\T(t) = & \left(\frac{d}{dt}P(t)\right)^\T = \left(- A^\T(t)P(t) - P(t)A(t) - Q(t) + P(t)B(t)R^{-1}(t)B^\T(t)P(t)\right)^\T\\ = & - A^\T(t)P^\T(t) - P^\T(t)A(t) - Q(t) + P^\T(t)B(t)R^{-1}(t)B^\T(t)P^\T(t).
+\end{align*}
+Together with fact that the boundary condition $P(t_1) = M$ is symmetric, $P(t)$ is symmetric for all $t$.
+
+(2) First, rewrite the ODE as follows
+\begin{align*}
+\dot{P}(t) = & - A^\T(t)P(t) - P(t)A(t) - Q(t) + P(t)B(t)R^{-1}(t)B^\T(t)P(t)\\ = & - \left(A(t) - \frac{1}{2}B(t)R^{-1}(t)B^\T(t)P(t)\right)^\T P(t) - P(t)\left(A(t) - \frac{1}{2}B(t)R^{-1}(t)B^\T(t)P(t)\right) - Q(t)\\ := &- S(t)^\T P(t) - P(t)S(t) - Q(t).
+\end{align*}
+It is easy to verify that if there exists a solution $P(t)$, then it satisfies
+\begin{align*}
+P(t) = & \Phi(t, t_1) P(t_1) \Phi(t, t_1)^\T + \int_{t_1}^t \Phi(t, \tau) (-Q(t)) \Phi(t, \tau)^\T d \tau\\ = &\Phi(t, t_1) P(t_1) \Phi(t, t_1)^\T + \int_{t}^{t_1} \Phi(t, \tau) Q(t) \Phi(t, \tau)^\T d \tau,
+\end{align*}
+where $\Phi(t,\tau)$ is the solution of
+$$\partial_t \Phi(t, \tau) = -S(t) \Phi(t, \tau),~\Phi(\tau, \tau) = I.$$ Since $\Phi(t,\tau)$ is non-singular, and $P(t_1) = M \succeq 0$ and $Q(t) \succeq 0$, $P(t)$ must be positive semi-definite.
+
+(3) As shown in (2), if $M \succ 0$ or $Q(t) \succ 0$ on a measurable subset of $[t, t_1]$, then $P(t) \succ 0$.
+
+\section*{Exercise 6.3}
+Let us rewrite the cost function such that everything outside the integral is independent of $u$. Let $P(t)$ be the solution of (6.14).
+\begin{align*}
+J(u) = & \int_{t_0}^{t_1} \left(x^\T(t) Q(t) x(t) + u^\T(t) R(t) u(t)\right) d t + x^\T(t_1)P(t_1)x(t_1) \\ = & \int_{t_0}^{t_1} \left(x^\T Q(t) x(t) + u^\T(t) R(t) u(t)\right) d t + x^\T(t_0)P(t_0)x(t_0) + \int_{t_0}^{t_1} \frac{d}{dt}\left(x^\T(t)P(t)x(t)\right) dt \\ = & \int_{t_0}^{t_1} \left(u^\T(t) R(t) u(t) + 2u^\T(t)B^\T(t)P(t)x(t) + x^\T(t)P(t)B(t)R^{-1}(t)B^\T(t)P(t)x(t)\right) d t + x^\T(t_0)P(t_0)x(t_0) \\ = & \int_{t_0}^{t_1} \left(u(t) + R^{-1}(t)B^\T(t)P(t)x(t)\right)^\TR(t)\left(u(t) + R^{-1}(t)B^\T(t)P(t)x(t)\right) d t + x^\T(t_0)P(t_0)x(t_0).
+\end{align*}
+Obviously, the unique global minimizer is $u^*(t) = - R^{-1}(t)B^\T(t)P(t)x(t)$.
+
+\section*{Exercise 6.4}
+In this case, $A = \begin{bmatrix}0 & 1\\ 0 & 0\end{bmatrix}$, $B = \begin{bmatrix}0\\1\end{bmatrix}$, $Q = I$, and $R = 1$. Solve the ARE, and we get $P = \begin{bmatrix}\sqrt{3} & 1\\ 1 & \sqrt{3}\end{bmatrix}.$
+
+Furthermore, the Hamiltonian matrix $\mathcal{H}(t) = \begin{bmatrix}0 & 1 & 0 & 0\\ 0 & 0 & 0 & \frac{1}{2}\\ 2 & 0 & 0 & 0 \\0 & 2 & -1 & 0\end{bmatrix}$
+
+\section*{Exercise 6.6}
+The ARE is $-\frac{b^2}{r}p^2 + 2ap + q = 0$. Solve it, and we get $\frac{p}{r} = \frac{a + \sqrt{a^2+\frac{qb^2}{r}}}{b^2}$. The eigenvalue of the closed-loop system is $\lambda = a - b^2\frac{p}{r}$. Thus, when $r \to 0$, $\lambda \to -\infty$. When $r \to \infty$, $\lambda \to -a$.
+\end{document}

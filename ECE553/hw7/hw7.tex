@@ -1,0 +1,202 @@
+\documentclass[11pt]{report}
+% this template is originally from Roy Dong's ECE 515.
+% Edited by Dawei Sun
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{upgreek}
+\usepackage{mathtools}
+\usepackage{bbm}
+\usepackage{hyperref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+\usepackage{algorithm2e}
+\usepackage[noend]{algpseudocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx}
+
+\usepackage{listings}
+\usepackage{multicol}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+\newcommand{\reals}{\mathbb{R}}
+
+\newcommand{\T}{\intercal}
+\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{ECE 553 - Fall 2020 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{Dawei Sun (daweis2)}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Exercise 5.1}
+Suppose that $V(t,x) > \overline{V}(t,x)$ for some $t, \Delta t$, and $x$. Then, pick a small positive constant $\epsilon$ such that $\epsilon < \frac{1}{2}(V(t,x) - \overline{V}(t,x))$. By the definition of infimum, there must exist a $u_\epsilon$ and the corresponding $x_\epsilon$ on $[t, t+\Delta t]$ such that $\int_{t}^{t+\Delta t} L(s, x_\epsilon(s), u_\epsilon(s)) d s+V(t+\Delta t, x_\epsilon(t+\Delta t)) < \overline{V}(t,x)) + \epsilon$. Similarly, since $V$ is also an infimum, $u_\epsilon$ and $x_\epsilon$ can be extended to $[t+\Delta t, t_1]$ such that $J(t+\Delta t,x_\epsilon(t+\Delta t), u_\epsilon) = \int_{t+\Delta t}^{t_1} L(s, x_\epsilon(s), u_\epsilon(s)) d s < V(t+\Delta t, x_\epsilon(t+\Delta t)) + \epsilon$. Thus, $J(t,x,u_\epsilon) = \int_{t}^{t+\Delta t} L(s, x_\epsilon(s), u_\epsilon(s)) d s + J(t+\Delta t,x_\epsilon(t+\Delta t), u_\epsilon) < \overline{V}(t, x) + 2\epsilon < V(t,x)$, which contradicts the definition of $V$. Thus, $V(t,x) \leq \overline{V}(t,x)$ for all $t, \Delta t$, and $x$.
+
+\section*{Exercise 5.2}
+Since both the cost and the system are time-invariant, $V$ is independent of time. Thus, $V_t \equiv 0$. The PDE becomes
+\[
+1+V_{x_1}(x)x_2 - \left|V_{x_2}(x)\right| = 0
+\]
+with boundary condition
+\[
+V(0) = 0.
+\]
+I don't know how to solve this PDE directly. However, according to the results we obtained in Section~{4.4.1}, the value function is
+\[
+V(x) = \left\{\begin{array}{ll}
+x_{2}+\sqrt{4 x_{1}+2 x_{2}^{2}} & \text { if } x_{1}>-\frac{1}{2} x_{2}\left|x_{2}\right| \\
+-x_{2}+\sqrt{-4 x_{1}+2 x_{2}^{2}} & \text { if } x_{1}<-\frac{1}{2} x_{2}\left|x_{2}\right| \\
+\left|x_{2}\right| & \text { if } x_{1}=-\frac{1}{2} x_{2}\left|x_{2}\right|
+\end{array}\right.
+\]
+It is easy to verify that this solves the PDE.
+
+\section*{Exercise 5.3}
+For a state trajectory $x$ starting from $x_0$ and corresponding to an arbitrary control input $u$, we have that 
+\[
+-\hat{V}_{t}(t, x(t)) \leq L(t, x(t), u(t))+\left\langle\hat{V}_{x}(t, x(t)), f(t, x(t), u(t))\right\rangle
+\]
+or
+\[
+0 \leq L(t, x(t), u(t))+\frac{d}{dt}\hat{V}_{t}(t, x(t)).
+\]
+Integrating over $[t_0, t_1]$, we obtain
+\[
+\hat{V}(t_0, x_0) \leq J(t_0, x_0, u),
+\]
+which means that for all $u$, we have that $J(t_0, u_0, \hat{u}) \leq J(t_0, x_0, u)$. Thus, $\hat{u}$ is an optimal control.
+
+\section*{Exercise 5.4}
+Sufficient condition: {\em
+Suppose that a $\mathcal{C}^{1}$ function $V: \mathbb{R}^{n} \rightarrow \mathbb{R}$ satisfies the HJB equation
+$$
+0 = \inf_{u \in U}\left\{L(x, u)+\left\langle\hat{V}_{x}(x), f(x, u)\right\rangle\right\}
+$$
+(for all $x \in \mathbb{R}^{n}$ ) and the following boundary condition: For any state trajectory $x$ and the corresponding control input $u$, if $J(t_0, x(t_0), u)$ is finite, then
+$$
+\lim_{t \to 0}\widehat{V}\left(x(t)\right) = 0.
+$$
+
+Suppose that a control $\hat{u}:\left[t_{0}, \infty\right] \rightarrow U$ and the corresponding trajectory $\hat{x}:\left[t_{0}, \infty\right] \rightarrow \mathbb{R}^{n},$ with the given initial condition $\hat{x}\left(t_{0}\right)=x_{0},$ satisfy everywhere the equation
+$$
+L(\hat{x}(t), \hat{u}(t))+\left\langle\hat{V}_{x}(\hat{x}(t)), f(\hat{x}(t), \hat{u}(t))\right\rangle=\min _{u \in U}\left\{L(\hat{x}(t), u)+\left\langle\widehat{V}_{x}(\hat{x}(t)), f(\hat{x}(t), u)\right\rangle\right\}.
+$$
+
+Then $\widehat{V}(x_0)$ is the optimal cost (i.e., $\widehat{V}(x_0) = V(x_0)$ where $V$ is the value function) and $\hat{u}$ is an optimal control.
+}
+\begin{proof}
+We know that along $\hat{x}$, the infimum is a minimum, thus
+\[
+0 = L(\hat{x}(t), \hat{u}(t))+\left\langle\hat{V}_{x}(\hat{x}(t)), f(\hat{x}(t), \hat{u}(t))\right\rangle
+\]
+for all $t \in [t_0, \infty)$.
+Integrating over $[t_0, t_1]$, we obtain
+\[
+\hat{V}(x_0) = \int_{t_0}^{t_1} L(\hat{x}(t), \hat{u}(t)) + \hat{V}(\hat{x}(t_1)).
+\]
+Let $t_1 \to \infty$, we have that $\hat{V}(x_0) = \int_{t_0}^{\infty} L(\hat{x}(t), \hat{u}(t)) = J(t_0, x_0, \hat{u})$.
+
+On the other hand, for a state trajectory $x$ corresponding to an arbitrary control input $u$, we have that
+\[
+0 \leq L({x}(t), {u}(t))+\left\langle\hat{V}_{x}({x}(t)), f({x}(t), {u}(t))\right\rangle
+\]
+for all $t \in [t_0, \infty)$. We only have to consider the cases where the running cost is finite. Then, according to our assumption on the boundary condition, we know that $\lim_{t \to 0}\widehat{V}\left(x(t)\right) = 0$. Integrating over $[t_0, t_1]$, we obtain
+\[
+\hat{V}(x_0) \leq \int_{t_0}^{t_1} L({x}(t), {u}(t)) + \hat{V}({x}(t_1)).
+\]
+Let $t \to \infty$, we have that $\hat{V}(x_0) \leq \int_{t_0}^{\infty} L({x}(t), {u}(t)) = J(t_0, x_0, {u})$. Thus, $\hat{u}$ is an optimal control.
+\end{proof}
+
+\section*{Exercise 5.5}
+By definition of $p^*$, we have that
+\[
+\dot{p}^* = -\frac{d}{dt}V_x(t, x^*(t)) = -V_{xt}(t, x^*(t)) - V_{xx}(t, x^*(t))^\T f(x^*(t), u^*(t)).
+\]
+By Eq.~{5.28}, we have that
+\[
+-V_{xt}(t, x^*(t)) = -V_{tx}(t, x^*(t)) = L_x(x^*(t), u^*(t)) + V_{xx}(t, x^*(t))^\T f(x^*(t), u^*(t)) + f(x^*(t), u^*(t))^\T V_{x}(t, x^*(t)).
+\]
+Thus,
+\[
+\dot{p}^* = L_x(x^*(t), u^*(t)) + f(x^*(t), u^*(t))^\T V_{x}(t, x^*(t)) = L_x(x^*(t), u^*(t)) - f(x^*(t), u^*(t))^\T p^* = -H_x|_*.
+\]
+
+\section*{Exercise 5.6}
+Consider a continuous function $g(x) = \begin{cases}
+      x \sin \frac{1}{x}, & \text{if}~x \neq 0\\
+      0, & \text{if}~x = 0\\
+    \end{cases}$. It is clear that $g$ is continuous at $0$ and hence everywhere. However, both $D^+ g(0)$ and $D^- g(0)$ are empty. Intuitively, for an arbitrary $\epsilon > 0$, $g$ takes both positive and negative values on $(0, \epsilon)$, and it is impossible to find a line passing the origin such that in a neighborhood around the origin $g$ is above or below the line.
+
+\section*{Exercise 5.7}
+Fix an arbitrary pair $\left(t_{0}, x_{0}\right)$. We need to show that for every $\mathcal{C}^{1}$ test function $\varphi=\varphi(t, x)$ such that $\varphi-V$ attains a local maximum at $\left(t_{0}, x_{0}\right),$ the inequality
+$$
+-\varphi_{t}\left(t_{0}, x_{0}\right)-\inf _{u \in U}\left\{L\left(t_{0}, x_{0}, u\right)+\left\langle\varphi_{x}\left(t_{0}, x_{0}\right), f\left(t_{0}, x_{0}, u\right)\right\rangle\right\} \geq 0
+$$
+must be satisfied. Suppose that, on the contrary, there exist a $C^{1}$ function $\varphi$ such that
+\begin{equation}
+\varphi\left(t_{0}, x_{0}\right)=V\left(t_{0}, x_{0}\right), \quad \varphi(t, x) \geq V(t, x) \quad \forall(t, x) \text { near }\left(t_{0}, x_{0}\right)
+\label{eq:local_maximum}
+\end{equation}
+and there exists $\epsilon > 0$ such that for all control value $u_{0} \in U$,
+\begin{equation}
+-\varphi_{t}\left(t_{0}, x_{0}\right) + \epsilon - L\left(t_{0}, x_{0}, u_{0}\right)-\left\langle\varphi_{x}\left(t_{0}, x_{0}\right), f\left(t_{0}, x_{0}, u_{0}\right)\right\rangle < 0
+\label{eq:contrary_assumption}
+\end{equation}
+Taking $\left(t_{0}, x_{0}\right)$ as the initial condition, let us consider the state trajectory $x(\cdot)$ that results from applying an arbitrary control $u$ on a small time interval $\left[t_{0}, t_{0}+\Delta t\right]$. We will now demonstrate that the rate of change of the value function along this trajectory is inconsistent with the principle of optimality. As long as we pick $\Delta t$ to be sufficiently small, we have
+$$
+\begin{aligned}
+& V\left(t_{0}+\Delta t, x\left(t_{0}+\Delta t\right)\right)-V\left(t_{0}, x_{0}\right) - \epsilon \Delta t \geq \varphi\left(t_{0}+\Delta t, x\left(t_{0}+\Delta t\right)\right)-\varphi\left(t_{0}, x_{0}\right) - \epsilon \Delta t\\
+= & \int_{t_{0}}^{t_{0}+\Delta t} \frac{d}{d t} \varphi(t, x(t)) d t - \epsilon  \Delta t =\int_{t_{0}}^{t_{0}+\Delta t}\left(\varphi_{t}(t, x(t))+\left\langle\varphi_{x}(t, x(t)), f\left(t, x(t), u(t)\right)\right\rangle - \epsilon \right) d t\\ > & -\int_{t_{0}}^{t_{0}+\Delta t} L\left(t, x(t), u_{0}\right) d t,
+\end{aligned}
+$$
+where the first inequality is a direct consequence of Eq.~\eqref{eq:local_maximum} and the last inequality follows from Eq.~\eqref{eq:contrary_assumption} by virtue of continuity of all the functions appearing there. We thus obtain
+$$
+V\left(t_{0}, x_{0}\right) + \epsilon \Delta t < \int_{t_{0}}^{t_{0}+\Delta t} L\left(t, x(t), u(t)\right) d t+V\left(t_{0}+\Delta t, x\left(t_{0}+\Delta t\right)\right)
+$$
+for arbitrary control input $u$.
+On the other hand, the principle of optimality (5.4) tells us that
+$$
+V\left(t_{0}, x_{0}\right) = \inf_{u[t_0, t_0+\Delta t]}\left(\int_{t_{0}}^{t_{0}+\Delta t} L\left(t, x(t), u(t)\right) d t+V\left(t_{0}+\Delta t, x\left(t_{0}+\Delta t\right)\right)\right)
+$$
+and we arrive at a contradiction. In other words, due to the margin $\epsilon \Delta t$, we can find a tighter value function $V$.
+% Provided that optimal controls exist, here is a slightly different way to see why (5.41) cannot be true: it would imply that the optimal cost-to-go from $\left(t_{0}, x_{0}\right)$ is higher than the cost of applying the constant control $u \equiv u_{0}$ on $\left[t_{0}, t_{0}+\Delta t\right]$ followed by an optimal control on the remaining interval $\left(t_{0}+\Delta t, t_{1}\right],$ which is clearly impossible.
+
+\section*{Exercise 5.8}
+Sufficient condition: {\em
+Suppose that a control $\hat{u}:\left[t_{0}, t_{1}\right] \rightarrow U,$ the corresponding trajectory $\hat{x}:\left[t_{0}, t_{1}\right] \rightarrow \mathbb{R}^{n}$ with $\hat{x}\left(t_{0}\right)=x_{0},$ and a function $\hat{V}:\left[t_{0}, t_{1}\right] \times \mathbb{R}^{n} \rightarrow \mathbb{R}$ are such that $\hat{V}\left(t_{0}, x_{0}\right)=J\left(t_{0}, x_{0}, \hat{u}\right)$ with $J$ as
+in $(5.1),$ i.e., $\hat{V}\left(t_{0}, x_{0}\right)$ is the cost corresponding to the control $\hat{u}$. Suppose that $\hat{V}$ is a viscosity solution of the HJB equation (5.20) and satisfies the boundary condition (5.21). Then $\hat{V}\left(t_{0}, x_{0}\right)$ is the optimal cost and $\hat{u}$ is an optimal control.
+}
+\begin{proof}
+Obviously, the true value function $V$ is a viscosity solution of the HJB equation. By the uniqueness of the viscosity solution of the HJB equation, we know $\hat{V}$ is exactly $V$. Then, by the definition of the value function, we know that $\hat{V}\left(t_{0}, x_{0}\right)$ is the optimal cost and $\hat{u}$ is an optimal control.
+\end{proof}
+\end{document}

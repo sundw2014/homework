@@ -1,0 +1,86 @@
+\documentclass[11pt]{report}
+% this template is originally from Roy Dong's ECE 515.
+% Edited by Dawei Sun
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{upgreek}
+\usepackage{mathtools}
+\usepackage{bbm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+\usepackage{algorithm2e}
+\usepackage[noend]{algpseudocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx}
+
+\usepackage{listings}
+\usepackage{multicol}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+\newcommand{\reals}{\mathbb{R}}
+
+\newcommand{\T}{\intercal}
+\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{ECE 553 - Fall 2020 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{red}{Dawei Sun (daweis2)}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Exercise 4.12}
+According to the maximum condition, $\langle B^T p^*(t), u^*(t)\rangle = \max_{u \in U}\langle B^T p^*(t), u\rangle$. Since $U$ is the unit ball, we have
+\[
+u^*(t) = \begin{cases} \frac{B^T p^*(t)}{\|B^T p^*(t)\|} & \mbox{if } \|B^T p^*(t)\| \neq 0,\\ ? & \mbox{otherwise}.\end{cases}
+\]
+Furthermore, we have $B^T p^*(t) = B^T e^{A^T(t^*-t)} p^*(t^*)$. Next we show that it is not possible that $\|B^T p^*(t)\| \equiv 0$ on an interval of time. If $\|B^T p^*(t)\| = p^*^T(t^*) e^{A(t^*-t)} B B^T e^{A^T(t^*-t)} p^*(t^*) \equiv 0$ on interval $[t_1, t_2]$, then $p^*^T(t^*) \int_{t_1}^{t_2} e^{A(t^*-t)} B B^T e^{A^T(t^*-t)} dt p^*(t^*) = 0$. Since $p^*^T(t^*) \neq 0$, we must have that the controllability Gramian $\int_{t_1}^{t_2} e^{A(t^*-t)} B B^T e^{A^T(t^*-t)} dt$ is singular, which contradicts the fact that $A, B$ is controllable. Thus, $u^*(t)$ is always a point on the boundary of the unit ball.
+
+\section*{Exercise 4.13}
+\begin{align*}
+\dot{\upvarphi}_i = & \langle \dot{p}^*, g_i \rangle + \langle p^*, \frac{\partial g_i}{\partial x}(f + Gu) \rangle\\
+= & - \langle f_x^T p^*, g_i \rangle - \sum_j \langle \frac{\partial g_j}{\partial x}^T p^* u_j, g_i \rangle\\
+& + \langle p^*, \frac{\partial g_i}{\partial x}f\rangle + \sum_j \langle p^*,  \frac{\partial g_i}{\partial x} g_j u_j\rangle\\
+= & \langle p^*, [f,g](x^*(t)) \rangle + \langle p^*, [\sum_j g_j,g_i](x^*(t)) \rangle
+\end{align*}
+
+\section*{Exercise 4.14}
+Assume that $\langle p^*, (ad~f)^{i-1}(g)(x^*(t)) \rangle \equiv 0$, $i=1,2,\ldots,k$ and now we want to check if $\langle p^*, (ad~f)^k(g)(x^*(t)) \rangle \equiv 0$. Let $h := (ad~f)^k(g)(x^*(t))$, and we have that
+\[
+\frac{d}{dt}\langle p^*, (ad~f)^k(g)(x^*(t)) \rangle = \langle p^*, (ad~f)^{k+1}(g)(x^*(t)) \rangle + \langle p^*, [g,(ad~f)^k(g)](x^*(t))u^*\rangle.
+\]
+A singular optimal control must make this derivative vanish. Thus, the control $u^* = -\frac{\langle p^*, (ad~f)^{k+1}(g)(x^*(t)) \rangle}{\langle p^*, [g,(ad~f)^k(g)](x^*(t))}$ can potentially be singular given that $\langle p^*, (ad~f)^{i-1}(g)(x^*(t)) \rangle \equiv 0$, $i=1,2,\ldots,k$. In order to check if $u^*$ satisfies the constraints $\|u\| \leq 1$, let $[g, (ad~f)^{k}(g)](x) = \sum_{i=0}^{k+1}\alpha_i(x) (ad~f)^{i}(g)(x^*(t))$. If it turns out that $|\alpha_{k+1}(x)| < 1$ for all $x$, then we have to continue this process and check whether $\langle p^*, (ad~f)^{k+1}(g)(x^*(t)) \rangle \equiv 0$.
+
+\section*{Exercise 4.15}
+\section*{Exercise 4.16}
+For any given time $t_f$, let the control be a square wave with switching frequency $f$. Then, as $f$ goes to $\infty$, $x_2(t_f)$ goes to $0$. Intuitively, if we switch the control between $\pm 1$ fast enough, we can ``keep" $x$ at the origin. However, although we can be arbitrarily close to the origin, we cannot reach it. Thus, the reachable set is not closed. If we convexify the control domain to $[-1,1]$, we can just let $u \equiv 0$, and then $x$ stays at the origin. In this case, according to Filippov’s theorem, the reachable sets are compact.
+\end{document}
