@@ -97,9 +97,56 @@ J(u) = & \int_{t_0}^{t_1} \left(x^\T(t) Q(t) x(t) + u^\T(t) R(t) u(t)\right) d t
 Obviously, the unique global minimizer is $u^*(t) = - R^{-1}(t)B^\T(t)P(t)x(t)$.
 
 \section*{Exercise 6.4}
-In this case, $A = \begin{bmatrix}0 & 1\\ 0 & 0\end{bmatrix}$, $B = \begin{bmatrix}0\\1\end{bmatrix}$, $Q = I$, and $R = 1$. Solve the ARE, and we get $P = \begin{bmatrix}\sqrt{3} & 1\\ 1 & \sqrt{3}\end{bmatrix}.$
+In this case, $A = \begin{bmatrix}0 & 1\\ 0 & 0\end{bmatrix}$, $B = \begin{bmatrix}0\\1\end{bmatrix}$, $Q = I$, and $R = 1$. Solve the ARE, and we get $P = \begin{bmatrix}\sqrt{3} & 1\\ 1 & \sqrt{3}\end{bmatrix}$.
 
-Furthermore, the Hamiltonian matrix $\mathcal{H}(t) = \begin{bmatrix}0 & 1 & 0 & 0\\ 0 & 0 & 0 & \frac{1}{2}\\ 2 & 0 & 0 & 0 \\0 & 2 & -1 & 0\end{bmatrix}$
+\noindent Furthermore, the Hamiltonian matrix $\mathcal{H}(t) = \begin{bmatrix}0 & 1 & 0 & 0\\ 0 & 0 & 0 & \frac{1}{2}\\ 2 & 0 & 0 & 0 \\0 & 2 & -1 & 0\end{bmatrix}$. Using the results in Exercise 6.1, we have that $P(t) = -\frac{1}{2}Y(t)X^{-1}(t)$, where $X$ and $Y$ satisfy
+\[
+\begin{bmatrix}\dot{X}\\\dot{Y}\end{bmatrix} = \mathcal{H}\begin{bmatrix}X\\Y\end{bmatrix},~X(t_1) = I, Y(t_1) = -2M.
+\]
+Moreover, solve this ODE, and we get
+\[
+\begin{bmatrix}X(t)\\Y(t)\end{bmatrix} = e^{\mathcal{H}(t-t_1)} \begin{bmatrix}I\\-2M\end{bmatrix}.
+\]
+The Hamiltonian matrix $\mathcal{H}$ is diagonalizable:
+\[
+\mathcal{H} = \begin{bmatrix}P_{11} & P_{12}\\P_{21} & P_{22}\end{bmatrix} \begin{bmatrix}\lambda_1 & 0 & 0 & 0\\ 0 & \lambda_2 & 0 & 0\\ 0 & 0 & \lambda_3 & 0\\0 & 0 & 0 & \lambda_4\end{bmatrix} \begin{bmatrix}\tilde{P}_{11} & \tilde{P}_{12}\\\tilde{P}_{21} & \tilde{P}_{22}\end{bmatrix},
+\]
+where $Re(\lambda_1) = Re(\lambda_2) = -Re(\lambda_3) = -Re(\lambda_4) > 0$.
+For large $t_1$, we have that
+\begin{align*}
+e^{\mathcal{H}(t-t_1)} = & \begin{bmatrix}P_{11} & P_{12}\\P_{21} & P_{22}\end{bmatrix} \begin{bmatrix}e^{\lambda_1(t-t_1)} & 0 & 0 & 0\\ 0 & e^{\lambda_2(t-t_1)} & 0 & 0\\ 0 & 0 & e^{\lambda_3(t-t_1)} & 0\\0 & 0 & 0 & e^{\lambda_4(t-t_1)}\end{bmatrix} \begin{bmatrix}\tilde{P}_{11} & \tilde{P}_{12}\\\tilde{P}_{21} & \tilde{P}_{22}\end{bmatrix}\\ \approx & \begin{bmatrix}P_{11} & P_{12}\\P_{21} & P_{22}\end{bmatrix} \begin{bmatrix}0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & e^{\lambda_3(t-t_1)} & 0\\0 & 0 & 0 & e^{\lambda_4(t-t_1)}\end{bmatrix} \begin{bmatrix}\tilde{P}_{11} & \tilde{P}_{12}\\\tilde{P}_{21} & \tilde{P}_{22}\end{bmatrix}.
+\end{align*}
+Let $\Lambda = \begin{bmatrix}e^{\lambda_3(t-t_1)} & 0\\0 & e^{\lambda_4(t-t_1)}\end{bmatrix}$. Then, we have that
+\[
+\begin{bmatrix}X(t)\\Y(t)\end{bmatrix} \approx \begin{bmatrix}P_{12}\Lambda\tilde{P}_{21} & P_{12}\Lambda\tilde{P}_{22}\\P_{22}\Lambda\tilde{P}_{21} & P_{22}\Lambda\tilde{P}_{22}\end{bmatrix} \begin{bmatrix}I\\-2M\end{bmatrix} = \begin{bmatrix}P_{12}(\Lambda\tilde{P}_{21}-2P_{12}\Lambda\tilde{P}_{22}M)\\P_{22}(\Lambda\tilde{P}_{21}-2P_{12}\Lambda\tilde{P}_{22}M)\end{bmatrix}.
+\]
+Thus, $P(t) = -\frac{1}{2}Y(t)X^{-1}(t) = -\frac{1}{2}P_{22}P_{12}^{-1} = \begin{bmatrix}\sqrt{3} & 1\\ 1 & \sqrt{3}\end{bmatrix}$, which is independent of $M$.
+
+\section*{Exercise 6.5}
+All the claims except $P \succ 0$ hold. There are three steps in the proof where controllability or observability is used.
+
+\paragraph{Boundedness of the optimal cost. (p. 154)} Stablizability guarantees that there exists $K$ such that all the eigenvalues of the closed-loop dynamics $(A+BK)$ have negative real parts. Controlled by the controller $u = Kx$, $x^\T(t)x(t) \to 0$. Since $0 \leq x^\T(t)Qx(t) + u^\T(t)Ru(t) = x^\T(t)(Q+K^\T K)x(t) \leq \|Q+K^\T K\|_2 x^\T(t)x(t)$, the running cost also converges to $0$ exponentially, and thus $J(u)$ is bounded. Optimal cost is smaller than $J(u)$ and hence also bounded.
+
+\paragraph{Closed-loop stability. (p. 157)} It is also true that if the output and the input of a detectable linear time-invariant system converge to $0$, then so does the state. One way to see this is as follows:
+by detectability, there exists a matrix $L$ such that $(A - LC)$ has eigenvalues with negative real parts; rewriting the system dynamics as $\dot{x} = (A - LC)x + Ly + Bu$, it is easy to show that $x \to 0$ when $y, u \to 0$.
+
+\paragraph{$P \succ 0$. (p. 158)} We know that the derivatives of the output at $t=0$ are
+\[
+\left[\begin{array}{c}
+\mathbf{y}\left(t_{0}\right) \\
+\dot{\mathbf{y}}\left(t_{0}\right) \\
+\ddot{\mathbf{y}}\left(t_{0}\right) \\
+\vdots \\
+\mathbf{y}^{(n-1)}\left(t_{0}\right)
+\end{array}\right]^{(n p) \times 1}=\left[\begin{array}{c}
+\mathbf{C} \\
+\mathbf{C A} \\
+\mathbf{C A}^{2} \\
+\vdots \\
+\mathbf{C A}^{n-1}
+\end{array}\right]^{(n p) \times n} \quad \times \mathbf{x}\left(t_{0}\right)=\mathcal{O} \mathbf{x}\left(t_{0}\right).
+\]
+Since $\mathcal{O}$ is not full-rank, there exists $x(t_0)$ such that $y(t) = Cx(t) \equiv 0$. Starting from such a $x(t_0)$ and setting $u \equiv 0$, we have that $y(t) \equiv 0$ and $J(u) = 0$ which is clearly the optimal cost. Thus, the correct claim is that ``$P$ is the unique symmetric positive semi-definite solution of the ARE".
 
 \section*{Exercise 6.6}
 The ARE is $-\frac{b^2}{r}p^2 + 2ap + q = 0$. Solve it, and we get $\frac{p}{r} = \frac{a + \sqrt{a^2+\frac{qb^2}{r}}}{b^2}$. The eigenvalue of the closed-loop system is $\lambda = a - b^2\frac{p}{r}$. Thus, when $r \to 0$, $\lambda \to -\infty$. When $r \to \infty$, $\lambda \to -a$.
