@@ -1,0 +1,261 @@
+\documentclass[12pt]{article}
+% this template is originally from Roy Dong's ECE 515.
+% Edited by Dawei Sun
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1.5 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{upgreek}
+\usepackage{mathtools}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+\usepackage[ruled,vlined]{algorithm2e}
+% \usepackage{algorithm2e}
+\usepackage[noend]{algpseudocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{float}
+
+\usepackage{listings}
+\usepackage{multicol}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{float}
+
+\usepackage{hyperref}
+\hypersetup{
+	pdftitle={},
+	pdfauthor={Dawei Sun},
+	colorlinks=true,
+	citecolor={blue},
+	linkcolor = {blue},
+	pagecolor={blue},
+	backref={true},
+	bookmarks=true,
+	bookmarksopen=false,
+	bookmarksnumbered=true
+}
+\usepackage{upgreek}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{upgreek}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{paralist}
+
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+
+\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+
+\newcommand{\T}{\intercal}
+\newcommand{\dx}{\delta_x}
+\newcommand{\ddx}{\dot{\delta}_x}
+\usepackage{scalerel,stackengine}
+\stackMath
+\newcommand\reallywidehat[1]{%
+\savestack{\tmpbox}{\stretchto{%
+  \scaleto{%
+    \scalerel*[\widthof{\ensuremath{#1}}]{\kern-.6pt\bigwedge\kern-.6pt}%
+    {\rule[-\textheight/2]{1ex}{\textheight}}%WIDTH-LIMITED BIG WEDGE
+  }{\textheight}% 
+}{0.5ex}}%
+\stackon[1pt]{#1}{\tmpbox}%
+}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{problem}[theorem]{Problem}
+
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\U}{\mathcal{U}}
+\newcommand{\rp}{\reals^{\geq 0}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{ECE557 - Spring 2021 at UIUC}
+\rhead{\textcolor{red}{Dawei Sun (daweis2)}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Contraction Theory and its Application in Control Synthesis}
+\date{}
+\begin{document}
+
+\maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction and background}
+Lyapunov's theory has been widely used to study the stability of a system around an equilibrium point. However, in practice, convergence or stability around a fixed equilibrium point sometimes might be too strong when designing a controller. For example, we may instead want to know if starting from any initial condition, the trajectory of the system will converge to a common trajectory but not a single point. Such a property is crucial in the design of tracking controllers that can track reference trajectories. Contraction theory~\cite{lohmiller1998contraction} is a tool that could be used to study the existence of such a property, which can be seen as a differential version of Lyapunov's theory. In this report, we will review several results in contraction theory and discuss several interesting research directions.
+
+\paragraph{Notations} We denote by $\reals$ and $\rp$ the set of real and non-negative real numbers respectively. For a symmetric matrix $A \in \reals^{n\times n}$, the notation $A \succeq 0$ ($A \preceq 0$) means $A$ is positive (negative) semi-definite. The set of positive definite $n \times n$ matrices is denoted by $S_n^{>0}$. For a matrix-valued function $M(x):\reals^n \mapsto \reals^{n \times n}$, its directional derivative along a vector $v \in \reals^{n}$ is $\partial_v M := \sum_{i} v_i \frac{\partial M}{\partial x_i}$. Unless otherwise stated, $x_i$ denotes the $i$-th element of vector $x$. For $A \in \reals^{n \times n}$, we denote $A + A^\T$ by $\hat{A}$. We denote the distance between two points $x$ and $y$ on a Riemannian manifold by $d(x,y)$, which is the length of the geodesic. We denote the length of a curve $c$ by $L(c)$. For a function $f(x,y)$, $f_x := \frac{\partial f}{\partial x}$ denotes the derivative with respect to $x$. For a function $f$, $\dot{f} := \frac{df}{dt}$ is the total derivative of $f$ with respect to time.
+
+\newcommand{\Ta}{\mathcal{T}}
+\section{Contraction analysis}
+Contraction theory~\cite{lohmiller1998contraction} analyzes the convergence of a dynamical system by examining the change of the distance between two arbitrarily close trajectories. Consider a time varying vector field $f$ defined on the state space $\X \subseteq \reals^n$ and also the following dynamical system where $x \in \X$,
+\begin{equation}
+\dot{x} = f(x(t), t).
+\label{eq:dyn_auto}
+\end{equation}
+
+Consider a solution trajectory $x: \reals \mapsto \X$. Let the {\it virtual displacement} $\dx(t)$ be an infinitesimal displacement such that for all $t \in \reals$, $\dx(t) \in \Ta_{x(t)} \X$. Assume that $x + \dx$ is also a valid solution of Eq.~\eqref{eq:dyn_auto}. Then, we have that $\frac{d}{dt}(x + \dx) = f(x+\dx) = f(x) + \frac{\partial f}{\partial x} \dx + o(\dx)$. Thus, we have that
+\begin{equation}
+\ddx = \frac{\partial f}{\partial x} \dx.
+\label{eq:dyn_auto_vir}
+\end{equation}
+
+If the symmetric part of the Jacobian $\frac{\partial f}{\partial x}$ is uniformly negative definite, i.e., there exists a constant $\lambda > 0$ such that for all $x$, $\frac{1}{2}\reallywidehat{\frac{\partial f}{\partial x}} \preceq -\lambda \mathbf{I}$, then $\dx^\T \dx$ converges to zero exponentially at rate $\lambda$. This indeed implies that all the trajectories of this system converge to a ``common" one. Intuitively, given a pair of trajectories $x_1$ and $x_2$ (not necessarily close to each other), we can find a parametric curve $c: [0,1] \times \reals \mapsto \X$ on the manifold such that $c(0,t) = x_1(t)$ and $c(1,t) = x_2(t)$ for all $t$. For each $t$, the length of the curve $c(\cdot, t)$ is a integral of some $\dx^\T \dx$ and thus also converges to $0$ as $t$ goes to infinity. Such a system is referred to be {\it contracting}.
+
+However, the assumption that $\frac{\partial f}{\partial x}$ is uniformly negative definite is strong. It can be loosened by introducing a \textit{contraction metric} $M : \X \mapsto S_n^{>0}$, which is a smooth function. Then, $\dx^\T M(x) \dx$ can be interpreted as a Riemannian squared length. Since $M(x) \succ 0$ for all $x$, if $\dx^\T M(x) \dx$ converges to $0$ exponentially, then the system is contracting. The converse is also true. As shown in \cite{lohmiller1998contraction}, if a system is contracting, then there exists a contraction metric $M$ and a constant $\lambda > 0$ such that $\frac{d}{dt}(\dx^\T M(x) \dx) < - \lambda \dx^\T M(x) \dx$ for all $(x, \dx) \in \Ta \X$ and all $t \in \reals$.
+
+The above results are formalized in the following theorem.
+\begin{theorem}
+If a contraction metric $M$ satisfies that for all $x \in \X$ and all $t \in \reals$,
+\begin{equation}
+\dot{M} + \reallywidehat{M \frac{\partial f}{\partial x}} + 2\lambda M \preceq 0,
+\label{eq:CM_con}
+\end{equation}
+and two positive scalar $\overline{m} > \underline{}{m} > 0$ satisfy that $\underline{m} \mathbf{I} \preceq M(x) \preceq \overline{m} \mathbf{I}$ for all $x \in \X$, then any two trajectories $x_1$ and $x_2$ of the system satisfy the following
+\begin{equation}
+\|x_1(t) - x_2(t)\| \leq \sqrt{\frac{\overline{m}}{\underline{m}}} e^{-\lambda t} \|x_1(0) - x_2(0)\|.
+\label{eq:CM_2norm_convergence}
+\end{equation}
+\label{thm:contraction}
+\end{theorem}
+This theorem was given in~\cite{lohmiller1998contraction} without proof. We give a rigorous proof in the following.
+
+\begin{proof}
+Consider the distance function $d(x_1(t), x_2(t))$ as a function of time. We first show that $d$ converges to $0$. Construct a parametric surface $c: [0,1] \times \reals \mapsto \X$ such that \begin{inparaenum}[(i)] \item At $t=0$, the curve $c(\cdot,0)$ is the geodesic between $x_1(0)$ and $x_2(0)$ with $c(0,0) = x_1(0)$ and $c(1,0) = x_2(0)$; \item $c(\cdot, t)$ is the forward (or backward) image of the geodesic, i.e., satisfies that for all $t \in \reals$ and all $s \in [0, 1]$,
+\begin{equation*}
+\frac{\partial}{\partial t} c(s, t) = f(c(s,t), t).
+\end{equation*}
+\end{inparaenum}
+
+Then, we have that
+\begin{equation*}
+\frac{\partial}{\partial t} c_s(s, t) = \frac{\partial}{\partial s} \left(\frac{\partial}{\partial t} c(s, t)\right) = \frac{\partial f}{\partial x}(c(s,t), t) \cdot c_s(s,t).
+\end{equation*}
+Consider the evolution of the squared length $c_s(s, t)^\T M(c(s,t)) c_s(s, t)$ as a function of time, and we have that
+\begin{align*}
+& \frac{d}{dt} \left(c_s(s, t)^\T M(c(s,t)) c_s(s, t)\right)\\
+= & c_s(s, t)^\T \left(\dot{M}(c(s,t)) + \reallywidehat{M(c(s,t)) \frac{\partial f}{\partial x}(c(s,t), t)}\right) c_s(s, t)\\
+\leq & -2\lambda c_s(s, t)^\T M(c(s,t)) c_s(s, t),
+\end{align*}
+where the inequality follows from Eq.~\eqref{eq:CM_con}. By comparison lemma, for all $t \in \reals$ and $s \in [0, 1]$,
+\begin{align*}
+c_s(s, t)^\T M(c(s,t)) c_s(s, t) \leq e^{-2\lambda t} c_s(s, 0)^\T M(c(s, 0)) c_s(s, 0).
+\end{align*}
+By the definition of geodesics, the distance between $x_1(t)$ and $x_2(t)$ satisfies
+\newcommand{\s}{\mathtt{s}}
+\begin{align}
+& d(x_1(t), x_2(t)) \leq L(c(\cdot, t))\\
+= & \int_{0}^{1} \sqrt{c_s(\s, t)^\T M(c(\s,t)) c_s(\s, t)} d\s\\
+\leq & e^{-\lambda t} \int_{0}^{1} \sqrt{c_s(\s, 0)^\T M(c(\s, 0)) c_s(\s, 0)} d\s = e^{-\lambda t} d(x_1(0), x_2(0)).
+\label{eq:CM_d_convergence}
+\end{align}
+By assumption, the metric $M$ is uniformly bounded. Hence, we have the following relations between the Riemannian distance and the Euclidean distance: $\sqrt{\underline{m}} \|x_1(t) - x_2(t)\| \leq d(x_1(t), x_2(t)) \leq \sqrt{\overline{m}}\|x_1(t) - x_2(t)\|$. This follows from the fact that $\sqrt{\underline{m}} \|x_1(t) - x_2(t)\| \leq L_1 \leq d(x_1(t), x_2(t)) \leq L_2 \leq \sqrt{\overline{m}}\|x_1(t) - x_2(t)\|$, where $L_1$ is the length of the original geodesic but under a new metric $\underline{M} \equiv \underline{m} \mathbf{I}$, and $L_2$ is the length of the straight line under the original metric. Combining these relations with Eq.~\eqref{eq:CM_d_convergence} yields Eq.~\eqref{eq:CM_2norm_convergence}.
+\end{proof}
+
+\section{Control contraction metric}
+Contraction theory can be further extended to control-affine systems as in~\cite{manchester2017control}. In this section, let us consider the following control-affine system
+\begin{equation}
+\dot{x} = f(x, t) + B(x) u,
+\label{eq:dyn_control}
+\end{equation}
+where $u: \reals \mapsto \reals^m$ is the control input and $B: \X \mapsto \reals^{n \times m}$ is a smooth function. Following the same process as in the last section, we can get the dynamics of the virtual displacement
+\begin{equation}
+\ddx = A(x,u,t) \dx + B(x,t) \delta_u,
+\label{eq:dyn_control_vir}
+\end{equation}
+where $A(x,u,t) := \frac{\partial f}{\partial x}(x,t) + \sum_{i=1}^{m} u_i \frac{\partial b_i}{\partial x}(x, t)$,  $b_i$ is the $i$-th column of $B$,  $u_i$ is the $i$-th element of $u$, and $\delta_u$ is an infinitesimal displacement of $u$.
+
+Now, let us consider the dynamics of the Riemannian length of the virtual displacement under metric $M$, i.e., $\dx^\T M(x) \dx$. We have that
+\begin{equation}
+\frac{d}{dt}(\dx^\T M(x) \dx) = \dx^\T \left(\dot{M} + \reallywidehat{M(A+BK)}\right) \dx,
+\end{equation}
+where $K = \frac{\partial u}{\partial x}$. Note that arguments of functions $M$, $A$, and $B$ are omitted for simplicity.
+% By Theorem~\ref{thm:contraction}, we know that if $\dot{M} + \reallywidehat{M(A+BK)} + 2\lambda M \preceq 0$, then the closed-loop system is contracting.
+An interesting question is in what conditions, there exists a feedback controller $u$ such that the system is contracting.
+
+It is hard to come up with a sufficient condition directly, but it is relatively easy to find a necessary condition. We know if the closed-loop system is contracting under metric $M$, then for all $(x, \dx) \in \Ta \X$ and all $t$, we must have that
+\[
+\frac{d}{dt}(\dx^\T M(x) \dx) \leq -2\lambda \dx^\T M(x) \dx,
+\]
+which is equivalent to
+\begin{align*}
+\dx^\T \left(\dot{M} + \reallywidehat{M(A+BK)} + 2\lambda M\right) \dx \leq 0.
+\end{align*}
+For those $\dx$ such that $\dx M B = 0$, we must have $\dx^\T \left(\dot{M} + \reallywidehat{MA} + 2\lambda M\right) \dx \leq 0$. In the next theorem, we construct a sufficient condition based one the above analysis.
+
+\begin{theorem}[Theorem in~\cite{manchester2017control}]
+If for all $x \in \X$, all $t \in \reals$, and all $u \in \reals^m$, the following is true
+\begin{equation}
+\dx^\T M B = 0 ~~~ \implies ~~~ \dx^\T \left(\dot{M} + \reallywidehat{MA} + 2\lambda M\right) \dx \leq 0,
+\label{eq:weaker_condition}
+\end{equation}
+then there exists a controller such that the closed-loop system is contracting.
+\end{theorem}
+
+Please note that the above condition is hard to verify due to the ``for all $u$" quantifier. Next, we will give a stronger condition which is control-independent. The basic idea is to eliminate $u$ from Eq.~\eqref{eq:weaker_condition}. It is clear that $\dot{M} = \partial_{f+Bu} M = \partial_f M + \sum_i u_i \partial_{b_i} M$. Thus,
+\begin{align*}
+& \dx^\T \left(\dot{M} + \reallywidehat{MA} + 2\lambda M\right) \dx\\
+= & \dx^\T \left(\partial_f M + \sum_i u_i \partial_{b_i} M + \reallywidehat{M \frac{\partial f}{\partial x}} + \sum_i u_i \left(\reallywidehat{M \frac{\partial b_i}{\partial x}}\right) + 2\lambda M\right) \dx\\
+= & \dx^\T \left(\partial_f M + \reallywidehat{M \frac{\partial f}{\partial x}} + 2\lambda M\right) \dx + \sum_i u_i \dx^\T \left( \partial_{b_i} M + \left(\reallywidehat{M \frac{\partial b_i}{\partial x}}\right)\right) \dx.
+\end{align*}
+
+Thus, the following conditions are sufficient.
+\begin{equation}
+\dx M B = 0 ~~~ \implies ~~~ \dx^\T \left(\partial_f M + \reallywidehat{M \frac{\partial f}{\partial x}} + 2\lambda M\right) \dx \leq 0,
+\end{equation}
+\begin{equation}
+\partial_{b_i} M + \left(\reallywidehat{M \frac{\partial b_i}{\partial x}}\right) = 0,~~~\forall i = 1, 2, 3, \cdots, m.
+\end{equation}
+As shown in~\cite{manchester2017control}, the above stronger conditions imply the existence of a controller in a simpler form.
+
+\section{Research directions}
+\subsection{Construction of contraction metrics}
+Although the contraction theory provides a way to find certificates and controllers to show that the system has a good behavior. However, using it in practice is still challenging. First, search for a contraction metric satisfying the above conditions entails solving Linear Matrix Inequalities (LMIs). In~\cite{aylward2008stability}, the authors proposed to solve this feasibility problem with Sum-of-Squares (SoS) programming. In~\cite{singh2019robust}, the authors extended the SoS-based method to controlled systems, i.e., search for a \textit{control} contraction metric (CCM) instead of an ordinary one, and proposed a more general method for synthesizing control given a valid CCM. However, in order to apply SoS-based methods, the dynamics of the system have to be represented by polynomials or can be approximated by polynomials. Furthermore, the method proposed in~\cite{singh2019robust} relies on an assumption on the structure of the system. Secondly, even with a given metric, computing the control input entails computation of the geodesics, which is not doable in general. The authors of~\cite{singh2019robust} resorted to the optimization-based method proposed in~\cite{leung2017nonlinear} to compute an approximation of the geodesic.
+
+Inspired by~\cite{chang2019neural} where neural networks are used to approximate a Lyapunov functions, we proposed to learn a contraction metric with a controller using neural networks. The contraction conditions can be imposed using carefully designed loss functions.
+
+\subsection{Almost contraction metrics}
+If data-driven method is used to search for a contraction metric, then it is not guaranteed that the contraction conditions are exactly satisfied. Instead, we might have a probability that the conditions are satisfied. We call such a metric an almost contraction metric, which is inspired by almost Lyapunov functions~\cite{liu2020almost}. In this case, Theorem~\ref{thm:contraction} must also be extended. The question we want to answer is as follows.
+\begin{problem}
+If a contraction metric $M$ satisfies Eq.~\eqref{eq:CM_con} for all $t \in \reals$ and almost all $x \in \X$ except $x \in \mathcal{B}$, where $\mathcal{B}$ is the bad set and its volume is bounded as $\texttt{Vol}(\mathcal{B}) \leq \epsilon$, then what convergence results can we claim about the distance between two trajectories?
+\end{problem}
+
+\section{Conclusion}
+In this report, we reviewed several results in contraction theory and their application in control synthesis. We also proposed some interesting research directions in this area, especially in the crossing area with machine learning.
+\bibliographystyle{unsrt}
+\bibliography{ref}
+\end{document}

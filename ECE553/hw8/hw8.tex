@@ -76,7 +76,7 @@ First, $P(t_1) = -\frac{1}{2}Y(t_1)X(t_1)^{-1} = M$.
 \end{align*}
 Together with fact that the boundary condition $P(t_1) = M$ is symmetric, $P(t)$ is symmetric for all $t$.
 
-(2) First, rewrite the ODE as follows
+\noindent (2) First, rewrite the ODE as follows
 \begin{align*}
 \dot{P}(t) = & - A^\T(t)P(t) - P(t)A(t) - Q(t) + P(t)B(t)R^{-1}(t)B^\T(t)P(t)\\ = & - \left(A(t) - \frac{1}{2}B(t)R^{-1}(t)B^\T(t)P(t)\right)^\T P(t) - P(t)\left(A(t) - \frac{1}{2}B(t)R^{-1}(t)B^\T(t)P(t)\right) - Q(t)\\ := &- S(t)^\T P(t) - P(t)S(t) - Q(t).
 \end{align*}
@@ -87,12 +87,12 @@ P(t) = & \Phi(t, t_1) P(t_1) \Phi(t, t_1)^\T + \int_{t_1}^t \Phi(t, \tau) (-Q(t)
 where $\Phi(t,\tau)$ is the solution of
 $$\partial_t \Phi(t, \tau) = -S(t) \Phi(t, \tau),~\Phi(\tau, \tau) = I.$$ Since $\Phi(t,\tau)$ is non-singular, and $P(t_1) = M \succeq 0$ and $Q(t) \succeq 0$, $P(t)$ must be positive semi-definite.
 
-(3) As shown in (2), if $M \succ 0$ or $Q(t) \succ 0$ on a measurable subset of $[t, t_1]$, then $P(t) \succ 0$.
+\noindent (3) As shown in (2), if $M \succ 0$ or $Q(t) \succ 0$ on a measurable subset of $[t, t_1]$, then $P(t) \succ 0$.
 
 \section*{Exercise 6.3}
 Let us rewrite the cost function such that everything outside the integral is independent of $u$. Let $P(t)$ be the solution of (6.14).
 \begin{align*}
-J(u) = & \int_{t_0}^{t_1} \left(x^\T(t) Q(t) x(t) + u^\T(t) R(t) u(t)\right) d t + x^\T(t_1)P(t_1)x(t_1) \\ = & \int_{t_0}^{t_1} \left(x^\T Q(t) x(t) + u^\T(t) R(t) u(t)\right) d t + x^\T(t_0)P(t_0)x(t_0) + \int_{t_0}^{t_1} \frac{d}{dt}\left(x^\T(t)P(t)x(t)\right) dt \\ = & \int_{t_0}^{t_1} \left(u^\T(t) R(t) u(t) + 2u^\T(t)B^\T(t)P(t)x(t) + x^\T(t)P(t)B(t)R^{-1}(t)B^\T(t)P(t)x(t)\right) d t + x^\T(t_0)P(t_0)x(t_0) \\ = & \int_{t_0}^{t_1} \left(u(t) + R^{-1}(t)B^\T(t)P(t)x(t)\right)^\TR(t)\left(u(t) + R^{-1}(t)B^\T(t)P(t)x(t)\right) d t + x^\T(t_0)P(t_0)x(t_0).
+J(u) = & \int_{t_0}^{t_1} \left(x^\T(t) Q(t) x(t) + u^\T(t) R(t) u(t)\right) d t + x^\T(t_1)P(t_1)x(t_1) \\ = & \int_{t_0}^{t_1} \left(x^\T Q(t) x(t) + u^\T(t) R(t) u(t)\right) d t + x^\T(t_0)P(t_0)x(t_0) + \int_{t_0}^{t_1} \frac{d}{dt}\left(x^\T(t)P(t)x(t)\right) dt \\ = & \int_{t_0}^{t_1} \left(u^\T(t) R(t) u(t) + 2u^\T(t)B^\T(t)P(t)x(t) + x^\T(t)P(t)B(t)R^{-1}(t)B^\T(t)P(t)x(t)\right) d t + x^\T(t_0)P(t_0)x(t_0) \\ = & \int_{t_0}^{t_1} \left(u(t) + R^{-1}(t)B^\T(t)P(t)x(t)\right)^\T R(t)\left(u(t) + R^{-1}(t)B^\T(t)P(t)x(t)\right) d t + x^\T(t_0)P(t_0)x(t_0).
 \end{align*}
 Obviously, the unique global minimizer is $u^*(t) = - R^{-1}(t)B^\T(t)P(t)x(t)$.
 
@@ -120,7 +120,7 @@ Let $\Lambda = \begin{bmatrix}e^{\lambda_3(t-t_1)} & 0\\0 & e^{\lambda_4(t-t_1)}
 \[
 \begin{bmatrix}X(t)\\Y(t)\end{bmatrix} \approx \begin{bmatrix}P_{12}\Lambda\tilde{P}_{21} & P_{12}\Lambda\tilde{P}_{22}\\P_{22}\Lambda\tilde{P}_{21} & P_{22}\Lambda\tilde{P}_{22}\end{bmatrix} \begin{bmatrix}I\\-2M\end{bmatrix} = \begin{bmatrix}P_{12}(\Lambda\tilde{P}_{21}-2P_{12}\Lambda\tilde{P}_{22}M)\\P_{22}(\Lambda\tilde{P}_{21}-2P_{12}\Lambda\tilde{P}_{22}M)\end{bmatrix}.
 \]
-Thus, $P(t) = -\frac{1}{2}Y(t)X^{-1}(t) = -\frac{1}{2}P_{22}P_{12}^{-1} = \begin{bmatrix}\sqrt{3} & 1\\ 1 & \sqrt{3}\end{bmatrix}$, which is independent of $M$.
+Thus, $P(t) \to -\frac{1}{2}Y(t)X^{-1}(t) = -\frac{1}{2}P_{22}P_{12}^{-1} = \begin{bmatrix}\sqrt{3} & 1\\ 1 & \sqrt{3}\end{bmatrix}$ as $t_1 \to \infty$, which is independent of $M$.
 
 \section*{Exercise 6.5}
 All the claims except $P \succ 0$ hold. There are three steps in the proof where controllability or observability is used.
@@ -146,8 +146,8 @@ by detectability, there exists a matrix $L$ such that $(A - LC)$ has eigenvalues
 \mathbf{C A}^{n-1}
 \end{array}\right]^{(n p) \times n} \quad \times \mathbf{x}\left(t_{0}\right)=\mathcal{O} \mathbf{x}\left(t_{0}\right).
 \]
-Since $\mathcal{O}$ is not full-rank, there exists $x(t_0)$ such that $y(t) = Cx(t) \equiv 0$. Starting from such a $x(t_0)$ and setting $u \equiv 0$, we have that $y(t) \equiv 0$ and $J(u) = 0$ which is clearly the optimal cost. Thus, the correct claim is that ``$P$ is the unique symmetric positive semi-definite solution of the ARE".
+Since $\mathcal{O}$ is not full-rank, there exists $x(t_0) \neq 0$ such that $\mathcal{O}x(t_0) = 0$. Starting from such an $x(t_0)$ and setting $u \equiv 0$, we have that $y(t) = Cx(t) = Ce^{At}x(t_0) = C\left(\sum_{i=0}^{\infty}\alpha_i A^i\right)x(t_0) \equiv 0$. Thus, $J(u) = 0$ and $u \equiv 0$ is clearly the optimal control. Thus, the correct claim is that ``$P$ is the unique symmetric positive \textbf{semi}-definite solution of the ARE". The proof of the uniqueness still holds since it is for ``the class of positive semidefinite matrices".
 
 \section*{Exercise 6.6}
-The ARE is $-\frac{b^2}{r}p^2 + 2ap + q = 0$. Solve it, and we get $\frac{p}{r} = \frac{a + \sqrt{a^2+\frac{qb^2}{r}}}{b^2}$. The eigenvalue of the closed-loop system is $\lambda = a - b^2\frac{p}{r}$. Thus, when $r \to 0$, $\lambda \to -\infty$. When $r \to \infty$, $\lambda \to -a$.
+The ARE is $-\frac{b^2}{r}p^2 + 2ap + q = 0$. Solve it, and we get $b^2\frac{p}{r} = a + \sqrt{a^2+\frac{qb^2}{r}}$. The eigenvalue of the closed-loop system is $\lambda = a - b^2\frac{p}{r}$. Thus, when $r \to 0$, $\lambda \to -\infty$. When $r \to \infty$, $\lambda \to -a$.
 \end{document}

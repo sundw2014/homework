@@ -1,0 +1,336 @@
+\documentclass[12pt]{article}
+% this template is originally from Roy Dong's ECE 515.
+% Edited by Dawei Sun
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the margins of our document.
+\usepackage[margin = 1.5 in]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import commands for custom header.
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Allow ourselves to do equations!
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{upgreek}
+\usepackage{mathtools}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nicer formatting for enumerate commands.
+\usepackage[shortlabels]{enumitem}
+
+\usepackage[ruled,vlined]{algorithm2e}
+% \usepackage{algorithm2e}
+\usepackage[noend]{algpseudocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colored text and include images.
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{float}
+
+\usepackage{listings}
+\usepackage{multicol}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some custom macros to make life easier.
+\newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbb}
+
+\newcommand{\T}{\intercal}
+\newcommand{\E}[1]{\mathbb{E}\left[#1\right]}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+
+
+\usepackage{hyperref}
+\hypersetup{
+	pdftitle={},
+	pdfauthor={Dawei Sun},
+	colorlinks=true,
+	citecolor={blue},
+	linkcolor = {blue},
+	pagecolor={blue},
+	backref={true},
+	bookmarks=true,
+	bookmarksopen=false,
+	bookmarksnumbered=true
+}
+
+%\newtheorem{problem}{Problem Statement}
+\usepackage{amssymb,amsmath}%,amsthm}
+\usepackage{subfigure}
+\newtheorem{assumption}{Assumption}
+%\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+% \newtheorem{lemma}{Lemma}
+% \newtheorem{theorem}{Theorem}
+
+% \newtheorem{proof}{Proof}
+
+% New stuff added by Sayan
+%% Some standard libraries
+\usepackage{paralist}
+\usepackage{xspace}
+
+% strike out
+\usepackage[normalem]{ulem}
+
+\newcommand{\sayan}[1]{\textcolor{blue}{#1}}
+\newcommand{\negin}[1]{\textcolor{magenta}{#1}}
+\newcommand{\geir}[1]{\textcolor{red}{#1}}
+\newcommand{\dawei}[1]{\textcolor{green}{#1}}
+
+%% Defining some Macros to be used throughout the paper
+
+
+\newcommand{\num}[1]{\relax\ifmmode \mathbb #1\else $\mathbb #1$\fi}
+\newcommand{\nnnum}[1]{\relax\ifmmode 
+  {\mathbb #1}_{\geq 0} \else ${\mathbb #1}_{\geq 0}$
+  \fi}
+\newcommand{\npnum}[1]{\relax\ifmmode 
+  {\mathbb #1}_{\leq 0} \else ${\mathbb #1}_{\leq 0}$
+  \fi}
+\newcommand{\pnum}[1]{\relax\ifmmode 
+  {\mathbb #1}_{> 0} \else ${\mathbb #1}_{> 0}$
+  \fi}
+\newcommand{\nnum}[1]{\relax\ifmmode 
+  {\mathbb #1}_{< 0} \else ${\mathbb #1}_{< 0}$
+  \fi}
+\newcommand{\plnum}[1]{\relax\ifmmode 
+  {\mathbb #1}_{+} \else ${\mathbb #1}_{+}$
+  \fi}
+\newcommand{\nenum}[1]{\relax\ifmmode 
+  {\mathbb #1}_{-} \else ${\mathbb #1}_{-}$
+  \fi}
+
+\newcommand{\bools}{{\num B}}                    %reals
+\newcommand{\reals}{{\num R}}                    %reals
+\newcommand{\nnreals}{{\nnnum R}}                    %nonnegative reals
+\newcommand{\realsinfty}{{\num R} \cup \{\infty, -\infty\}}                    %nonnegative reals
+\newcommand{\plreals}{{\plnum R}}                    %positive reals
+\newcommand{\naturals}{{\num N}}                      %natural numbers
+\newcommand{\integers}{{\num Z}}                      %integers
+\newcommand{\nnintegers}{{\nnnum Z}}    
+\newcommand{\rationals}{{\num Q}}                      %rationals
+\newcommand{\nnrationals}{{\nnnum Q}}                   % nonnegative rationals
+\newcommand{\Time}{{\num T}}  
+
+
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\Y}{\mathcal{Y}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\pack}{\mathcal{N}_{\mathit{pack}}}
+\newcommand{\phit}[3]{{p_{#1,#2}{(#3)}}}
+\newcommand{\Expectation}[1]{\mathbb{E}\left[#1\right]}
+
+\newcommand{\observ}{y}
+\newcommand{\Observ}{y}
+\newcommand{\Prob}{{\num P}}
+\newcommand{\Trans}[3]{{#1}_{{#2,#3}}}
+\newcommand{\Unsafe}{\mathcal{U}}
+\newcommand{\uthresh}{\eta}
+\newcommand{\supp}[1]{{\rm{supp}\mathit{(#1)}}}
+\newcommand{\modelname}{NiMC\xspace}
+\newcommand{\execs}[1]{{{\rm{Execs}}_{#1}}}
+\newcommand{\partition}[2]{{\mathcal{P}_{#1,#2}}}
+\newcommand{\counter}[2]{{\mathit{count}_{#1,#2}}}
+
+\newcommand{\queried}[2]{{\mathit{q}_{#1,#2}}}
+\newcommand{\batch}{{\mathit{b}}}
+
+\newcommand{\Scar}{{$\mathsf{Singlecar}$\xspace}}
+\newcommand{\SlplatoonTwo}{{$\mathsf{SLplatoon2}$\xspace}}
+\newcommand{\SlplatoonThree}{{$\mathsf{SLplatoon3}$\xspace}}
+\newcommand{\Mlplatoon}{{$\mathsf{MLplatoon}$\xspace}}
+\newcommand{\Merging}{{$\mathsf{Merging}$\xspace}}
+\newcommand{\DetectingPedestrian}{{$\mathsf{DetectBrake}$\xspace}}
+
+\newcommand{\toolname}{{{\sf HooVer}\xspace}}
+
+
+%% transition system quick description
+\usepackage{listings}
+
+\usepackage{stmaryrd}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{upgreek}
+
+\newcommand{\two}[4]{
+  \parbox{.95\columnwidth}{\vspace{1pt} \vfill
+    \parbox[t]{#1\columnwidth}{#3}%
+    \parbox[t]{#2\columnwidth}{#4}%
+  }}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lhead{CS598SM - Fall 2020 at UIUC}
+\rhead{\textcolor{red}{Dawei Sun (daweis2)}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \title{Estimate}
+
+\begin{document}
+% \maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Background and motivation}
+In this project, we try to solve the problem of estimating the smoothness of the output of a probabilistic program representing a Markov Decision Process (MDP). The basic idea is to get high-confidence estimates with hypothesis testing. This project aims to solve a problem remaining in~\cite{musavi2019verification} where optimistic optimization is applied to solve verification problems.
+
+We start by introducing basic mathematical objects needed to define our problem. Given a set $\X$, a {\em $\sigma$-algebra} is a collection $\F_\X$ of subsets of $\X$ which is closed under complementation and countable union. A {\em measurable space\/} is a pair $(\X, \F_\X)$, where $\F_\X$ is a $\sigma$-algebra over $\X$ and the elements of $\F_\X$ are referred to as {\em measurable sets}. A {\em Markovian transition kernel} on a measurable space $(\X, \F_\X)$ is  a mapping $\mathbb{P}:\X \times \F_\X \rightarrow [0, 1]$, such that \begin{inparaenum}[(i)] \item for all $x \in \X$, $\mathbb{P}(x, \cdot)$ is a probability measure on $\F_\X$; and \item for all $\mathcal{A} \in \F_\X$, $\mathbb{P}(\cdot, \mathcal{A})$ is a $\F_\X$-measurable function. \end{inparaenum}
+
+\begin{definition}
+\label{def:mpis}
+A {\em Nondeterministically initialized Markov chain (\modelname)\/} $\M$ is defined by a triplet $((\X, \F_\X), \mathbb{P}, \Theta)$, where:
+\begin{inparaenum}[(i)]
+\item $(\X, \F_\X)$ is a measurable space and $\X$ will serve as the state space;
+\item $\mathbb{P}:\X \times \F_\X \rightarrow [0, 1]$ is a Markovian {\em transition kernel}; and
+\item $\Theta \subseteq \X$ is the set of possible initial states.
+\end{inparaenum}
+\end{definition}
+
+Given a model $\M$ and a measurable unsafe set $\Unsafe \in \F_\X$, we are interested in evaluating the {\em worst case\/} probability of $\M$ hitting $\Unsafe$ over all possible nondeterministic choices of an initial state $x_0$ in $\Theta$. Once an initial state $x_0 \in \Theta$ is fixed, the probability of a set of paths is defined in the standard way. The details of the construction of the measure space over executions is not relevant for our work, and therefore, we give an abridged overview below.
+
+An {\em execution} of $\M$  of length $k$ is a sequence of states $\alpha = x_0 x_1 \cdots x_k$, where $x_0 \in \Theta$ and for all $i$, $x_i \in \X$. The $i^{\mathit{th}}$ state of an execution $\alpha$ is denoted by $\alpha_i = x_i$. We say that an execution $\alpha$ of length $k$ \emph{hits} the unsafe set $\Unsafe$ if there exists $i\in\{0,\ldots,k\}$, such that  $\alpha_i \in \Unsafe$.
+The complement of $\Unsafe$, the  {\em safe subset} of $\X$, is denoted by $\mathcal{S}$. The safe set is also a member of the $\sigma$-algebra $\F_\X$ since $\sigma$-algebras are closed under complementation. From a given initial state $x_0 \in \Theta$, the probability of $\M$ hitting $\Unsafe$ within $k$ steps is denoted by $\phit{k}{\Unsafe}{x_0}$. By definition, $\phit{k}{\Unsafe}{x_0} = 1$, if $x_0 \in \Unsafe$. For $x_0 \notin \Unsafe$ and $k \geq 1$,   
+\begin{equation}
+\label{eq:prob_int}
+\phit{k}{\Unsafe}{x_0} = 1 - \int_{S^k} \mathbb{P}(x_0, dx_1) \cdots \mathbb{P}(x_{k-1}, dx_k),
+\end{equation}
+which follows from the Ionescu Tulce{\u a} theorem~\cite{ionescu1949mesures}~\cite{petritis2012}. In~\cite{musavi2019verification}, optimistic optimization~\cite{bubeck2009online} was applied to solve the optimization problem $\arg\min_{x \in \Theta} \phit{k}{\Unsafe}{x}$. However, in order to apply the method proposed in~\cite{musavi2019verification}, some parameter describing the smoothness of $\phit{k}{\Unsafe}{x}$ must be known a priori. In~\cite{musavi2019verification}, the authors proposed using grid search to find a proper smoothness parameter.
+
+In this project, we will try to estimate the smoothness of the function $f(x) = \phit{k}{\Unsafe}{x}$ given a program representing the transition kernel $\mathbb{P}$, initial set $\Theta$, and unsafe set $\Unsafe$. A sample of such a program is shown in the next section.
+
+\subsection{A simple example}
+\label{ex:simple}
+Figure~\ref{fig:brownian} shows an MDP model specifying a particle moving randomly on the  plane.
+The initial set $\Theta \subseteq \reals^2$, specified by \texttt{set\_Theta()},  defines $\Theta = \{(x_1, x_2)~|~x_1 \in [1,2],\,x_2 \in [2,3]\}$.
+The unsafe set $\Unsafe$,  specified by the member function \texttt{is\_unsafe()}, defines $\Unsafe = \{(x_1, x_2)~|~x_1^2+x_2^2 > 4\}$. The \texttt{transition()} function describes the transition kernel $\mathbb{P}$. Given an input (pre)state $x$, \texttt{transition()} returns the post-state $x'$ of the transition by sampling  the measure $\mathbb{P}(x, \cdot)$. For this example, $x'$ is computed by adding \texttt{inc} to $x$ where \texttt{inc} is sampled from a $2$-dimensional Gaussian distribution with mean $\mu = (0, 0)$ and covariance $\Sigma = \begin{bmatrix} \sigma^2 & 0\\ 0 & \sigma^2 \end{bmatrix}$. We can write the  transition kernel explicitly by a density function: $ p(x')= \frac{1}{2\pi \sigma^2} \exp(-\frac{1}{2 \sigma^2}(x_1'-x_1)^2+(x_2'-x_2)^2)$.
+
+\begin{figure}
+	\centering
+	\hrule
+	\two{.46}{.54}
+	{\lstinputlisting[language=Python,lastline=11,basicstyle=\scriptsize]{Brownian.py}}
+	{\lstinputlisting[language=Python,firstline=11,lastline=20,firstnumber=11,basicstyle=\scriptsize]{Brownian.py}}
+	\hrule
+	\caption{\small Model description file for a simple Brownian motion model.}
+	\label{fig:brownian}
+\end{figure}
+
+\section{Smoothness of a function}
+In this section, we define the smoothness of our interests. Let the domain of the function be a compact set $\X \subset \reals^D$ and the function be $f : \X \mapsto \reals$. We say $0 < \rho < 1$ is a valid smoothness parameter if for all $x, y \in \X$, we have that $f^* - f(y) \leq f^* - f(x) + \max\{f^* - f(x), \ell(x,y)\}$, where $f^* = \inf_{x \in \X} f(x)$ and $\ell(x,y) = \|x-y\|_2^{-D\frac{\log \rho}{\log 2}}$. Since data-driven methods will be used to search for a parameter, it is hard to find a parameter such that the inequality holds for all points in $\X$. In order to evaluate the found parameter, we define the accuracy of a parameter as follows.
+\newcommand{\Unif}[1]{\texttt{Unif}\left(#1\right)}
+\newcommand{\Acc}[1]{\texttt{Acc}\left(#1\right)}
+\newcommand{\indicator}[1]{\mathbb{I}\left(#1\right)}
+
+\begin{definition}
+\label{def:acc}
+The accuracy of a parameter $\rho$ is
+\[
+\Acc{\rho} = \Pr_{x, y \stackrel{i.i.d.}{\sim} \Unif{\X}} \left(f^* - f(y) \leq f^* - f(x) + \max\{f^* - f(x), \ell(x,y)\}\right),
+\]
+where $\Unif{\X}$ is the uniform distribution over $\X$.
+\end{definition}
+
+\section{Estimate smoothness with hypothesis testing}
+Searching for a valid smoothness parameter is hard. However, it is easy to evaluate the accuracy of a given parameter. Inspired by this fact, we proposed to use hypothesis testing to search for an accurate enough parameter with some confidence.
+
+Hypothesis testing is a widely used technique in statistical model checking~\cite{agha2018survey}. It can be used to determine the extent to which observations ``conform" to a given specification. In order to get observations, we sample $x, y$ from $\X$ as in Definition~\ref{def:acc}. The observation is a binary random variable $Z = \indicator{\left(f^* - f(y) \leq f^* - f(x) + \max\{f^* - f(x), \ell(x,y)\}\right)}$, where $\indicator{\cdot}$ is the indicator function. Clearly, $\Pr(Z=1) = \Acc{\rho}$. We would like to test the hypothesis $\Acc{\rho} \geq \theta$ against the alternative hypothesis $\Acc{\rho} < \theta$, where $\theta$ is a constant specified by the user. However, as in~\cite{younes2002probabilistic}, we are forced to relax the hypotheses in order to freely be able to choose type I/II error bounds.
+
+To this end, we introduce a indifference region of width $2\delta$. The hypothesis $H_0$ is $\Acc{\rho} \geq \theta+\delta$, and the alternative hypothesis $H_1$ is $\Acc{\rho} \leq \theta-\delta$. Let the hypothesis $H_2$ be that neither $H_0$ nor $H_1$ holds. The hypothesis testing algorithm that we will be introducing accepts either $H_0$ or $H_1$ when it terminates. Along with the results, we also get some guarantees on the correctness of the results as follows.
+$$\Pr[H_0\text{ holds }|\text{ accept }H_1] \leq \alpha$$
+$$\Pr[H_1\text{ holds }\vee H_2\text{ holds }|\text{ accept }H_1] \geq 1 - \alpha$$
+$$\Pr[H_1\text{ holds }|\text{ accept }H_0] \leq \beta$$
+$$\Pr[H_0\text{ holds }\vee H_2\text{ holds }|\text{ accept }H_0] \geq 1 - \beta$$
+
+If $H_2$ holds, then we cannot claim anything. However, recall that $H_2$ represents indifference, i.e. $\Acc{\rho}$ is sufficiently close to $\theta$ that we are indifferent to whether it actually is below or above $\theta$. Together with the symmetry of the distribution, in case $H_2$ holds we interpret this to mean that $\Acc{\rho} \geq \theta$ is true if we accepted $H_0$, or false if we accepted $H_1$. With this interpretation, we obtain the desired error bounds $\Pr[\Acc{\rho} \geq \theta |\text{ accept }H_1] \leq \alpha$ and $\Pr[\Acc{\rho} < \theta |\text{ accept }H_0] \leq \beta$.
+
+Then, sequential probability ratio test is used as follows. We collect samples $z_i$ at each time step and decision may be made based on the following quantity.
+$$\frac{p_{1 m}}{p_{0 m}}=\frac{\prod_{i=1}^{m} \operatorname{Pr}\left[Z=z_{i} \mid \Acc{\rho} = \theta-\delta\right]}{\prod_{i=1}^{m} \operatorname{Pr}\left[Z=z_{i} \mid \Acc{\rho} = \theta+\delta\right]},$$
+where $z_i$ is the $i$-th observation. The algorithm accepts $H_0$ immediately if
+$$
+\frac{p_{1 m}}{p_{0 m}} \geq \frac{1-\beta}{\alpha},
+$$
+or accept $H_{1}$ if
+$$
+\frac{p_{1 m}}{p_{0 m}} \leq \frac{\beta}{1-\alpha}.
+$$
+
+\section{Putting it all together}
+\label{sec:overall}
+The overall framework is shown in Algorithm~\ref{alg:alg}. First, we initialize $\rho$ to $\rho_0$ which is relatively large, e.g., $0.99$. Then, we use hypothesis testing to test the specification ``$\Acc{\rho} \geq \theta$" with some given $\alpha$, $\beta$, and $\delta$. If it does not pass the testing (i.e., $H_1$ is accepted), we decrease $\rho$ and repeat this process. Once the algorithm returns a $\hat{\rho}$, it is guaranteed that $\Pr[\Acc{\hat{\rho}} \geq \theta] \geq 1-\beta$.
+
+\begin{algorithm}[tbph]
+\KwIn{Type I error bound $\alpha$; Type II error bound $\beta$; Indifference region width $\delta$; Initial guess $\rho_0$; Decay factor $\gamma$.}
+\SetKwFunction{Test}{Test}
+\SetKwProg{Fn}{Function}{:}{}
+\Fn{\Test{$\rho$, $\alpha$, $\beta$, $\delta$, $\theta$}}{
+    \While{not accepted}{
+        Sample $y_i$\;
+        Compute $\frac{p_{1 m}}{p_{0 m}}=\frac{\prod_{i=1}^{m} \operatorname{Pr}\left[Z=z_{i} \mid \Acc{\rho} = \theta-\delta\right]}{\prod_{i=1}^{m} \operatorname{Pr}\left[Z=z_{i} \mid \Acc{\rho} = \theta+\delta\right]}$\;
+        \If{$\frac{p_{1 m}}{p_{0 m}} \geq \frac{1-\beta}{\alpha}$}{Accept $H_0$\;}
+        \If{$\frac{p_{1 m}}{p_{0 m}} \leq \frac{\beta}{1-\alpha}$}{Accept $H_1$\;}
+    }
+}
+$\rho = \rho_0$\;
+\While{True}{
+    \Test($\rho$, $\alpha$, $\beta$, $\delta$, $\theta$)\;
+    \If{not accept $H_0$}{
+        $\rho = \gamma \rho$\;
+    }
+    \Else{
+        Return $\rho$\;
+    }
+}
+\caption{Search for smoothness parameter.}
+\label{alg:alg}
+\end{algorithm}
+
+\section{Experimental evaluation}
+We implement the proposed algorithm using Python and evaluated it on several benchmarks. Since we are dealing with black-box systems, the ground truth of the smoothness parameter is unknown. To evaluate the estimated smoothness parameter, we apply it in the black-box optimization algorithm proposed in~\cite{musavi2019verification} and use the final result (the hitting probability of the found initial state) as a metric. Please see Algorithm~1 in~\cite{musavi2019verification} for details. Moreover, we compare the results with the grid search method (Algorithm~2) in~\cite{musavi2019verification}. Details about the benchmarks can also be found in~\cite{musavi2019verification}.
+
+The results are shown in Table~\ref{tab:results}. Some observations are in order. First, our method improves the running time by a factor $\sim 4$. This is expected since the grid search method runs a instance of optimization for each of the four candidate smoothness parameters, while ours only runs a single instance for the estimated parameter. Second, use of the estimated parameter leads to some drop on the final results, but the drop is relatively small ($\sim 0.02$), which is acceptable. 
+
+\begin{table}[!htpb]
+\small 
+\centering
+\def\arraystretch{1.3}
+\setlength\tabcolsep{3pt}
+\caption{\small Comparison. Results are averaged over 10 runs.}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+{\bf Benchmark} & Brownian motion & \SlplatoonThree & \Mlplatoon & \DetectingPedestrian\\
+\hline
+{\bf Result~\cite{musavi2019verification}} & 0.450 & 0.975 & 0.989 & 0.970\\
+\hline
+{\bf Result(Ours)} & 0.439 & 0.969 & 0.980 & 0.952\\
+\hline
+{\bf Running Time~\cite{musavi2019verification}} (s) & 71 & 506 & 579 & 399\\
+\hline
+{\bf Running Time (Ours)} (s) & 19 & 135 & 159 & 113\\
+\hline
+\end{tabular}
+% \vspace{0.25cm}
+\label{tab:results}
+% \vspace{-0.3cm}
+\end{table}
+
+\section{Conclusion}
+In this project, we apply hypothesis testing to estimate the smoothness of the output of a probabilistic program. The accuracy of the estimate is guaranteed. For future work, it is necessary to discuss how to interpret the theoretical guarantee given by hypothesis testing when combining it with the black-box optimization algorithm. The regret bound derived in~\cite{musavi2019verification} should be updated accordingly.
+\bibliographystyle{unsrt}
+\bibliography{ref}
+\end{document}
