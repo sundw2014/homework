@@ -1,0 +1,69 @@
+\usepackage{url, hyperref}
+\usepackage{algorithm, algpseudocode} %
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\usepackage{amsthm, amsmath, amssymb, amsthm} %amsfonts, amsmath, bm
+\usepackage{enumerate, paralist}
+\usepackage{natbib}
+\usepackage{comment}
+\usepackage{color}
+\usepackage{multirow}
+\usepackage{xspace}
+\usepackage{rotating}
+\usepackage{graphicx}
+
+% math environments
+\theoremstyle{plain}
+\newtheorem{theorem}{\textbf{Theorem}}
+\newtheorem{lemma}[theorem]{\textbf{Lemma}}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{assumption}[definition]{Assumption}
+\newtheorem{fact}[definition]{Fact}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+
+% citation
+\renewcommand{\cite}{\citep}
+
+% writing macros
+\newcommand{\rom}[1]{\romannumeral #1}
+\newcommand{\emphb}[1]{\textbf{#1}}
+
+% math macros
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\II}{\mathbf{I}}
+\newcommand{\Cond}{~\Big\vert~}
+\newcommand{\cond}{~\big\vert~}
+\newcommand{\Expe}[1]{\mathbb{E}\Big[#1\Big]}
+\newcommand{\Ebig}[2]{\mathbb{E}_{#1}\Big[#2\Big]}
+\newcommand{\Indi}{\mathbb{I}}
+\newcommand{\holder}{\,\cdot\,}
+\newcommand{\bone}{\mathbf{1}}
+\newcommand{\maxnorm}[1]{\left\| #1 \right\|_\infty}
+\newcommand{\dotprod}[2]{\left\langle #1, #2 \right\rangle}
+\newcommand{\bzro}{\mathbf{0}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+% paper-specific macros
+\newcommand{\Fcal}{\mathcal{F}}
+\newcommand{\Gcal}{\mathcal{G}}
+\newcommand{\Scal}{\mathcal{S}}
+\newcommand{\Acal}{\mathcal{A}}
+\newcommand{\Tcal}{\mathcal{T}}
+\newcommand{\Rmin}{R_{\min}}
+\newcommand{\Rmax}{R_{\max}}
+\newcommand{\Vmax}{V_{\max}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\Xcal}{\mathcal{X}}
+\newcommand{\emp}[1]{\widehat{#1}}
+\newcommand{\Otil}{\tilde O}

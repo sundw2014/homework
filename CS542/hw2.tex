@@ -1,0 +1,105 @@
+\documentclass{article}
+\usepackage[left=2cm,top=2cm,right=2cm]{geometry}
+\usepackage{palatino}
+\usepackage{fancyhdr}
+
+\input{def}
+
+\title{CS 542 Stats RL Homework 2}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{CS 542 - Fall 2021 at University of Illinois at Urbana-Champaign}
+\rhead{\textcolor{black}{HW2}}
+\lfoot{Submitted by: \textcolor{red}{Dawei Sun \textit{(daweis2)}}}
+\rfoot{Due: \textcolor{red}{\today}}
+
+\begin{document}
+
+% \maketitle
+
+\begin{itemize}
+\item \textbf{Submission deadline: Sep.~24 before class.} Submission website: Canvas.
+\item \textbf{Your submission must be typeset with \LaTeX.} Handwritten solutions will not be accepted. The \LaTeX~source file of this homework will be provided and you can use it as a template.
+\item This homework helps you familiarize with RL basics. It is very important that you work them out and clean up any confusion in basics before we move on to more advanced topics, as we will be using these techniques through the entire course. 
+\item You can discuss with anyone and consult any material, but (1) you still need to write the homework on your own, and (2) if you get help from anyone other than the course instructors or any material other than the course notes, you will need to mention them in your homework. 
+\end{itemize}
+
+\paragraph{1. Evaluation error to decision loss}
+\paragraph{(1)}
+There are $K$ items, $1, 2, \ldots, K$. The $i$-th item has value $v_i \in \RR$. Let $v^\star := \max_{i\in[K]} v_i$, where $[K]:= \{1, 2, \ldots, K\}$, and $i^\star = \argmax_{i\in[K]} v_i$. 
+
+An agent chooses the $j$-th item, where $j = \argmax_{i\in[K]} u_i$, and $\{u_i\}_{i=1}^K$ are $K$ real numbers. Let 
+$$
+\epsilon:= \max_{i\in[K]} |u_i - v_i|.
+$$
+Upper-bound $v^\star - v_j$ as a function of $\epsilon$. Prove your result.
+
+
+\paragraph{(2)}
+If we further have $\forall i, \, u_i \le v_i$, can you improve the bound? What about $\forall i, \, u_i \ge v_i$?
+
+\paragraph{(3)}
+State and prove an upper bound of $|u_j - v^\star|$.
+
+\paragraph{Solution}
+\paragraph{(1)} $v^\star - v_j \leq 2\epsilon$.
+\begin{proof} Using the fact that $u_j \geq u_{i^\star}$, we have that\\ $v^\star - v_j \leq (v_{i^\star} - u_{i^\star}) + (u_j - v_j) \leq 2 \max_{i \in [K]} |u_i - v_i| = 2 \epsilon$.
+\end{proof}
+\paragraph{(2)} If $\forall i$, $u_i \leq v_{i}$, we have that $v^\star - v_j \leq (v_{i^\star} - u_{i^\star}) + (u_j - v_j) \leq v_{i^\star} - u_{i^\star} \leq \epsilon$. If $\forall i$, $u_i \geq v_{i}$, we have that $v^\star - v_j \leq (v_{i^\star} - u_{i^\star}) + (u_j - v_j) \leq u_j - v_j \leq \epsilon$.
+\paragraph{(3)} $|u_j - v^\star| = |u_j - v_j + v_j -v^\star| \leq |u_j - v_j| + |v_j - v^\star| \leq 3\epsilon$.
+\newpage
+
+\paragraph{2. Policy-specific Bellman update operator}~\\
+Recall that the Bellman update operator for policy $\pi$, $\Tcal^\pi$, is defined as: $\forall f\in \RR^{\Scal\times\Acal}$,
+$$
+(\Tcal^\pi f)(s,a) := R(s,a) + \gamma \EE_{s'\sim P(s,a)}[f(s', \pi(s'))].
+$$
+\begin{enumerate}
+\item Prove that similar to $\Tcal$, $\Tcal^\pi$ is also a $\gamma$-contraction under $\ell_\infty$.
+\item Similar to value iteration, you can use an iterative method to approximately solve for $Q^\pi$ by  $f_0 := \mathbf{0}$, and $f_k := \Tcal^\pi f_{k-1}$. How many iterations do you need so that $\|f_k - Q^\pi\|_\infty \le \epsilon$? Express it as a function of $\gamma$ and $\Vmax := \Rmax/(1-\gamma)$.
+\item Show that $\frac{\ln(\Vmax/\epsilon)}{1-\gamma}$ is an upper bound on the expression in Question 2. (Hint: $(1-x)^{1/x} \to e^{-1}$.)
+\end{enumerate}
+\paragraph{Solution}
+\begin{enumerate}
+\item
+\begin{proof} For all $f, f' \in \RR^{\Scal \times \Acal}$ and all $(s,a) \in \Scal \times \Acal$,
+\begin{multline*}
+|\left(\Tcal^\pi f\right) (s, a) - \left(\Tcal^\pi f'\right) (s, a)| = \gamma \left|\EE_{s'\sim P(s,a)} \left[f(s',\pi(s')) - f'(s',\pi(s'))\right]\right|\\ \leq \gamma \EE_{s'\sim P(s,a)} \left|f(s',\pi(s')) - f'(s',\pi(s'))\right| \leq \gamma \|f-f'\|_{\infty}.
+\end{multline*}
+\end{proof}
+\item By definition, $Q^\pi$ is the fixed point of $\Tcal$. Then, $\|f_k - Q^\pi\|_\infty = \|\Tcal f_{k-1} - \Tcal Q^\pi\|_\infty \leq \gamma \|f_{k-1} - Q^\pi\|_\infty \leq \cdots \leq \gamma^k \|f_0 - Q^\pi\|_\infty = \gamma^k V_{max}$. Thus, $k \geq \frac{\ln(V_{max} / \epsilon)}{\ln(1/\gamma)}$.
+\item Because $\ln(1/\gamma) - 1 + \gamma \geq 0$, $\forall \gamma \in (0,1)$, we have that $\frac{\ln(V_{max} / \epsilon)}{\ln(1/\gamma)} \leq \frac{\ln(V_{max} / \epsilon)}{(1 - \gamma)}$.
+\end{enumerate}
+\newpage
+
+\paragraph{3. Loss of using a smaller $\gamma$}~\\
+Suppose we are given an MDP $M = (\Scal, \Acal, P, R, \gamma)$. In the lecture we have seen that heavy discounting leads to faster convergence of planning, so we may run some planning algorithm using $\gamma' < \gamma$. The question is, how lossy is the obtained policy when we evaluate it in the original MDP? 
+
+More concretely, let's ignore the details of the planning algorithm and say we can compute the optimal policy for $M' = (\Scal, \Acal, P, R, \gamma')$, that is, a new MDP that is the same as $M$ in all parameters except that its discount factor is $\gamma'$ instead of $\gamma$. Let $\pi_{\gamma'}^\star$ denote the optimal policy of $M'$. Prove a bound on $\|V_M^\star - V_M^{\pi_{\gamma'}^\star}\|_\infty$. Here the subscript $M$ is not necessary and only used to emphasize that both value functions are defined in the original $M$ (i.e., w.r.t.~$\gamma$, not $\gamma'$). 
+Your bound should scale with $\gamma - \gamma'$, that is, when $\gamma'$ is close to $\gamma$, the loss will be small. 
+\paragraph{Solution}
+First, we have for all $\pi$ and all initial state $s$, $V_{M}^\pi(s) - V_{M'}^\pi(s) = \EE \sum_{t = 0}^{\infty} \gamma^t r_t - \EE \sum_{t = 0}^{\infty} \gamma'^t r_t' = \EE \sum_{t = 0}^{\infty} (\gamma^t - \gamma'^t) r_t \leq \sum_{t = 0}^{\infty} (\gamma^t - \gamma'^t) R_{max} = \left(\frac{1}{1-\gamma} - \frac{1}{1-\gamma'}\right)R_{max}$, where in the second equation, we use the fact that $r_t$ and $r_t'$ have the exact same distribution. Using the same technique as in Question 1, for all $s$, we have that $V^\star_M(s) - V^{\pi^*_{\gamma'}}_M(s) \leq V^{\pi^\star_\gamma}_M - V_{M'}^{\pi^\star_\gamma} + V_{M'}^{\pi^*_{\gamma'}} - V^{\pi^*_{\gamma'}}_M \leq V^{\pi^\star_\gamma}_M - V_{M'}^{\pi^\star_\gamma} \leq \left(\frac{1}{1-\gamma} - \frac{1}{1-\gamma'}\right)R_{max} = \frac{\gamma - \gamma'}{(1-\gamma)(1-\gamma')}R_{max}$, where the first inequality follows from the fact that $\pi^\star_{\gamma'}$ is the best for $M'$, and the second inequality follows from that $V_M > V_{M'}$ for all policy. Thus, $\|V_M^\star - V_M^{\pi_{\gamma'}^\star}\|_\infty \leq \frac{\gamma - \gamma'}{(1-\gamma)(1-\gamma')}R_{max}$.
+
+\paragraph{4. Alternative proof to the bound on $\|V^\star - V^{\pi_f}\|_\infty$}~\\
+In the lectures we have seen a performance loss bound for acting greedily w.r.t.~an arbitrary $f \in \RR^{\Scal\times\Acal}$: 
+$$
+\|V^\star - V^{\pi_f}\|_\infty \le \frac{2}{1-\gamma} \|f - Q^\star\|_\infty.
+$$ 
+We proved it from scratch and the proof was a bit involved. It turns out that the proof becomes much simpler if we use the Performance Difference Lemma we introduced later (see note1.pdf for the lemma itself). You are now asked to write down this proof. 
+
+Hint: Invoke performance difference lemma for $\pi^\star$ and $\pi_f$, and add and subtract terms in the form of $f(\cdot)$ inside the expectation on the RHS. This is also related to Problem 1 of this homework. 
+
+Comparing to the original proof, you should see that you no longer need to handle the recursion (which corresponds to term (ii) in the handwritten notes) in this alternative proof, because the multi-step aspect of the problem is already handled by the performance difference lemma. 
+\paragraph{Solution}
+We have that for all $s$, 
+\begin{align*}
+& V^\star(s) - V^{\pi_f}(s)\\
+= & \frac{1}{1-\gamma} \EE_{s' \sim d^{\pi_f,s}} \left[Q^\star(s',\pi^\star(s') - Q^\star(s', \pi^f(s'))\right]\\
+\leq & \frac{1}{1-\gamma} \EE_{s' \sim d^{\pi_f,s}} \left[ Q^\star(s',\pi^\star(s')) - Q^\star(s', \pi^f(s')) + f(s',\pi_f(s')) - f(s', \pi^\star(s'))\right]\\
+= & \frac{1}{1-\gamma} \EE_{s' \sim d^{\pi_f,s}} \left[ (Q^\star(s',\pi^\star(s')) - f(s', \pi^\star(s'))) + (f(s',\pi_f(s'))- Q^\star(s', \pi^f(s'))) \right]\\
+\leq & \frac{1}{1-\gamma} \EE_{s' \sim d^{\pi_f,s}} \left[ |Q^\star(s',\pi^\star(s')) - f(s', \pi^\star(s'))| + |f(s',\pi_f(s'))- Q^\star(s', \pi^f(s'))| \right]\\
+\leq & \frac{2}{1-\gamma} \|Q^\star - f\|_\infty,
+\end{align*}
+where the first equation is the Performance Difference Lemma, and the first inequality follows from the fact that $\pi_f$ is the best for $f$.
+\end{document}
